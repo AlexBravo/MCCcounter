@@ -25,8 +25,9 @@ public class MccCounterTest {
     public void testKing() throws Exception {
         Map<String, Integer> map = new HashMap<>();
 
-        map.put("ing", 1);
-        Map<String, Integer> mccCounterMap = mccCounter.calculateMCCs("king");
+        //map.put("ing", 2);
+        map.put("in", 1);
+        Map<String, Integer> mccCounterMap = mccCounter.calculateMCCs("sin");
         assertEquals(map, mccCounterMap);
     }
 

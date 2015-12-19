@@ -20,95 +20,56 @@ public class MccCounter {
     String[] longMccList = {"ing", "and", "the", "ion"};
 
     public Map<String, Integer> calculateMCCs(String in) {
-        String inp = in;
+        String input = in;
         Map<String, Integer> mccs = new HashMap<>();
-        for(int i = 1; i < inp.length(); i++) {
-            if (!inp.equals("")) {
-                String lFResult = findInLong(inp);
-                if (!lFResult.equals("")) {
-                    if (mccs.containsKey(lFResult)) {
-                        mccs.put(lFResult, mccs.get(lFResult) + 1);
-                    } else {
-                        mccs.put(lFResult, 1);
-                    }
-                } else {
-                    String sFResult = findInShort(inp);
-                    if (sFResult.length() != 0) {
-                        if (mccs.containsKey(sFResult)) {
-                            mccs.put(sFResult, mccs.get(sFResult) + 1);
-                        } else {
-                            mccs.put(sFResult, 1);
-                        }
-                    }
-                }
+        if(input.length() > 1) {
+            if (input.length() < 3) {
+                putInMap(searchThroughShort(input), mccs);
+            } else {
+                putInMap(searchThroughLong(input), mccs);
+                putInMap(searchThroughShort(input), mccs);
             }
-            inp = inp.substring(i);
         }
         return mccs;
     }
 
-    public String findInLong(String in){
-        if(in.length() < 3){
-            return "";
-        } else {
-            String[] lPossibilities = new String[4];
-
-            int j = 0;
-            for (int i = 0; i < longMccList.length; i++) {
-                String fIn = in.substring(0, 1);
-                String fList = longMccList[i].substring(0, 1);
-                if (fIn.equals(fList)) {
-                    lPossibilities[j] = longMccList[i];
-                    j++;
+    public Map<String, Integer> searchThroughShort(String toSearch){
+        Map<String, Integer> results = new HashMap<>();
+        String searchable = "";
+        for(int i = 0; i < toSearch.length() - 1; i++){
+            searchable = toSearch.substring(i, i + 2);
+            for(int j = 0; j < shortMccList.length; j++){
+                if(searchable.equals(shortMccList[j])){
+                    if (results.containsKey(shortMccList[j])) {
+                        results.put(shortMccList[j], results.get(shortMccList[j]) + 1);
+                    } else {
+                        results.put(shortMccList[j], 1);
+                    }
                 }
             }
-            String answer = "";
-            for (int i = 0; i < j; i++) {
-                if (in.substring(1, 2).equals(lPossibilities[i].substring(1, 2))) {
-                    answer = lPossibilities[i];
-                    break;
+        }
+        return results;
+    }
+
+    public Map<String, Integer> searchThroughLong(String toSearch){
+        Map<String, Integer> results = new HashMap<>();
+        String searchable = "";
+        for(int i = 0; i < toSearch.length() - 2; i++){
+            searchable = toSearch.substring(i, i + 3);
+            for(int j = 0; j < longMccList.length; j++){
+                if(searchable.equals(longMccList[j])){
+                    if (results.containsKey(longMccList[j])) {
+                        results.put(longMccList[j], results.get(longMccList[j]) + 1);
+                    } else {
+                        results.put(longMccList[j], 1);
+                    }
                 }
             }
-            return answer;
         }
+        return results;
     }
 
-
-    public String findInShort(String in){
-        String[] sPossibilities = new String[30];
-        int j = 0;
-        for(int i = 0; i < shortMccList.length; i++){
-            if(firstLetterIn(in).equals(firstLetterIn(shortMccList[i]))){
-                sPossibilities[j] = shortMccList[i];
-                j++;
-            }
-        }
-        String answer = "";
-        for(int i = 0; i < j; i++){
-            if(secondLetterIn(in).equals(secondLetterIn(sPossibilities[i]))){
-                answer = sPossibilities[i];
-                break;
-            }
-        }
-        return answer;
+    public void putInMap(Map<String, Integer> toPut, Map<String, Integer> toPutIn){
+        toPutIn.putAll(toPut);
     }
-
-
-
-    public String firstLetterIn(String in) {
-        if (in.equals("")) {
-            return "";
-        } else {
-            return in.substring(0, 1);
-        }
-    }
-
-    public String secondLetterIn(String in){
-        if (in.equals("")) {
-            return "";
-        } else {
-            return in.substring(1, 2);
-        }
-    }
-
 }
