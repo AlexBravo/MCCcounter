@@ -26,8 +26,8 @@ public class MccCounterTest {
         Map<String, Integer> map = new HashMap<>();
 
         //map.put("ing", 2);
-        map.put("in", 1);
-        Map<String, Integer> mccCounterMap = mccCounter.calculateMCCs("sin");
+        map.put("ing", 1);
+        Map<String, Integer> mccCounterMap = mccCounter.calculateMCCs("sing");
         assertEquals(map, mccCounterMap);
     }
 
