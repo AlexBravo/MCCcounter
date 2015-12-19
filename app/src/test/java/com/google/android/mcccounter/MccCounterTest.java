@@ -24,15 +24,17 @@ public class MccCounterTest {
     @Test
     public void testKing() throws Exception {
         Map<String, Integer> map = new HashMap<>();
-        map.put("th", 1);
-        Map<String, Integer> mccCounterMap = mccCounter.calculateMCCs("th");
+
+        map.put("ing", 1);
+        Map<String, Integer> mccCounterMap = mccCounter.calculateMCCs("king");
         assertEquals(map, mccCounterMap);
     }
 
-    @Test
-    public void testSinging() throws Exception {
-        Map<String, Integer> map = new HashMap<>();
-        map.put("ing", 1);
-        assertEquals(map, mccCounter.calculateMCCs("ing"));
-    }
+
+//    @Test
+//    public void testSinging() throws Exception {
+//        Map<String, Integer> map = new HashMap<>();
+//        map.put("ing", 1);
+//        assertEquals(map, mccCounter.calculateMCCs("ing"));
+//    }
 }
