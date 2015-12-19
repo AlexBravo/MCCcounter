@@ -1,6 +1,7 @@
 package com.google.android.mcccounter;
 
 import android.support.annotation.NonNull;
+import android.text.StaticLayout;
 
 import org.w3c.dom.ls.LSException;
 
@@ -14,12 +15,12 @@ import java.util.Map;
 //Created by Kids on 12/12/2015.
 
 public class MccCounter {
-    String[] shortMccList = {"in", "th", "or", "an", "st", "co", "il", "ac",
+    static String[] shortMccList = {"in", "th", "or", "an", "st", "co", "il", "ac",
                              "ch", "no", "de", "se", "ed", "of", "le", "ro", "ou",
                              "ti", "is", "it", "en", "re", "er", "on", "to"};
-    String[] longMccList = {"ing", "and", "the", "ion"};
+    static String[] longMccList = {"ing", "and", "the", "ion"};
 
-    public Map<String, Integer> calculateMCCs(String in) {
+    public static Map<String, Integer> calculateMCCs(String in) {
         String input = in;
         Map<String, Integer> mccs = new HashMap<>();
         if(input.length() > 1) {
@@ -33,7 +34,9 @@ public class MccCounter {
         return mccs;
     }
 
-    public Map<String, Integer> searchThroughShort(String toSearch){
+
+
+    public static Map<String, Integer> searchThroughShort(String toSearch){
         Map<String, Integer> results = new HashMap<>();
         String searchable = "";
         for(int i = 0; i < toSearch.length() - 1; i++){
@@ -51,7 +54,7 @@ public class MccCounter {
         return results;
     }
 
-    public Map<String, Integer> searchThroughLong(String toSearch){
+    public static Map<String, Integer> searchThroughLong(String toSearch){
         Map<String, Integer> results = new HashMap<>();
         String searchable = "";
         for(int i = 0; i < toSearch.length() - 2; i++){
@@ -69,7 +72,7 @@ public class MccCounter {
         return results;
     }
 
-    public void putInMap(Map<String, Integer> toPut, Map<String, Integer> toPutIn){
+    public static void putInMap(Map<String, Integer> toPut, Map<String, Integer> toPutIn){
         toPutIn.putAll(toPut);
     }
 }

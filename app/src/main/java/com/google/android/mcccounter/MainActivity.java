@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,5 +50,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void mcc(View view){
+        EditText word = (EditText) findViewById(R.id.word);
+        String input = word.getText().toString();
+        TextView result = (TextView) findViewById(R.id.result);
+        result.setText(MccCounter.calculateMCCs(input).toString());
     }
 }
