@@ -37,11 +37,11 @@
             android:layout_height="wrap_content"
             android:hint="Enter a word!"/>
 
-        <Button
-            android:text="See Mccs!"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="mcc"/>
+        <!--<Button-->
+            <!--android:text="See Mccs!"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:onClick="mcc"/>-->
 
         <TextView
             android:id="@+id/result"
