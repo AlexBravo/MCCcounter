@@ -70,7 +70,8 @@ public class MainActivity extends AppCompatActivity {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             String rs = s.toString();
             output = MccCounter.calculateMCCs(rs).toString();
-            result.setText(output);
+
+            result.setText(output.substring(1, output.length() - 1));
         }
 
         public void afterTextChanged(Editable s) {

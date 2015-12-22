@@ -1,15 +1,6 @@
 package com.google.android.mcccounter;
 
-import android.support.annotation.NonNull;
-import android.text.StaticLayout;
-
-import org.w3c.dom.ls.LSException;
-
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
 //Created by Maxim on 12/12/2015.
@@ -26,15 +17,17 @@ public class MccCounter {
         Map<String, Integer> mccs = new HashMap<>();
         if(input.length() > 1) {
             if (input.length() < 3) {
-                putInMap(searchThroughShort(input), mccs);
+                putInMap(searchThroughShortR(input), mccs);
             } else {
                 putInMap(searchThroughLong(input), mccs);
-                putInMap(searchThroughShort(input), mccs);
+                putInMap(searchThroughShortR(input), mccs);
                 mccs = ridOfShortRepitition(mccs);
             }
         }
         return mccs;
     }
+
+
 
     public static Map<String, Integer> ridOfShortRepitition(Map<String, Integer> list){
         if(list.containsKey("in") && list.containsKey("ing")){
@@ -78,16 +71,38 @@ public class MccCounter {
                 if(searchable.equals(shortMccList[j])){
                     if (results.containsKey(shortMccList[j])) {
                         results.put(shortMccList[j], results.get(shortMccList[j]) + 1);
-                        break;
+                        i++;
                     } else {
                         results.put(shortMccList[j], 1);
-                        break;
+                        i++;
                     }
                 }
             }
         }
         return results;
     }
+
+    public static Map<String, Integer> searchThroughShortR(String toSearch){
+        Map<String, Integer> results = new HashMap<>();
+        String searchable = "";
+        for(int i = toSearch.length() - 1; i > 2; i--){
+            searchable = toSearch.substring(i - 2, i);
+            for(int j = 0; j < shortMccList.length; j++){
+                if(searchable.equals(shortMccList[j])){
+                    if (results.containsKey(shortMccList[j])) {
+                        results.put(shortMccList[j], results.get(shortMccList[j]) + 1);
+                        i--;
+                    } else {
+                        results.put(shortMccList[j], 1);
+                        i--;
+                    }
+                }
+            }
+        }
+        return results;
+    }
+
+
 
     public static Map<String, Integer> searchThroughLong(String toSearch){
         Map<String, Integer> results = new HashMap<>();
@@ -98,8 +113,30 @@ public class MccCounter {
                 if(searchable.equals(longMccList[j])){
                     if (results.containsKey(longMccList[j])) {
                         results.put(longMccList[j], results.get(longMccList[j]) + 1);
+                        i+=2;
                     } else {
                         results.put(longMccList[j], 1);
+                        i+=2;
+                    }
+                }
+            }
+        }
+        return results;
+    }
+
+    public static Map<String, Integer> searchThroughLongR(String toSearch){
+        Map<String, Integer> results = new HashMap<>();
+        String searchable = "";
+        for(int i = toSearch.length(); i > 0; i--){
+            searchable = toSearch.substring(i - 3, i);
+            for(int j = 0; j < longMccList.length; j++){
+                if(searchable.equals(longMccList[j])){
+                    if (results.containsKey(longMccList[j])) {
+                        results.put(longMccList[j], results.get(longMccList[j]) + 1);
+                        i-=2;
+                    } else {
+                        results.put(longMccList[j], 1);
+                        i-=2;
                     }
                 }
             }
