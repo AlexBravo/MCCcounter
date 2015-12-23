@@ -1,23 +1,29 @@
 package com.google.android.mcccounter;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private EditText word;
     private String input;
     private String output;
     private TextView result;
+    private ListView listview;
+    private View button;
+    private ArrayList<String> list = new ArrayList<String>();
+    private String[] values = new String[32];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,18 +31,14 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         word = (EditText) findViewById(R.id.word);
-        word.addTextChangedListener(passwordWatcher);
-        result = (TextView) findViewById(R.id.result);
+        word.addTextChangedListener(tWatcher);
+        //result = (TextView) findViewById(R.id.result);
         input = word.getText().toString();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        listview = (ListView) findViewById(R.id.listview);
+        button = findViewById(R.id.button);
+
+
     }
 
     @Override
@@ -61,23 +63,54 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private final TextWatcher passwordWatcher = new TextWatcher() {
+    private final TextWatcher tWatcher = new TextWatcher() {
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+//            String rs = s.toString();
+//            output = MccCounter.calculateMCCs(rs).toString();
+//
+//            result.setText(output.substring(1, output.length() - 1));
         }
 
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        public void onTextChanged(CharSequence s, int st, int before, int count) {
+            list.clear();
             String rs = s.toString();
             output = MccCounter.calculateMCCs(rs).toString();
+//            result.setText(output.substring(1, output.length() - 1));
 
-            result.setText(output.substring(1, output.length() - 1));
+            if(output.length() > 2) {
+                String r = output.substring(0, output.length());
+                int start = 0;
+                int k = 0;
+                for (int j = 0; j < r.length(); j++) {
+                    if (r.substring(j, j + 1).equals(",")) {
+                        list.add(r.substring(start+1, j));
+                        start = j + 1;
+
+                    }
+                    if( r.substring(j, j + 1).equals("}")){
+                        list.add(r.substring(start+1, j));
+                    }
+                }
+
+
+            }
+
         }
 
         public void afterTextChanged(Editable s) {
-
-                //result.setText(MccCounter.calculateMCCs(input).toString());
-
+//            String rs = s.toString();
+//            output = MccCounter.calculateMCCs(rs).toString();
+//
+//            result.setText(output.substring(1, output.length() - 1));
         }
     };
+
+    public void onClick(View view){
+        final ArrayAdapter adapter = new ArrayAdapter(this,
+                android.R.layout.simple_list_item_1, list);
+        listview.setAdapter(adapter);
+
+        button.setVisibility(View.GONE);
+    }
 }

@@ -31,32 +31,32 @@
         android:paddingLeft="30dp"
         tools:context=".MainActivity">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="*Note: After you are done typing please hit space to see the true result. This is a fix our team is working on at the moment. Our team thanks you for your patients and cooperation."/>
         <EditText
             android:id="@+id/word"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:hint="Enter a word!"/>
 
-        <!--<Button-->
-            <!--android:text="See Mccs!"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:onClick="mcc"/>-->
-
-        <TextView
-            android:id="@+id/result"
+        <Button
+            android:id="@+id/button"
+            android:text="See Mccs!"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="23dp"/>
-        </LinearLayout>
+            android:onClick="onClick"/>
 
-    <android.support.design.widget.FloatingActionButton android:id="@+id/fab"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end" android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />
+        <!--<TextView-->
+            <!--android:id="@+id/result"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textSize="23dp"/>-->
+
+        <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/listview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
 
 </android.support.design.widget.CoordinatorLayout>
