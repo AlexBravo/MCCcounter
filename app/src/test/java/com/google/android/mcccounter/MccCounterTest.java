@@ -31,7 +31,6 @@ public class MccCounterTest {
         assertEquals(map, mccCounterMap);
     }
 
-   // public void testAcount()
 
 //    @Test
 //    public void testSinging() throws Exception {
