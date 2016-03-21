@@ -21,14 +21,21 @@ public class ConfusionsTest {
     }
 
     @Test
-    public void testAcount() throws Exception {
+    public void testRandomString() throws Exception {
         ArrayList<String> arrayList = new ArrayList<String>();
-
+        //AssetManager am = context.getAssets();
+        //InputStream is = am.open("test.txt");
+        //String input = convertStreamToString(is);
         //map.put("ing", 2);
-        arrayList.add("aco");
-        ArrayList<String> confusionArrayList = confusion.calculateConfusions("account");
+        //arrayList.add();
+        //Like "le-r" (and "l-er"), "de-d", "to-r", "co-n", "co-r", "a-th" (and "at-h"), "at-i", "de-n", etc.
+        //String in = "ler ded tor con cor ath ati den";
+        //String in = "lerdedtorconcorathatiden";
+        String in = "conor";
+        ArrayList<String> confusionArrayList = confusion.calculateConfusions(in);
         assertEquals(arrayList, confusionArrayList);
     }
+
     static String convertStreamToString(java.io.InputStream is) {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
