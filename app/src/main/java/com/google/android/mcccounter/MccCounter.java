@@ -6,11 +6,7 @@ import java.util.Map;
 //Created by Maxim on 12/12/2015.
 
 public class MccCounter {
-    static String[] shortMccList = {"in", "or", "an", "th", "al", "at", "ma", "ar", "es",
-                                    "st", "co", "il", "ac", "ch", "no", "de", "se", "ed",
-                                    "of", "le", "ro", "ou", "ti", "is", "it", "en", "re",
-                                    "er", "on", "to"};
-    static String[] longMccList = {"ing", "and", "the", "ion"};
+   
 
     public static Map<String, Integer> calculateMCCs(String in) {
         String input = in;
@@ -67,13 +63,13 @@ public class MccCounter {
         String searchable = "";
         for(int i = 0; i < toSearch.length() - 1; i++){
             searchable = toSearch.substring(i, i + 2);
-            for(int j = 0; j < shortMccList.length; j++){
-                if(searchable.equals(shortMccList[j])){
-                    if (results.containsKey(shortMccList[j])) {
-                        results.put(shortMccList[j], results.get(shortMccList[j]) + 1);
+            for(int j = 0; j < Utility.shortMccList.length; j++){
+                if(searchable.equals(Utility.shortMccList[j])){
+                    if (results.containsKey(Utility.shortMccList[j])) {
+                        results.put(Utility.shortMccList[j], results.get(Utility.shortMccList[j]) + 1);
                         i++;
                     } else {
-                        results.put(shortMccList[j], 1);
+                        results.put(Utility.shortMccList[j], 1);
                         i++;
                     }
                 }
@@ -87,13 +83,13 @@ public class MccCounter {
         String searchable = "";
         for(int i = toSearch.length() - 1; i > 2; i--){
             searchable = toSearch.substring(i - 2, i);
-            for(int j = 0; j < shortMccList.length; j++){
-                if(searchable.equals(shortMccList[j])){
-                    if (results.containsKey(shortMccList[j])) {
-                        results.put(shortMccList[j], results.get(shortMccList[j]) + 1);
+            for(int j = 0; j < Utility.shortMccList.length; j++){
+                if(searchable.equals(Utility.shortMccList[j])){
+                    if (results.containsKey(Utility.shortMccList[j])) {
+                        results.put(Utility.shortMccList[j], results.get(Utility.shortMccList[j]) + 1);
                         i--;
                     } else {
-                        results.put(shortMccList[j], 1);
+                        results.put(Utility.shortMccList[j], 1);
                         i--;
                     }
                 }
@@ -109,13 +105,13 @@ public class MccCounter {
         String searchable = "";
         for(int i = 0; i < toSearch.length() - 2; i++){
             searchable = toSearch.substring(i, i + 3);
-            for(int j = 0; j < longMccList.length; j++){
-                if(searchable.equals(longMccList[j])){
-                    if (results.containsKey(longMccList[j])) {
-                        results.put(longMccList[j], results.get(longMccList[j]) + 1);
+            for(int j = 0; j < Utility.longMccList.length; j++){
+                if(searchable.equals(Utility.longMccList[j])){
+                    if (results.containsKey(Utility.longMccList[j])) {
+                        results.put(Utility.longMccList[j], results.get(Utility.longMccList[j]) + 1);
                         i+=2;
                     } else {
-                        results.put(longMccList[j], 1);
+                        results.put(Utility.longMccList[j], 1);
                         i+=2;
                     }
                 }
@@ -129,13 +125,13 @@ public class MccCounter {
         String searchable = "";
         for(int i = toSearch.length(); i > 0; i--){
             searchable = toSearch.substring(i - 3, i);
-            for(int j = 0; j < longMccList.length; j++){
-                if(searchable.equals(longMccList[j])){
-                    if (results.containsKey(longMccList[j])) {
-                        results.put(longMccList[j], results.get(longMccList[j]) + 1);
+            for(int j = 0; j < Utility.longMccList.length; j++){
+                if(searchable.equals(Utility.longMccList[j])){
+                    if (results.containsKey(Utility.longMccList[j])) {
+                        results.put(Utility.longMccList[j], results.get(Utility.longMccList[j]) + 1);
                         i-=2;
                     } else {
-                        results.put(longMccList[j], 1);
+                        results.put(Utility.longMccList[j], 1);
                         i-=2;
                     }
                 }
