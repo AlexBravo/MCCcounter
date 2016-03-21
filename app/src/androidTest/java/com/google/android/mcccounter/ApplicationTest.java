@@ -1,15 +1,52 @@
 package com.google.android.mcccounter;
 
-import org.junit.Test;
+import android.content.Context;
+import android.support.test.runner.AndroidJUnit4;
+import android.test.suitebuilder.annotation.LargeTest;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertEquals;
 
 /**
- * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
+ * Created by wendy on 3/20/2016.
  */
-public class ApplicationTest{
-    @Test
-    public void mcccounterTest(){
-        assertEquals("hi", "hi");
+@RunWith(AndroidJUnit4.class)
+@LargeTest
+public class ApplicationTest {
+    private Confusions confusion;
+    private Context context = this.context;
+    @Before
+    public void setUp() throws Exception {
+        confusion = new Confusions();
     }
+
+    @Test
+    public void testRandomString() throws Exception {
+        ArrayList<String> arrayList = new ArrayList<String>();
+        InputStream is = getInstrumentation().getContext().getResources().openRawResource(R.raw.test);
+        //AssetManager am = context.getAssets();
+        //InputStream is = am.open("test.txt");
+        String in = convertStreamToString(is);
+        //map.put("ing", 2);
+        //arrayList.add();
+        //Like "le-r" (and "l-er"), "de-d", "to-r", "co-n", "co-r", "a-th" (and "at-h"), "at-i", "de-n", etc.
+        //String in = "ler ded tor con cor ath ati den";
+        //String in = "lerdedtorconcorathatiden";
+        //String in = "conor";
+        ArrayList<String> confusionArrayList = confusion.calculateConfusions(in);
+        assertEquals(arrayList, confusionArrayList);
+    }
+
+    static String convertStreamToString(java.io.InputStream is) {
+        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
+    }
+
 }
