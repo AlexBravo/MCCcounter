@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertEquals;
@@ -29,19 +29,20 @@ public class ApplicationTest {
 
     @Test
     public void testRandomString() throws Exception {
-        ArrayList<String> arrayList = new ArrayList<String>();
-        InputStream is = getInstrumentation().getContext().getResources().openRawResource(R.raw.test);
+        HashMap<String, Integer> hashMap = new HashMap<String, Integer>();
+        InputStream is = getInstrumentation().getContext().getResources().openRawResource(com.google.android.mcccounter.test.R.raw.aliceinwonderland);
         //AssetManager am = context.getAssets();
         //InputStream is = am.open("test.txt");
         String in = convertStreamToString(is);
         //map.put("ing", 2);
-        //arrayList.add();
+        //arrayList.add("aco");
         //Like "le-r" (and "l-er"), "de-d", "to-r", "co-n", "co-r", "a-th" (and "at-h"), "at-i", "de-n", etc.
         //String in = "ler ded tor con cor ath ati den";
         //String in = "lerdedtorconcorathatiden";
         //String in = "conor";
-        ArrayList<String> confusionArrayList = confusion.calculateConfusions(in);
-        assertEquals(arrayList, confusionArrayList);
+        HashMap<String, Integer> confusionArrayList = confusion.calculateConfusions(in);
+
+        assertEquals(hashMap, confusionArrayList);
     }
 
     static String convertStreamToString(java.io.InputStream is) {
