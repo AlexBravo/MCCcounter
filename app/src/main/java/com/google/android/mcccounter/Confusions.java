@@ -1,6 +1,13 @@
 package com.google.android.mcccounter;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by wendy on 3/20/2016.
  */
@@ -30,16 +37,18 @@ public class Confusions {
                 i++;
             }
         }
-
-        /*Collections.sort(result, new Comparator<Map.Entry<K, V>>()
-        {
+        List<Map.Entry<String, Integer>> list = new LinkedList<>( result.entrySet() );
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
             @Override
-            public int compare( Map.Entry<K, V> o1, Map.Entry<K, V> o2 )
-            {
-                return (o1.getValue()).compareTo( o2.getValue() );
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                return (o1.getValue()).compareTo(o2.getValue())*-1;
             }
-        } );*/
-        return result;
+        });
+        HashMap<String, Integer> returnVal = new LinkedHashMap<>();
+        for (Map.Entry<String, Integer> entry : list) {
+            returnVal.put( entry.getKey(), entry.getValue() );
+        }
+        return returnVal;
     }
 
     public static boolean isMcc(String section) {
