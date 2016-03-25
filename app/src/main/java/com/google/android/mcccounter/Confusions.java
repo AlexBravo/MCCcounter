@@ -15,15 +15,16 @@ public class Confusions {
 
 
 
-    public static HashMap<String, Integer> calculateConfusions(String in) {
+    public static HashMap<String, Integer> calculateConfusions(String inp, String[] mccs) {
+        String in = inp.toLowerCase();
         HashMap<String, Integer> result = new HashMap<String, Integer>();
         int i = 0;
         final int mccLength = 2;
         while(i < in.length() - mccLength) {
             String first = in.substring(i,i + mccLength);
-            if (isMcc(first)) {
+            if (isMcc(first, mccs)) {
                 String second = in.substring(i + 1, i + mccLength + 1);
-                if (isMcc(second)) {
+                if (isMcc(second, mccs)) {
                     String toAdd = first + second.charAt(1);
                     if(!result.containsKey(toAdd)) {
                         result.put(toAdd, 1);
@@ -41,7 +42,7 @@ public class Confusions {
         Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
             @Override
             public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-                return (o1.getValue()).compareTo(o2.getValue())*-1;
+                return (o1.getValue()).compareTo(o2.getValue()) * -1;
             }
         });
         HashMap<String, Integer> returnVal = new LinkedHashMap<>();
@@ -51,8 +52,40 @@ public class Confusions {
         return returnVal;
     }
 
-    public static boolean isMcc(String section) {
-        if(Utility.lookThroughShorts(section)){
+    public static HashMap<String, HashMap<String, Integer>> findConfusingPercentage(String in){
+        HashMap<String, HashMap<String, Integer>> result = new HashMap<String, HashMap<String, Integer>>();
+        HashMap<String, Integer> original = calculateConfusions(in, Utility.shortMccList);
+        result.put("ORIGINAL", original);
+        for(int i = 0; i < Utility.shortMccList.length; i++) {
+            String[] mccs = Utility.shortMccList;
+            String s = mccs[i];
+            mccs[i] = "";
+            HashMap<String, Integer> h = calculateConfusions(in, mccs);
+            String percent = calculatePercentage(h, original);
+            if(!percent.equals(" 0.0% ")) {
+                String key = s + percent;
+                result.put(key, h);
+            }
+            mccs[i] = s;
+        }
+        return result;
+    }
+
+    public static String calculatePercentage(HashMap<String, Integer> h, HashMap<String, Integer> original) {
+        int originalTotal = 0;
+        int hTotal = 0;
+        for(Integer i : original.values()){
+            originalTotal += i;
+        }
+        for(Integer j : h.values()){
+            hTotal += j;
+        }
+        double d = ((originalTotal - hTotal) / (double) originalTotal) * 100;
+        String result = " " + d + "% ";
+        return result;
+    }
+    public static boolean isMcc(String section, String[] mccs) {
+        if(Utility.lookThroughMccArraylist(section, mccs)){
             return true;
         }
         return false;

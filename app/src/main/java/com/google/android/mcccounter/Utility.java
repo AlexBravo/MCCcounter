@@ -33,14 +33,17 @@ public class Utility {
         }
         return false;
     }
-    /*public static HashMap<String, Integer> sort(HashMap<String, Integer> hashMap) {
-        int largest = 0;
-        String largestKey = "";
-        for(String s : hashMap.keySet()) {
-            if(hashMap.get(s) > largest){
-                largest = hashMap.get(s);
-                largestKey = s;
+    public static boolean lookThroughMccArraylist(String in, String[] mccs) {
+        if(in.length() != 2) {
+            return false;
+        }
+        for(String s : mccs){
+            if(s.equals(in)) {
+                return true;
             }
         }
-    }*/
+        return false;
+    }
+
+
 }

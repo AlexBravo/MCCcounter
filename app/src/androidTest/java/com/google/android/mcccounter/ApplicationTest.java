@@ -3,6 +3,7 @@ package com.google.android.mcccounter;
 import android.content.Context;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.util.Log;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +30,7 @@ public class ApplicationTest {
 
     @Test
     public void testRandomString() throws Exception {
-        HashMap<String, Integer> hashMap = new HashMap<String, Integer>();
+        HashMap<String, HashMap<String, Integer>> hashMap = new HashMap<String, HashMap<String, Integer>>();
         InputStream is = getInstrumentation().getContext().getResources().openRawResource(com.google.android.mcccounter.test.R.raw.aliceinwonderland);
         //AssetManager am = context.getAssets();
         //InputStream is = am.open("test.txt");
@@ -40,9 +41,9 @@ public class ApplicationTest {
         //String in = "ler ded tor con cor ath ati den";
         //String in = "lerdedtorconcorathatiden";
         //String in = "conor";
-        HashMap<String, Integer> confusionArrayList = confusion.calculateConfusions(in);
-
-        assertEquals(hashMap, confusionArrayList);
+        HashMap<String, HashMap<String, Integer>> confusionPercentages = confusion.findConfusingPercentage(in);
+        Log.d("&@@@@@@", confusionPercentages.toString());
+        assertEquals(hashMap, confusionPercentages);
     }
 
     static String convertStreamToString(java.io.InputStream is) {
