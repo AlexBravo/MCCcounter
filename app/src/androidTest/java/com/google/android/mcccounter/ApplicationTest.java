@@ -31,7 +31,10 @@ public class ApplicationTest {
     @Test
     public void testRandomString() throws Exception {
         HashMap<String, HashMap<String, Integer>> hashMap = new HashMap<String, HashMap<String, Integer>>();
-        InputStream is = getInstrumentation().getContext().getResources().openRawResource(com.google.android.mcccounter.test.R.raw.aliceinwonderland);
+        InputStream is = getInstrumentation().getContext().getResources()
+            .openRawResource(com.google.android.mcccounter.test.R.raw.my812_notes);
+        //  .openRawResource(com.google.android.mcccounter.test.R.raw.aliceinwonderland);
+
         //AssetManager am = context.getAssets();
         //InputStream is = am.open("test.txt");
         String in = convertStreamToString(is);
@@ -41,7 +44,7 @@ public class ApplicationTest {
         //String in = "ler ded tor con cor ath ati den";
         //String in = "lerdedtorconcorathatiden";
         //String in = "conor";
-        HashMap<String, HashMap<String, Integer>> confusionPercentages = confusion.findConfusingPercentage(in);
+        HashMap<String, Integer> confusionPercentages = confusion.findConfusingPercentage(in);
         Log.d("&@@@@@@", confusionPercentages.toString());
         assertEquals(hashMap, confusionPercentages);
     }

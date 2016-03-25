@@ -5,9 +5,13 @@ package com.google.android.mcccounter;
  */
 public class Utility {
     static String[] shortMccList = {"in", "or", "an", "th", "al", "at", "ma", "ar", "es",
-            "st", "co", "il", "ac", "ch", "no", "de", "se", "ed",
-            "of", "le", "ro", "ou", "ti", "is", "it", "en", "re",
+            "co", "il", "ac", "ch", "no", "de", "se", "ed",
+            "of", "le", "ro", "ou", "ti", "is", "it", "en",
             "er", "on", "to"};
+//    static String[] shortMccList = {"in", "or", "an", "th", "al", "at", "ar", "es",
+//            "st", "il", "ac", "ch", "no", "ed",
+//            "of", "ro", "ou", "is", "it", "en",
+//            "er", "on", "to" }; // re, ti, le, co, se, ma, de
     static String[] longMccList = {"ing", "and", "the", "ion"};
 
     public static boolean lookThroughShorts(String in) {
