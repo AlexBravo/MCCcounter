@@ -32,8 +32,8 @@ public class ApplicationTest {
     public void testRandomString() throws Exception {
         HashMap<String, HashMap<String, Integer>> hashMap = new HashMap<String, HashMap<String, Integer>>();
         InputStream is = getInstrumentation().getContext().getResources()
-            .openRawResource(com.google.android.mcccounter.test.R.raw.my812_notes);
-        //  .openRawResource(com.google.android.mcccounter.test.R.raw.aliceinwonderland);
+          .openRawResource(com.google.android.mcccounter.test.R.raw.aliceinwonderland);
+        //    .openRawResource(com.google.android.mcccounter.test.R.raw.my812_notes);
 
         //AssetManager am = context.getAssets();
         //InputStream is = am.open("test.txt");

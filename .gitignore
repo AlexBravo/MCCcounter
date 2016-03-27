@@ -5,3 +5,5 @@
 .DS_Store
 /build
 /captures
+
+app/src/androidTest/res/raw/my812_notes.txt
