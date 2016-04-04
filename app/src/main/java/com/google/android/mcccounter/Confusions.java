@@ -65,6 +65,10 @@ public class Confusions {
         }
 
         HashMap<String, Integer> frequencies = Confusions.calculateFrequencies(in, MccLists.shortMccList);
+        int frequenciesTotal = 0;
+        for(Integer i : frequencies.values()){
+            frequenciesTotal += i;
+        }
 
         List<String> mccs = MccLists.shortMccList;
         for(int i = 0; i < MccLists.shortMccList.size(); i++) {
@@ -72,7 +76,7 @@ public class Confusions {
             mccs.set(i, "");
             HashMap<String, Integer> h = calculateConfusions(in, mccs);
             double percent = calculatePercentage(h, originalTotal);
-            double frequency = frequencies.get(mccToRemove) / 10000.0; // in 10 thousands
+            double frequency = frequencies.get(mccToRemove) / 100000.0; // in 100 thousands
             int rank = (int)(percent/frequency);
             // Don't output not confusing MCCs
             if(rank != 0) {

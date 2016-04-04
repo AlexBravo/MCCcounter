@@ -37,16 +37,17 @@ public class ApplicationTest {
         //String in = "lerdedtorconcorathatiden";
         //String in = "conor";
 
-//        HashMap<String, Integer> confusionRanks = Confusions.findConfusingPercentage(in);
-//        Log.i("MCC confusion ranks", confusionRanks.toString());
+//        HashMap<String, Integer> frequencies = Confusions.calculateFrequencies(in, MccLists.shortMccList);
+//        Log.i("MCC frequencies", frequencies.toString());
 
-        HashMap<String, Integer> frequencies = Confusions.calculateFrequencies(in, MccLists.shortMccList);
-        Log.i("MCC frequencies", frequencies.toString());
-//
-//        HashMap<String, Integer> confusions = Confusions.calculateConfusions(in, Utility.shortMccList);
+        HashMap<String, Integer> confusionRanks = Confusions.findConfusingPercentage(in);
+        Log.i("MCC confusion ranks", confusionRanks.toString());
+
+
+//        HashMap<String, Integer> confusions = Confusions.calculateConfusions(in, MccLists.shortMccList);
 //        Log.i("MCC confusions", confusions.toString());
 
-        //assertEquals(hashMap, confusionPercentages);
+//        assertEquals(hashMap, confusionPercentages);
     }
 
 }
