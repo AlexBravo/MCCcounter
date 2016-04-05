@@ -22,6 +22,7 @@ public class ApplicationTest {
 //    public void setUp() throws Exception {
 //    }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void testRandomString() throws Exception {
         //HashMap<String, Integer> hashMap = new HashMap<>();
@@ -37,15 +38,18 @@ public class ApplicationTest {
         //String in = "lerdedtorconcorathatiden";
         //String in = "conor";
 
-//        HashMap<String, Integer> frequencies = Confusions.calculateFrequencies(in, MccLists.shortMccList);
-//        Log.i("MCC frequencies", frequencies.toString());
+        int testNumber = 2;
 
-        HashMap<String, Integer> confusionRanks = Confusions.findConfusingPercentage(in);
-        Log.i("MCC confusion ranks", confusionRanks.toString());
-
-
-//        HashMap<String, Integer> confusions = Confusions.calculateConfusions(in, MccLists.shortMccList);
-//        Log.i("MCC confusions", confusions.toString());
+        if (testNumber == 1) {
+            HashMap<String, Integer> frequencies = Confusions.calculateFrequencies(in);
+            Log.i("MCC frequencies", frequencies.toString());
+        } else if (testNumber == 2) {
+            HashMap<String, Integer> confusions = Confusions.calculateConfusions(in);
+            Log.i("MCC confusions", confusions.toString());
+        } else if (testNumber == 3) {
+            HashMap<String, Integer> confusionRanks = Confusions.findConfusionRanks(in);
+            Log.i("MCC confusion ranks", confusionRanks.toString());
+        }
 
 //        assertEquals(hashMap, confusionPercentages);
     }
