@@ -18,12 +18,11 @@ public class MccLists {
     // To full list added: as, ea, ha, he, io, li, ll, me, nd, ne, nt, te, us, ve // More than 9k
     // To full list added: as, io, li, me, ne, nt, te, us, ve
     // Removed: io, se, nt, ne, es, ti, ed, en, ma, li, il, us, ac, as, no
-    // Removed 8 MCCs (es, ti, ed, en, se, ma, il, ac, no) and added 3 MCCs (me, te, ve)
-    // Removed ti,
+    // Removed: 8 MCCs (es, ti, ed, en, se, ma, il, ac, no) and added 3 MCCs (me, te, ve)
+    // Removed: 11 MCCs (ac, ed, es, is, le, ma, no, ou, se, th, ti) and added "me"
     public static List<String> shortMccList = Arrays.asList(
-        "re", "in", "or", "an", "al", "at", "ar", "co", "ch",
-        "de", "of", "ro", "it", "er", "on", "to",
-        "st", "me", "il", "li", "en");
+        "re", "in", "or", "an", "al", "at", "ar", "co", "ch", "de",
+        "of", "ro", "it", "er", "on", "to", "st", "me", "il", "en");
 
     public static List<String> longMccList = Arrays.asList("ing", "and", "the");
 }

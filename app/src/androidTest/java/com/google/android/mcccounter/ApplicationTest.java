@@ -38,7 +38,7 @@ public class ApplicationTest {
         //String in = "lerdedtorconcorathatiden";
         //String in = "conor";
 
-        int testNumber = 2;
+        int testNumber = 3;
 
         if (testNumber == 1) {
             HashMap<String, Integer> frequencies = Confusions.calculateFrequencies(in);
