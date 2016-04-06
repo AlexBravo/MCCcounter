@@ -59,18 +59,42 @@ public class Utility {
     }
 
     @NonNull
-    public static HashMap<String, Integer> sortMap(HashMap<String, Integer> map) {
+    public static LinkedHashMap<String, Integer> sortMap(HashMap<String, Integer> map) {
         List<Map.Entry<String, Integer>> list = new LinkedList<>(map.entrySet());
         Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
             @Override
             public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-                return (o1.getValue()).compareTo(o2.getValue()) * -1;
+                return (o2.getValue()).compareTo(o1.getValue());
             }
         });
-        HashMap<String, Integer> returnVal = new LinkedHashMap<>();
+        LinkedHashMap<String, Integer> returnVal = new LinkedHashMap<>();
         for (Map.Entry<String, Integer> entry : list) {
             returnVal.put( entry.getKey(), entry.getValue() );
         }
         return returnVal;
+    }
+
+    @NonNull
+    public static LinkedHashMap<String, Integer> sortMapReverse(HashMap<String, Integer> map) {
+        List<Map.Entry<String, Integer>> list = new LinkedList<>(map.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                return (o1.getValue()).compareTo(o2.getValue());
+            }
+        });
+        LinkedHashMap<String, Integer> returnVal = new LinkedHashMap<>();
+        for (Map.Entry<String, Integer> entry : list) {
+            returnVal.put( entry.getKey(), entry.getValue() );
+        }
+        return returnVal;
+    }
+
+    public static int calculateTotal(HashMap<String, Integer> map) {
+        int mapTotal = 0;
+        for(Integer i : map.values()){
+            mapTotal += i;
+        }
+        return mapTotal;
     }
 }

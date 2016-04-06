@@ -10,10 +10,10 @@ public class MccCounter {
         Map<String, Integer> mccs = new HashMap<>();
         if(in.length() > 1) {
             if (in.length() < 3) {
-                putInMap(searchThroughShortR(in), mccs);
+                mccs.putAll(searchThroughShortR(in));
             } else {
-                putInMap(searchThroughLong(in), mccs);
-                putInMap(searchThroughShortR(in), mccs);
+                mccs.putAll(searchThroughLong(in));
+                mccs.putAll(searchThroughShortR(in));
                 mccs = ridOfShortRepitition(mccs);
             }
         }
@@ -136,9 +136,5 @@ public class MccCounter {
             }
         }
         return results;
-    }
-
-    public static void putInMap(Map<String, Integer> toPut, Map<String, Integer> toPutIn){
-        toPutIn.putAll(toPut);
     }
 }

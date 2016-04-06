@@ -25,4 +25,14 @@ public class MccLists {
         "of", "ro", "it", "er", "on", "to", "st", "me", "il", "en");
 
     public static List<String> longMccList = Arrays.asList("ing", "and", "the");
+
+    // list of 59 bigrams that have frequencies higher than 8,000 + "of":
+    public static List<String> fullShortMccList = Arrays.asList(
+            "in", "er", "re", "th", "on", "or", "an", "le", "te", "es",
+            "he", "at", "to", "en", "co", "ro", "ed", "ti", "st", "de",
+            "ng", "al", "it", "se", "ar", "nt", "nd", "ou", "om", "ma",
+            "me", "li", "ne", "is", "il", "ve", "as", "io", "ra", "ta",
+            "ll", "no", "ch", "ea", "et", "us", "ce", "ha", "ec", "fo",
+            "ic", "ot", "ge", "ac", "ri", "el", "la", "ct", "ca", "of");
+    public static List<String> fullLongMccList = Arrays.asList("ing", "ion", "and", "the");
 }

@@ -4,11 +4,12 @@ import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.util.Log;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.InputStream;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 
@@ -17,10 +18,13 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class ApplicationTest {
-//    private Context context = this.context;
-//    @Before
-//    public void setUp() throws Exception {
-//    }
+
+    private MccCalculator mccCalculator;
+
+    @Before
+    public void setUp() throws Exception {
+        mccCalculator = new MccCalculator(MccLists.shortMccList, MccLists.longMccList);
+    }
 
     @SuppressWarnings("ConstantConditions")
     @Test
@@ -41,13 +45,13 @@ public class ApplicationTest {
         int testNumber = 3;
 
         if (testNumber == 1) {
-            HashMap<String, Integer> frequencies = Confusions.calculateFrequencies(in);
+            LinkedHashMap<String, Integer> frequencies = mccCalculator.calculateFrequencies(in);
             Log.i("MCC frequencies", frequencies.toString());
         } else if (testNumber == 2) {
-            HashMap<String, Integer> confusions = Confusions.calculateConfusions(in);
+            LinkedHashMap<String, Integer> confusions = mccCalculator.calculateConfusions(in);
             Log.i("MCC confusions", confusions.toString());
         } else if (testNumber == 3) {
-            HashMap<String, Integer> confusionRanks = Confusions.findConfusionRanks(in);
+            LinkedHashMap<String, Integer> confusionRanks = mccCalculator.findConfusionRanks(in);
             Log.i("MCC confusion ranks", confusionRanks.toString());
         }
 
