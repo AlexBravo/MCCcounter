@@ -51,9 +51,9 @@ public class CreateMccList {
             for (String candidate : allSortedMCCs) {
                 newList.add(candidate);
                 MccCalculator mccCalculator = new MccCalculator(newList, MccLists.fullLongMccList);
-                newList.remove(candidate);
-
                 HashMap<String, Integer> confusions = mccCalculator.calculateConfusions(in);
+                // Now that calculateConfusions() is done, candidate can be removed
+                newList.remove(candidate);
 
                 //Log.i("MCC confusions", "Adding " + candidate + " resulted in " + confusions.size() + " confusions " + confusions.toString());
 
