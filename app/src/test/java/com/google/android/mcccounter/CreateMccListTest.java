@@ -32,7 +32,7 @@ public class CreateMccListTest {
         List<String> expectedList = Arrays.asList("the", "in", "ar", "to");
         Collections.sort(expectedList);
 
-        assertEquals(createdList, expectedList);
+        assertEquals(expectedList, createdList);
     }
 
     @SuppressWarnings("SpellCheckingInspection")
@@ -49,7 +49,7 @@ public class CreateMccListTest {
         allMCCs.addAll(MccLists.fullShortMccList);
         Collections.sort(allMCCs);
 
-        assertEquals(createdList, allMCCs);
+        assertEquals(allMCCs, createdList);
     }
 
     @Test
@@ -65,6 +65,6 @@ public class CreateMccListTest {
         allMCCs.addAll(MccLists.fullShortMccList);
         Collections.sort(allMCCs);
 
-        assertEquals(createdList, allMCCs);
+        assertEquals(allMCCs, createdList);
     }
 }
