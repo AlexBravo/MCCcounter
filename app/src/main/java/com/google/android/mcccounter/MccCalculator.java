@@ -25,6 +25,7 @@ public class MccCalculator {
         int i = 0;
         // Go all the way to 2 letters before the last one. That is the place of last possible confusion
         while(i < in.length() - 2) {
+            // It's OK for the second parameter of substring() to go all the way to be equal lenght()
             if (i + 3 <= in.length()) {
                 //String longMcc = in.substring(i, i + 3);
                 // Account for the fact that all MCCs have capitalized first letter
@@ -34,12 +35,6 @@ public class MccCalculator {
                     // "thet" is not confusing if there are only "the" and "et",
                     // as there needs to be "th", "the" and "et" to be confusing
 
-                    // Don't count capitalized second MCC
-//                    String secondShort = in.substring(i + 2, (i + 2) + 2);
-//                    if (shortList.contains(secondShort)) {
-//                        String toAdd = longMcc + secondShort.charAt(1);
-//                        addToMap(toAdd, confusions);
-//                    }
                     i += 3;
                     continue;
                 }
@@ -50,11 +45,22 @@ public class MccCalculator {
             String shortMcc = in.substring(i, i + 1).toLowerCase() + in.substring(i + 1, i + 2);
             if (shortList.contains(shortMcc)) {
                 // Don't count capitalized second MCC
-                String second = in.substring(i + 1, (i + 1) + 2);
-                if (shortList.contains(second)) {
-                    String toAdd = shortMcc + second.charAt(1);
+                String secondShort = in.substring(i + 1, (i + 1) + 2);
+                if (shortList.contains(secondShort)) {
+                    String toAdd = shortMcc + secondShort.charAt(1);
                     addToMap(toAdd, confusions);
+                } else if (i + 4 <= in.length()) {
+                    // Look for confusions like "at"-"the" in "rather"
+
+                    // Don't count capitalized second MCC
+                    String secondLong = in.substring(i + 1, (i + 1) + 3);
+                    if (longList.contains(secondLong)) {
+                        String toAdd = shortMcc + secondLong.substring(1, 3);
+                        addToMap(toAdd, confusions);
+                        i += 2;
+                    }
                 }
+
                 i += 2;
             } else {
                 i++;
@@ -152,7 +158,6 @@ public class MccCalculator {
             longList.remove(candidate);
         }
     }
-
 
     private static void addToMap(String toAdd, HashMap<String, Long> map) {
         if(!map.containsKey(toAdd)) {

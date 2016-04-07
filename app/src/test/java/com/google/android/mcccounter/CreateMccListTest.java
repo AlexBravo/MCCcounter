@@ -1,5 +1,6 @@
 package com.google.android.mcccounter;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.InputStream;
@@ -12,10 +13,12 @@ import static junit.framework.Assert.assertEquals;
 
 //Created by alex on 4/6/2016
 public class CreateMccListTest {
-//    @Before
-//    public void setUp() throws Exception {
-//        mccCounter = new MccCounter();
-//    }
+
+    private MccListCreator mccListCreator;
+    @Before
+    public void setUp() throws Exception {
+        mccListCreator = new MccListCreator();
+    }
 
 //    @Test
 //    public void testEmptyString() throws Exception {
@@ -27,7 +30,7 @@ public class CreateMccListTest {
         @SuppressWarnings("SpellCheckingInspection")
         final String in = "thetheininareto";
 
-        List<String> createdList = MccListCreator.createMccList(in, 1, 1000);
+        List<String> createdList = mccListCreator.createMccList(in, 1, 1000);
         Collections.sort(createdList);
 
         List<String> expectedList = Arrays.asList("the", "in", "ar", "to");
@@ -51,7 +54,7 @@ public class CreateMccListTest {
 
         int minMccValue = in.length()/1000; // 0.1%
         int maxConfusionDelta = in.length()/100; // 1%
-        List<String> createdList = MccListCreator.createMccList(in, minMccValue, maxConfusionDelta);
+        List<String> createdList = mccListCreator.createMccList(in, minMccValue, maxConfusionDelta);
         Collections.sort(createdList);
 
         List<String> allMCCs = new ArrayList<>(MccLists.fullLongMccList);
@@ -69,7 +72,7 @@ public class CreateMccListTest {
 
         int minMccValue = in.length()/1000; // 0.1%
         int maxConfusionDelta = in.length()/100; // 1%
-        List<String> createdList = MccListCreator.createMccList(in, minMccValue, maxConfusionDelta);
+        List<String> createdList = mccListCreator.createMccList(in, minMccValue, maxConfusionDelta);
         Collections.sort(createdList);
 
         List<String> allMCCs = new ArrayList<>(MccLists.fullLongMccList);
