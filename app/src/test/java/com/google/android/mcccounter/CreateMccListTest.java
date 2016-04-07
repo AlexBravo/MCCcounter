@@ -24,7 +24,7 @@ public class CreateMccListTest {
 
     @Test
     public void testSimpleString() throws Exception {
-        final String in = "thetheinarto";
+        final String in = "thetheininareto";
 
         List<String> createdList = MccListCreator.createMccList(in);
         Collections.sort(createdList);

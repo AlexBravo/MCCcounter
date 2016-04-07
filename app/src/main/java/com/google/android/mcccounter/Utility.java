@@ -60,48 +60,48 @@ public class Utility {
     }
 
     @NonNull
-    public static LinkedHashMap<String, Integer> sortMap(HashMap<String, Integer> map) {
-        List<Map.Entry<String, Integer>> list = new LinkedList<>(map.entrySet());
-        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+    public static LinkedHashMap<String, Long> sortMap(HashMap<String, Long> map) {
+        List<Map.Entry<String, Long>> list = new LinkedList<>(map.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<String, Long>>() {
             @Override
-            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+            public int compare(Map.Entry<String, Long> o1, Map.Entry<String, Long> o2) {
                 return (o2.getValue()).compareTo(o1.getValue());
             }
         });
-        LinkedHashMap<String, Integer> returnVal = new LinkedHashMap<>();
-        for (Map.Entry<String, Integer> entry : list) {
+        LinkedHashMap<String, Long> returnVal = new LinkedHashMap<>();
+        for (Map.Entry<String, Long> entry : list) {
             returnVal.put( entry.getKey(), entry.getValue() );
         }
         return returnVal;
     }
 
     @NonNull
-    public static LinkedHashMap<String, Integer> sortMapReverse(HashMap<String, Integer> map) {
-        List<Map.Entry<String, Integer>> list = new LinkedList<>(map.entrySet());
-        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+    public static LinkedHashMap<String, Long> sortMapReverse(HashMap<String, Long> map) {
+        List<Map.Entry<String, Long>> list = new LinkedList<>(map.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<String, Long>>() {
             @Override
-            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+            public int compare(Map.Entry<String, Long> o1, Map.Entry<String, Long> o2) {
                 return (o1.getValue()).compareTo(o2.getValue());
             }
         });
-        LinkedHashMap<String, Integer> returnVal = new LinkedHashMap<>();
-        for (Map.Entry<String, Integer> entry : list) {
+        LinkedHashMap<String, Long> returnVal = new LinkedHashMap<>();
+        for (Map.Entry<String, Long> entry : list) {
             returnVal.put( entry.getKey(), entry.getValue() );
         }
         return returnVal;
     }
 
-    public static int calculateTotalOfValues(HashMap<String, Integer> map) {
+    public static int calculateTotalOfValues(HashMap<String, Long> map) {
         int mapTotal = 0;
-        for(Integer i : map.values()){
+        for(Long i : map.values()){
             mapTotal += i;
         }
         return mapTotal;
     }
 
-    public static int calculateMccSavings(HashMap<String, Integer> map) {
+    public static int calculateMccSavings(HashMap<String, Long> map) {
         int mapTotal = 0;
-        for(Map.Entry<String, Integer> entry : map.entrySet()) {
+        for(Map.Entry<String, Long> entry : map.entrySet()) {
             // We have 1 press saved for each 2-letter MCC
             // and 2 press saved for each 3-letter MCC
             int mccSaving = entry.getKey().length() - 1;
@@ -113,7 +113,7 @@ public class Utility {
     // Less confusing and more frequent MCCs has the lowest confusion rank
     // TODO: Find a way to tell between MCC with low confusion and low frequency
     // TODO: and high confusion and high frequency
-    @Nullable public static Integer calculateConfusionRank(double confusion, int frequency) {
+    @Nullable public static Long calculateConfusionRank(double confusion, long frequency) {
         if(frequency == 0) {
             return null;
         }
@@ -124,6 +124,6 @@ public class Utility {
             confusion = 1;
         }
 
-        return (int)(confusion/dFrequency);
+        return (long)(confusion/dFrequency);
     }
 }

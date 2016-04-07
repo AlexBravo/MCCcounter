@@ -6,8 +6,8 @@ import java.util.Map;
 //Created by Maxim on 12/12/2015.
 
 public class MccCounter {
-    public static Map<String, Integer> calculateMCCs(String in) {
-        Map<String, Integer> mccs = new HashMap<>();
+    public static Map<String, Long> calculateMCCs(String in) {
+        Map<String, Long> mccs = new HashMap<>();
         if(in.length() > 1) {
             if (in.length() < 3) {
                 mccs.putAll(searchThroughShortR(in));
@@ -20,7 +20,7 @@ public class MccCounter {
         return mccs;
     }
 
-    public static Map<String, Integer> ridOfShortRepetition(Map<String, Integer> list){
+    public static Map<String, Long> ridOfShortRepetition(Map<String, Long> list){
         if(list.containsKey("in") && list.containsKey("ing")){
             if(list.get("in") <= list.get("ing")){
                 list.remove("in");
@@ -54,8 +54,8 @@ public class MccCounter {
 
 
     @SuppressWarnings("unused")
-    public static Map<String, Integer> searchThroughShort(String toSearch){
-        Map<String, Integer> results = new HashMap<>();
+    public static Map<String, Long> searchThroughShort(String toSearch){
+        Map<String, Long> results = new HashMap<>();
         for(int i = 0; i < toSearch.length() - 1; i++){
             String searchable = toSearch.substring(i, i + 2);
             for(int j = 0; j < MccLists.shortMccList.size(); j++){
@@ -65,7 +65,7 @@ public class MccCounter {
                         results.put(mcc, results.get(mcc + 1));
                         i++;
                     } else {
-                        results.put(mcc, 1);
+                        results.put(mcc, 1L);
                         i++;
                     }
                 }
@@ -74,8 +74,8 @@ public class MccCounter {
         return results;
     }
 
-    public static Map<String, Integer> searchThroughShortR(String toSearch){
-        Map<String, Integer> results = new HashMap<>();
+    public static Map<String, Long> searchThroughShortR(String toSearch){
+        Map<String, Long> results = new HashMap<>();
         for(int i = toSearch.length() - 1; i > 2; i--){
             String searchable = toSearch.substring(i - 2, i);
             for(int j = 0; j < MccLists.shortMccList.size(); j++){
@@ -85,7 +85,7 @@ public class MccCounter {
                         results.put(mcc, results.get(mcc) + 1);
                         i--;
                     } else {
-                        results.put(mcc, 1);
+                        results.put(mcc, 1L);
                         i--;
                     }
                 }
@@ -96,8 +96,8 @@ public class MccCounter {
 
 
 
-    public static Map<String, Integer> searchThroughLong(String toSearch){
-        Map<String, Integer> results = new HashMap<>();
+    public static Map<String, Long> searchThroughLong(String toSearch){
+        Map<String, Long> results = new HashMap<>();
 
         for(int i = 0; i < toSearch.length() - 2; i++){
             String searchable = toSearch.substring(i, i + 3);
@@ -108,7 +108,7 @@ public class MccCounter {
                         results.put(mcc, results.get(mcc) + 1);
                         i+=2;
                     } else {
-                        results.put(mcc, 1);
+                        results.put(mcc, 1L);
                         i+=2;
                     }
                 }
@@ -118,8 +118,8 @@ public class MccCounter {
     }
 
     @SuppressWarnings("unused")
-    public static Map<String, Integer> searchThroughLongR(String toSearch){
-        Map<String, Integer> results = new HashMap<>();
+    public static Map<String, Long> searchThroughLongR(String toSearch){
+        Map<String, Long> results = new HashMap<>();
         for(int i = toSearch.length(); i > 0; i--){
             String searchable = toSearch.substring(i - 3, i);
             for(int j = 0; j < MccLists.longMccList.size(); j++){
@@ -129,7 +129,7 @@ public class MccCounter {
                         results.put(mcc, results.get(mcc) + 1);
                         i-=2;
                     } else {
-                        results.put(mcc, 1);
+                        results.put(mcc, 1L);
                         i-=2;
                     }
                 }

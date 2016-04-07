@@ -1,5 +1,6 @@
 package com.google.android.mcccounter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -7,21 +8,22 @@ import java.util.List;
 /** Created by alex on 3/20/2016. */
 
 public class MccCalculator {
-    public List<String> shortList;
-    public List<String> longList;
+    public List<String> shortList = new ArrayList<>();
+    public List<String> longList = new ArrayList<>();
 
-    HashMap<String, Integer> frequencies = new HashMap<>();
+    HashMap<String, Long> frequencies = new HashMap<>();
 
-    public MccCalculator(List<String> shortList, List<String> longList) {
-        this.shortList = shortList;
-        this.longList = longList;
-    }
+//    public MccCalculator(List<String> shortList, List<String> longList) {
+//        this.shortList = shortList;
+//        this.longList = longList;
+//    }
 
-    public LinkedHashMap<String, Integer> calculateSortedConfusions(String in) {
+    public LinkedHashMap<String, Long> calculateSortedConfusions(String in) {
         //String in = inp.toLowerCase();
-        HashMap<String, Integer> confusions = new HashMap<>();
+        HashMap<String, Long> confusions = new HashMap<>();
         // Go through the input text and find MCCs in them
         int i = 0;
+        // Go all the way to 2 letters before the last one. That is the place of last possible confusion
         while(i < in.length() - 2) {
             if (i + 3 <= in.length()) {
                 //String longMcc = in.substring(i, i + 3);
@@ -58,12 +60,13 @@ public class MccCalculator {
         return Utility.sortMap(confusions);
     }
 
-    public LinkedHashMap<String, Integer> calculateSortedFrequencies(String in) {
+    public LinkedHashMap<String, Long> calculateSortedFrequencies(String in) {
         // Go through the input text and find MCCs in them
         frequencies.clear();
 
         int i = 0;
         int length = in.length();
+        // Go all the way to one letter before the last one
         while(i < length - 1) {
             if (i + 3 <= length) {
                 //String longMcc = in.substring(i, i + 3);
@@ -95,25 +98,27 @@ public class MccCalculator {
     }
 
     @SuppressWarnings("unused")
-    public LinkedHashMap<String, Integer> calculateSortedConfusionRanks(String in){
+    public LinkedHashMap<String, Long> calculateSortedConfusionRanks(String in){
 
-        HashMap<String, Integer> confusionRanks = new HashMap<>();
-        HashMap<String, Integer> originalConfusions = calculateSortedConfusions(in);
+        HashMap<String, Long> confusionRanks = new HashMap<>();
+        HashMap<String, Long> originalConfusions = calculateSortedConfusions(in);
         int originalConfusionsTotal = Utility.calculateTotalOfValues(originalConfusions);
 
 
-        LinkedHashMap<String, Integer> sortedFrequencies = calculateSortedFrequencies(in);
+        LinkedHashMap<String, Long> sortedFrequencies = calculateSortedFrequencies(in);
         int frequenciesTotal = Utility.calculateMccSavings(sortedFrequencies);
 
         for(int i = 0; i < shortList.size(); i++) {
             String mccToRemove = shortList.get(i);
             shortList.set(i, "");
-            HashMap<String, Integer> confusions = calculateSortedConfusions(in);
+            HashMap<String, Long> confusions = calculateSortedConfusions(in);
             double confusionPercentage = calculateConfusionPercentage(confusions, originalConfusionsTotal);
-            int frequency = sortedFrequencies.get(mccToRemove);
-            Integer confusionRank = Utility.calculateConfusionRank(confusionPercentage, frequency);
-            if (confusionRank != null) {
-                confusionRanks.put(mccToRemove, confusionRank);
+            Long frequency = sortedFrequencies.get(mccToRemove);
+            if (frequency != 0) {
+                Long confusionRank = Utility.calculateConfusionRank(confusionPercentage, frequency);
+                if (confusionRank != null) {
+                    confusionRanks.put(mccToRemove, confusionRank);
+                }
             }
             shortList.set(i, mccToRemove);
         }
@@ -121,7 +126,7 @@ public class MccCalculator {
         return Utility.sortMap(confusionRanks);
     }
 
-    public double calculateConfusionPercentage(HashMap<String, Integer> confusions, int originalTotal) {
+    public double calculateConfusionPercentage(HashMap<String, Long> confusions, int originalTotal) {
         int confusionsTotal = Utility.calculateTotalOfValues(confusions);
         @SuppressWarnings("UnnecessaryLocalVariable")
         double d = ((originalTotal - confusionsTotal) / (double) originalTotal) * 100;
@@ -145,12 +150,12 @@ public class MccCalculator {
     }
 
 
-    private static void addToMap(String toAdd, HashMap<String, Integer> map) {
+    private static void addToMap(String toAdd, HashMap<String, Long> map) {
         if(!map.containsKey(toAdd)) {
-            map.put(toAdd, 1);
+            map.put(toAdd, 1L);
         } else {
-            int prev = map.get(toAdd);
-            map.put(toAdd, prev + 1);
+            long prev = map.get(toAdd);
+            map.put(toAdd, prev + 1L);
         }
     }
 }

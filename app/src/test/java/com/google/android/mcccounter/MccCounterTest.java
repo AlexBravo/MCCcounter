@@ -21,11 +21,11 @@ public class MccCounterTest {
 
     @Test
     public void testString() throws Exception {
-        Map<String, Integer> map = new HashMap<>();
+        Map<String, Long> map = new HashMap<>();
 
         //map.put("ing", 2);
-        map.put("ing", 1);
-        Map<String, Integer> mccCounterMap = MccCounter.calculateMCCs("sing");
+        map.put("ing", 1L);
+        Map<String, Long> mccCounterMap = MccCounter.calculateMCCs("sing");
         assertEquals(map, mccCounterMap);
     }
 

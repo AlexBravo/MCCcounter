@@ -9,92 +9,103 @@ import java.util.Map;
 /** Created by alex on 4/6/16. */
 public class MccListCreator {
 
+    private static final long MIN_MCC_VALUE = 1;
+
     public static List<String> createMccList(String in) {
-        int fileLength = in.length();
+        long fileLength = in.length();
 
         List<String> allMCCs = new ArrayList<>(MccLists.fullLongMccList);
         allMCCs.addAll(MccLists.fullShortMccList);
 
-        List<String> shortList = new ArrayList<>();
-        List<String> longList = new ArrayList<>();
+        List<String> finalList = new ArrayList<>();
 
-        HashMap<String, Integer> confusionRanks = new HashMap<>();
-//        HashMap<String, Integer> candidateFrequencies = new HashMap<>();
+        HashMap<String, Long> ranks = new HashMap<>();
+        HashMap<String, Long> extraConfusions = new HashMap<>();
+        HashMap<String, Long> savingFromMCCs = new HashMap<>();
 
-        int confusionTotal = 0;
-        MccCalculator mccCalculator = new MccCalculator(shortList, longList);
+        long confusionSoFar = 0;
+        long mccSavingSoFar = 0;
+        MccCalculator mccCalculator = new MccCalculator();
         while (!allMCCs.isEmpty()) {
-            confusionRanks.clear();
-//            candidateFrequencies.clear();
+            ranks.clear();
+            extraConfusions.clear();
+            savingFromMCCs.clear();
 
             for (String candidate : allMCCs) {
                 mccCalculator.add(candidate);
 
                 // TODO: Number of occurrence of an MCCs should be calculated for each MCC based on the current list of MCCs
-                int occurrences = 1; //mccCalculator.calculateChords(in, candidate);
+                //int occurrences = 1; //mccCalculator.calculateChords(in, candidate);
                 //int occurrences = frequencies.get(candidate);
 
-                HashMap<String, Integer> confusions = mccCalculator.calculateSortedConfusions(in);
-
-                //Log.i("MCC confusions", "Adding " + candidate + " resulted in " + confusions.size() + " confusions " + confusions.toString());
 
                 // Calculate the sum of all confusions
-                int newConfusionTotal = Utility.calculateTotalOfValues(confusions);
-                int addedConfusion = newConfusionTotal - confusionTotal;
+                HashMap<String, Long> confusions = mccCalculator.calculateSortedConfusions(in);
+                long newConfusionTotal = Utility.calculateTotalOfValues(confusions);
+                long addedConfusion = newConfusionTotal - confusionSoFar;
 
                 // Calculate the new frequencies of all MCCs using the new lists
-                LinkedHashMap<String, Integer> allFrequencies = mccCalculator.calculateSortedFrequencies(in);
+                LinkedHashMap<String, Long> allFrequencies = mccCalculator.calculateSortedFrequencies(in);
 
                 // Was this chord encountered?
-                Integer frequency = allFrequencies.get(candidate);
+                Long frequency = allFrequencies.get(candidate);
                 if (frequency != null) {
-                    int mccSavings = Utility.calculateMccSavings(allFrequencies);
+                    long mccSavings = Utility.calculateMccSavings(allFrequencies);
+                    long gainedSavings = mccSavings - mccSavingSoFar;
 
-                    int typedChords = fileLength - mccSavings;
-                    // Add 1 to avoid 0 rank
-                    int rank = (addedConfusion + 1) * typedChords;
-                    if (rank != 0) {
-                        confusionRanks.put(candidate, rank);
+                    // Add chord only if it gains us something
+                    if (gainedSavings >= MIN_MCC_VALUE) {
+                        long typedChords = fileLength - mccSavings;
+
+                        // Rank is a product of confusions and how many chords need to be typed for a given text
+                        // Rank needs to be minimized.
+                        // Add 1 to addedConfusion to make sure typedChords is taken into account
+                        long rank = (addedConfusion + 1) * typedChords;
+                        ranks.put(candidate, rank);
+                        extraConfusions.put(candidate, newConfusionTotal);
+                        savingFromMCCs.put(candidate, mccSavings);
                     }
-
-                    // Store frequency to see if frequencies are changing as we add more MCC
-//                    candidateFrequencies.put(candidate, frequency);
-//
-//                    //Integer confusionRank = Utility.calculateConfusionRank(addedConfusion, frequency);
-//                    //if (confusionRank != null) {
-//                    //    confusionRanks.put(candidate, confusionRank);
-//                    //}
                 }
 
                 // Now that calculations are done, candidate can be removed
                 mccCalculator.remove(candidate);
             }
 
-//            LinkedHashMap<String, Integer> sortedCandidateFrequencies = Utility.sortMap(candidateFrequencies);
+//            LinkedHashMap<String, Long> sortedCandidateFrequencies = Utility.sortMap(candidateFrequencies);
 //            System.out.println("sortedCandidateFrequencies " + sortedCandidateFrequencies.toString());
 
-            LinkedHashMap<String, Integer> sortedConfusionRanks = Utility.sortMapReverse(confusionRanks);
-            System.out.println("sortedConfusionRanks " + sortedConfusionRanks.toString());
+            LinkedHashMap<String, Long> sortedRanks = Utility.sortMapReverse(ranks);
+            System.out.println("sortedRanks " + sortedRanks.toString());
 
-            if (sortedConfusionRanks.isEmpty()) {
-                System.out.println("Error sortedConfusionRanks empty");
+            if (sortedRanks.isEmpty()) {
+                System.out.println("sortedRanks empty. Done.");
                 allMCCs.clear();
             } else {
-                // Take MCC with the smallest confusion rank
-                Map.Entry<String, Integer> entry = sortedConfusionRanks.entrySet().iterator().next();
+                // Take MCC with the smallest rank
+                Map.Entry<String, Long> entry = sortedRanks.entrySet().iterator().next();
                 String mccToAdd = entry.getKey();
-                System.out.println("'" + mccToAdd + "' has rank " + entry.getValue());
+
+                long newConfusionTotal = extraConfusions.get(mccToAdd);
+                long mccSavings = savingFromMCCs.get(mccToAdd);
+
+                System.out.println("'" + mccToAdd + "' rank=" + entry.getValue()
+                        + "' confusionSoFar=" + (newConfusionTotal - confusionSoFar)
+                        + "' savings from adding=" + (mccSavings - mccSavingSoFar));
+                confusionSoFar = newConfusionTotal;
+                mccSavingSoFar = mccSavings;
 
                 allMCCs.remove(mccToAdd);
                 mccCalculator.add(mccToAdd);
+                finalList.add(mccToAdd);
 
-                // Now we can calculate new confusions
-                HashMap<String, Integer> confusions = mccCalculator.calculateSortedConfusions(in);
-                confusionTotal = Utility.calculateTotalOfValues(confusions);
+//                // Now we can calculate new confusions
+//                HashMap<String, Long> confusions = mccCalculator.calculateSortedConfusions(in);
+//                confusionSoFar = Utility.calculateTotalOfValues(confusions);
+
             }
 
 // Calculate new frequencies to prune the new list from too rare MCCs
-//            HashMap<String, Integer> frequencies = mccCalculator.calculateSortedFrequencies(in);
+//            HashMap<String, Long> frequencies = mccCalculator.calculateSortedFrequencies(in);
 //            System.out.println("New MCC frequencies " + frequencies.toString());
 //            Set<String> allSortedMCCs = frequencies.keySet();
 //            System.out.println("allSortedMCCs " + allSortedMCCs.toString());
@@ -102,9 +113,8 @@ public class MccListCreator {
 //                removeTooRareMcc()
         }
 
-        System.out.println("MCC longList " + longList.toString() + " shortList " + shortList.toString());
-        List<String> finalList = new ArrayList<>(longList);
-        finalList.addAll(shortList);
+        System.out.println("MCC finalList " + finalList.toString());
+
 
         return finalList;
     }
