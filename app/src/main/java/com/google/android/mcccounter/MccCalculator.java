@@ -30,12 +30,16 @@ public class MccCalculator {
                 // Account for the fact that all MCCs have capitalized first letter
                 String longMcc = in.substring(i, i + 1).toLowerCase() + in.substring(i + 1, i + 3);
                 if (longList.contains(longMcc)) {
+                    // Don't look for 4th letter.
+                    // "thet" is not confusing if there are only "the" and "et",
+                    // as there needs to be "th", "the" and "et" to be confusing
+
                     // Don't count capitalized second MCC
-                    String secondShort = in.substring(i + 2, (i + 2) + 2);
-                    if (shortList.contains(secondShort)) {
-                        String toAdd = longMcc + secondShort.charAt(1);
-                        addToMap(toAdd, confusions);
-                    }
+//                    String secondShort = in.substring(i + 2, (i + 2) + 2);
+//                    if (shortList.contains(secondShort)) {
+//                        String toAdd = longMcc + secondShort.charAt(1);
+//                        addToMap(toAdd, confusions);
+//                    }
                     i += 3;
                     continue;
                 }

@@ -24,25 +24,34 @@ public class CreateMccListTest {
 
     @Test
     public void testSimpleString() throws Exception {
+        @SuppressWarnings("SpellCheckingInspection")
         final String in = "thetheininareto";
 
-        List<String> createdList = MccListCreator.createMccList(in);
+        List<String> createdList = MccListCreator.createMccList(in, 1, 1000);
         Collections.sort(createdList);
 
         List<String> expectedList = Arrays.asList("the", "in", "ar", "to");
+        // Q: Why does it add "to" before "et"?
+        // A: Because both "to" and "et" have the same rank, but "to" was looked at first
+
+        // It should try adding "et", but fail as no savings.
+
+        // TODO: Test number of confusions MccListCreator thinks there are
         Collections.sort(expectedList);
 
         assertEquals(expectedList, createdList);
     }
 
-    @SuppressWarnings("SpellCheckingInspection")
     @Test
     public void testSmallFile() throws Exception {
+        @SuppressWarnings("SpellCheckingInspection")
         String fileName = "aliceinwonderland.txt";
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
         final String in = Utility.toString(is);
 
-        List<String> createdList = MccListCreator.createMccList(in);
+        int minMccValue = in.length()/1000; // 0.1%
+        int maxConfusionDelta = in.length()/100; // 1%
+        List<String> createdList = MccListCreator.createMccList(in, minMccValue, maxConfusionDelta);
         Collections.sort(createdList);
 
         List<String> allMCCs = new ArrayList<>(MccLists.fullLongMccList);
@@ -58,7 +67,9 @@ public class CreateMccListTest {
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
         final String in = Utility.toString(is);
 
-        List<String> createdList = MccListCreator.createMccList(in);
+        int minMccValue = in.length()/1000; // 0.1%
+        int maxConfusionDelta = in.length()/100; // 1%
+        List<String> createdList = MccListCreator.createMccList(in, minMccValue, maxConfusionDelta);
         Collections.sort(createdList);
 
         List<String> allMCCs = new ArrayList<>(MccLists.fullLongMccList);
