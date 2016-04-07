@@ -7,3 +7,5 @@
 /captures
 
 app/src/androidTest/res/raw/my812_notes.txt
+
+app/src/test/resources/812_notes.txt

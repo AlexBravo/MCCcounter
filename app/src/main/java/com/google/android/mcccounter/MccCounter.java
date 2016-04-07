@@ -14,13 +14,13 @@ public class MccCounter {
             } else {
                 mccs.putAll(searchThroughLong(in));
                 mccs.putAll(searchThroughShortR(in));
-                mccs = ridOfShortRepitition(mccs);
+                mccs = ridOfShortRepetition(mccs);
             }
         }
         return mccs;
     }
 
-    public static Map<String, Integer> ridOfShortRepitition(Map<String, Integer> list){
+    public static Map<String, Integer> ridOfShortRepetition(Map<String, Integer> list){
         if(list.containsKey("in") && list.containsKey("ing")){
             if(list.get("in") <= list.get("ing")){
                 list.remove("in");

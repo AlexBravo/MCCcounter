@@ -6,7 +6,7 @@ import java.util.List;
 /** Created by alex on 4/4/16. */
 
 public class MccLists {
-//    public static List<String> shortMccList = Arrays.asList(
+//    public static List<String> shortList = Arrays.asList(
 //            "re", "in", "or", "an", "th", "al", "at", "ma", "ar", "es",
 //            "co", "il", "ac", "ch", "no", "de", "se", "ed", "of", "le",
 //            "ro", "ou", "ti", "is", "it", "en", "er", "on", "to", "st"); // Full list
