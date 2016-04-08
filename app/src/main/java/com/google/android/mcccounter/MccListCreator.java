@@ -43,6 +43,7 @@ public class MccListCreator {
             newConfusions.clear();
             mccSavings.clear();
 
+            // Evaluate all candidates
             for (String candidate : allMCCs) {
                 mccCalculator.add(candidate);
 
@@ -167,7 +168,7 @@ public class MccListCreator {
             }
         }
 
-        // Use relative rank to decide which branch to use
+        // TODO: Use relative rank to decide which branch to use
         //noinspection UnnecessaryLocalVariable
         String mccToAdd = branches.get(0);
 
