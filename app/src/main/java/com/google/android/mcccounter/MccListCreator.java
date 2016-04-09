@@ -12,11 +12,14 @@ import java.util.Map;
 public class MccListCreator {
     public static final double BRANCH_TOLERANCE = 1.01; // 1%
 
+    public static int branchesCount = 0;
+    public static long maxSavings;
+
+    private MccCalculator mccCalculator = new MccCalculator();
+
     private HashMap<String, Long> ranks = new HashMap<>();
     private HashMap<String, Long> newConfusions = new HashMap<>();
     private HashMap<String, Long> mccSavings = new HashMap<>();
-
-    private MccCalculator mccCalculator = new MccCalculator();
 
     private int minMccValue;
     private int maxConfusionDelta;
@@ -24,71 +27,81 @@ public class MccListCreator {
     private String in;
     private long fileLength;
 
-    public List<String> createMccList(String in, int minMccValue, int maxConfusionDelta) {
+
+    public MccListCreator(String in, int minMccValue, int maxConfusionDelta) {
         this.in = in;
         this.fileLength = in.length();
+
         this.minMccValue = minMccValue;
         this.maxConfusionDelta = maxConfusionDelta;
+    }
 
-        List<String> finalList = new ArrayList<>();
+    public void createMccList(List<String> mccList,
+                                      long savingsSoFar, long confusionsSoFar,
+                                      int recursionLevel) {
 
-        long confusionSoFar = 0;
-        long savingSoFar = 0;
+        List<String> mccsToConsider = new ArrayList<>(MccLists.fullLongMccList);
+        mccsToConsider.addAll(MccLists.fullShortMccList);
 
-        List<String> allMCCs = new ArrayList<>(MccLists.fullLongMccList);
-        allMCCs.addAll(MccLists.fullShortMccList);
-
-        while (!allMCCs.isEmpty()) {
-            ranks.clear();
-            newConfusions.clear();
-            mccSavings.clear();
-
-            // Evaluate all candidates
-            for (String candidate : allMCCs) {
-                mccCalculator.add(candidate);
-
-                evaluateCandidate(candidate, savingSoFar, confusionSoFar);
-
-                mccCalculator.remove(candidate);
-            }
-
-            String mccToAdd = findMccToAdd(ranks);
-            if (mccToAdd.isEmpty()) {
-                System.out.println("mccToAdd is empty. Done.");
-                System.out.println("discarded MCCs " + allMCCs);
-
-                allMCCs.clear();
-            } else {
-                long newConfusionTotal = newConfusions.get(mccToAdd);
-                long confusionsDelta = newConfusionTotal - confusionSoFar;
-
-                long newSavingsTotal = mccSavings.get(mccToAdd);
-                long savingsDelta = newSavingsTotal - savingSoFar;
-
-                System.out.println("'" + mccToAdd
-                        + "' savingsDelta=" + savingsDelta
-                        + ", confusionsDelta=" + confusionsDelta
-                        + ", rank=" + ranks.get(mccToAdd));
-                confusionSoFar = newConfusionTotal;
-                savingSoFar = newSavingsTotal;
-
-                allMCCs.remove(mccToAdd);
-                mccCalculator.add(mccToAdd);
-                finalList.add(mccToAdd);
-            }
-
-// Calculate new frequencies to prune the new list from too rare MCCs
-//            HashMap<String, Long> frequencies = mccCalculator.calculateSortedFrequencies(in);
-//            System.out.println("New MCC frequencies " + frequencies);
-//            Set<String> allSortedMCCs = frequencies.keySet();
-//            System.out.println("allSortedMCCs " + allSortedMCCs);
-//            for (each MCC)
-//                removeTooRareMcc()
+        // Init mccCalculator lists
+        for (String mcc : mccList) {
+            mccCalculator.add(mcc);
+            mccsToConsider.remove(mcc);
         }
 
-        System.out.println("MCC finalList(" + finalList.size() + "): " + finalList);
+        ranks.clear();
+        newConfusions.clear();
+        mccSavings.clear();
 
-        return finalList;
+        // Evaluate all candidates
+        for (String candidate : mccsToConsider) {
+            mccCalculator.add(candidate);
+
+            evaluateCandidate(candidate, savingsSoFar, confusionsSoFar);
+
+            mccCalculator.remove(candidate);
+        }
+
+        List<String> branches = findMccsToAdd(ranks);
+        if (branches.isEmpty()) {
+            System.out.println("mccList " + mccList
+                    + "' savingsSoFar=" + savingsSoFar + ", maxSavings=" + maxSavings);
+
+            if (savingsSoFar > maxSavings) {
+                maxSavings = savingsSoFar;
+            }
+            return;
+        }
+
+        // TODO: Use relative rank to decide which branch to use first
+        for (String mccToAdd : branches) {
+            long newConfusionTotal = newConfusions.get(mccToAdd);
+            //long confusionsDelta = newConfusionTotal - confusionsSoFar;
+
+            long newSavingsTotal = mccSavings.get(mccToAdd);
+            long savingsDelta = newSavingsTotal - savingsSoFar;
+
+            confusionsSoFar = newConfusionTotal;
+            savingsSoFar = newSavingsTotal;
+
+            mccList.add(mccToAdd);
+
+            branchesCount++;
+
+            System.out.println("added '" + mccToAdd
+                    + "' savingsDelta=" + savingsDelta
+                    //+ ", confusionsDelta=" + confusionsDelta
+                    + "' savingsSoFar=" + savingsSoFar
+                    + ", rank=" + ranks.get(mccToAdd) + " l=" + recursionLevel);
+
+            // Go into this branch
+            MccListCreator mccListCreator = new MccListCreator(in, minMccValue, maxConfusionDelta);
+            mccListCreator.createMccList(mccList, savingsSoFar, confusionsSoFar, ++recursionLevel);
+
+            mccList.remove(mccToAdd);
+        }
+
+        // Many lists were created, so can't just return one list
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -119,7 +132,8 @@ public class MccListCreator {
                 System.out.println("'" + candidate + "' too high confusionsDelta=" + confusionsDelta);
 
             // TODO: Think about how to implement this restraint better
-            } else if (confusionsDelta > savingsDelta) {
+            //} else if (confusionsDelta > savingsDelta) {
+            } else if (confusionsDelta > 0) {
                 //System.out.println("'" + candidate + "' confusionsDelta=" + confusionsDelta
                 //        + " > savingsDelta=" + savingsDelta);
             } else {
@@ -136,19 +150,19 @@ public class MccListCreator {
         }
     }
 
-    public String findMccToAdd(HashMap<String, Long> ranks) {
+    public List<String> findMccsToAdd(HashMap<String, Long> ranks) {
         LinkedHashMap<String, Long> sortedRanks = Utility.sortMapReverse(ranks);
         //System.out.println("sortedRanks " + sortedRanks);
 
+        ArrayList<String> branches = new ArrayList<>();
+
         if (sortedRanks.isEmpty()) {
-            return "";
+            return branches;
         }
 
         // Look for MCCs with the smallest rank
         Iterator<Map.Entry<String, Long>> iterator = sortedRanks.entrySet().iterator();
         Map.Entry<String, Long> firstEntry = iterator.next();
-
-        ArrayList<String> branches = new ArrayList<>();
 
         String firstEntryKey = firstEntry.getKey();
         long firstEntryRank = firstEntry.getValue();
@@ -161,17 +175,13 @@ public class MccListCreator {
         while (iterator.hasNext()) {
             Map.Entry<String, Long> nextEntry = iterator.next();
             if (nextEntry.getValue() < firstEntryRank * BRANCH_TOLERANCE) {
-                System.out.println("Alternative choice found for '" + firstEntryKey
-                        + "' : '" + nextEntry.getKey() + "'");
+                //System.out.println("Alternative choice found for '" + firstEntryKey
+                //        + "' : '" + nextEntry.getKey() + "'");
 
                 branches.add(nextEntry.getKey());
             }
         }
 
-        // TODO: Use relative rank to decide which branch to use
-        //noinspection UnnecessaryLocalVariable
-        String mccToAdd = branches.get(0);
-
-        return mccToAdd;
+        return branches;
     }
 }

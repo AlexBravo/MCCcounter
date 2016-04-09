@@ -34,5 +34,6 @@ public class MccLists {
             "me", "li", "ne", "is", "il", "ve", "as", "io", "ra", "ta",
             "ll", "no", "ch", "ea", "et", "us", "ce", "ha", "ec", "fo",
             "ic", "ot", "ge", "ac", "ri", "el", "la", "ct", "ca", "of");
-    public static List<String> fullLongMccList = Arrays.asList("ing", "ion", "and", "the");
+
+    public static List<String> fullLongMccList = Arrays.asList("the", "ing", "and", "ion");
 }

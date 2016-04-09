@@ -52,7 +52,6 @@ public class MccCounter {
         return list;
     }
 
-
     @SuppressWarnings("unused")
     public static Map<String, Long> searchThroughShort(String toSearch){
         Map<String, Long> results = new HashMap<>();
@@ -93,8 +92,6 @@ public class MccCounter {
         }
         return results;
     }
-
-
 
     public static Map<String, Long> searchThroughLong(String toSearch){
         Map<String, Long> results = new HashMap<>();
