@@ -1,15 +1,9 @@
 package com.google.android.mcccounter;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import static junit.framework.Assert.assertEquals;
 
 //Created by alex on 4/6/2016
 public class CreateMccListTest {
@@ -32,11 +26,12 @@ public class CreateMccListTest {
         @SuppressWarnings("SpellCheckingInspection")
         final String in = "thetheininareto";
 
-        MccListCreator mccListCreator = new MccListCreator(in, 1, 1000);
+        MccListCreator mccListCreator = new MccListCreator(in, 1, 10);
         mccListCreator.createMccList(new ArrayList<String>(), 0, 0, 0);
 
         System.out.println("maxSavings=" + MccListCreator.maxSavings
-                + " branchesCount=" + MccListCreator.branchesCount);
+                + " branchesCount=" + MccListCreator.branchesCount
+                + " duplicateBranchesCount=" + MccListCreator.duplicateBranchesCount);
 
         //Collections.sort(createdList);
         //List<String> expectedList = Arrays.asList("the", "in", "ar", "to");
@@ -58,20 +53,15 @@ public class CreateMccListTest {
         final String in = Utility.toString(is);
 
         int minMccValue = in.length()/1000; // 0.1%
-        int maxConfusionDelta = in.length()/100; // 1%
+        int maxConfusionDelta = in.length()/1000; // 0.1%
         MccListCreator mccListCreator = new MccListCreator(in, minMccValue, maxConfusionDelta);
         mccListCreator.createMccList(new ArrayList<String>(), 0, 0, 0);
 
         System.out.println("maxSavings=" + MccListCreator.maxSavings
-                + " branchesCount=" + MccListCreator.branchesCount);
+                + " branchesCount=" + MccListCreator.branchesCount
+                + " duplicateBranchesCount=" + MccListCreator.duplicateBranchesCount);
 
-//        Collections.sort(createdList);
-//
-//        List<String> allMCCs = new ArrayList<>(MccLists.fullLongMccList);
-//        allMCCs.addAll(MccLists.fullShortMccList);
-//        Collections.sort(allMCCs);
-//
-//        assertEquals(allMCCs, createdList);
+        System.out.println("mccLists=" + MccListCreator.mccLists);
     }
 
     @Test
@@ -81,19 +71,12 @@ public class CreateMccListTest {
         final String in = Utility.toString(is);
 
         int minMccValue = in.length()/1000; // 0.1%
-        int maxConfusionDelta = in.length()/100; // 1%
+        int maxConfusionDelta = in.length()/1000; // 0.1%
         MccListCreator mccListCreator = new MccListCreator(in, minMccValue, maxConfusionDelta);
         mccListCreator.createMccList(new ArrayList<String>(), 0, 0, 0);
 
         System.out.println("maxSavings=" + MccListCreator.maxSavings
-                + " branchesCount=" + MccListCreator.branchesCount);
-
-//        Collections.sort(createdList);
-//
-//        List<String> allMCCs = new ArrayList<>(MccLists.fullLongMccList);
-//        allMCCs.addAll(MccLists.fullShortMccList);
-//        Collections.sort(allMCCs);
-//
-//        assertEquals(allMCCs, createdList);
+                + " branchesCount=" + MccListCreator.branchesCount
+                + " duplicateBranchesCount=" + MccListCreator.duplicateBranchesCount);
     }
 }

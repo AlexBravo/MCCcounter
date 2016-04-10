@@ -1,6 +1,7 @@
 package com.google.android.mcccounter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -13,9 +14,12 @@ public class MccListCreator {
     public static final double BRANCH_TOLERANCE = 1.01; // 1%
 
     public static int branchesCount = 0;
+    public static int duplicateBranchesCount = 0;
     public static long maxSavings;
 
     private MccCalculator mccCalculator = new MccCalculator();
+
+    public static HashMap<String, Long> mccLists = new HashMap<>();
 
     private HashMap<String, Long> ranks = new HashMap<>();
     private HashMap<String, Long> newConfusions = new HashMap<>();
@@ -36,9 +40,8 @@ public class MccListCreator {
         this.maxConfusionDelta = maxConfusionDelta;
     }
 
-    public void createMccList(List<String> mccList,
-                                      long savingsSoFar, long confusionsSoFar,
-                                      int recursionLevel) {
+    public void createMccList(List<String> mccList, long savingsSoFar, long confusionsSoFar,
+                              int recursionLevel) {
 
         List<String> mccsToConsider = new ArrayList<>(MccLists.fullLongMccList);
         mccsToConsider.addAll(MccLists.fullShortMccList);
@@ -64,40 +67,54 @@ public class MccListCreator {
 
         List<String> branches = findMccsToAdd(ranks);
         if (branches.isEmpty()) {
-            System.out.println("mccList " + mccList
-                    + "' savingsSoFar=" + savingsSoFar + ", maxSavings=" + maxSavings);
-
             if (savingsSoFar > maxSavings) {
                 maxSavings = savingsSoFar;
             }
+
+            System.out.println("mccList(" + mccList.size() + ") " + mccList);
+            System.out.println("   savingsSoFar=" + savingsSoFar + ", maxSavings=" + maxSavings
+                    + " branchesCount=" + branchesCount + " duplicateBranchesCount=" + duplicateBranchesCount);
             return;
         }
 
         // TODO: Use relative rank to decide which branch to use first
         for (String mccToAdd : branches) {
             long newConfusionTotal = newConfusions.get(mccToAdd);
-            //long confusionsDelta = newConfusionTotal - confusionsSoFar;
+            long confusionsDelta = newConfusionTotal - confusionsSoFar;
 
             long newSavingsTotal = mccSavings.get(mccToAdd);
             long savingsDelta = newSavingsTotal - savingsSoFar;
 
-            confusionsSoFar = newConfusionTotal;
-            savingsSoFar = newSavingsTotal;
-
             mccList.add(mccToAdd);
 
-            branchesCount++;
+            // Before evaluating a new mccList make sure we have not evaluated it already.
+            // The order of MCCs in a list doesn't matter.
+            // 1. sort a list of MCCs
+            // 2. join MCCs into a String
+            // 3. add MCC list String to a list
+            // 4. look for an existing  MCC list String using String comparison
 
-            System.out.println("added '" + mccToAdd
-                    + "' savingsDelta=" + savingsDelta
-                    //+ ", confusionsDelta=" + confusionsDelta
-                    + "' savingsSoFar=" + savingsSoFar
-                    + ", rank=" + ranks.get(mccToAdd) + " l=" + recursionLevel);
+            ArrayList<String> sortedMccList = new ArrayList<>(mccList);
+            Collections.sort(sortedMccList);
+            String mccListAsString = sortedMccList.toString();
+            if (mccLists.get(mccListAsString) == null) {
+                mccLists.put(mccListAsString, newSavingsTotal);
+                branchesCount++;
 
-            // Go into this branch
-            MccListCreator mccListCreator = new MccListCreator(in, minMccValue, maxConfusionDelta);
-            mccListCreator.createMccList(mccList, savingsSoFar, confusionsSoFar, ++recursionLevel);
+                System.out.println("added '" + mccToAdd + "' savingsDelta=" + savingsDelta
+                        + ", confusionsDelta=" + confusionsDelta + ", rank=" + ranks.get(mccToAdd)
+                        + ", l=" + recursionLevel);
+                System.out.println("  savingsSoFar=" + savingsSoFar + "', maxSavings=" + maxSavings
+                        + "', confusionsSoFar=" + confusionsSoFar);
 
+                // Go into this branch
+                MccListCreator mccListCreator = new MccListCreator(in, minMccValue, maxConfusionDelta);
+                mccListCreator.createMccList(mccList, newSavingsTotal, newConfusionTotal, ++recursionLevel);
+
+            } else {
+                //System.out.println("MCC list already exists " + mccListAsString);
+                duplicateBranchesCount++;
+            }
             mccList.remove(mccToAdd);
         }
 
@@ -129,11 +146,10 @@ public class MccListCreator {
             if (savingsDelta < minMccValue) {
                 //System.out.println("'" + candidate + "' too low savingsDelta=" + savingsDelta);
             } else if (confusionsDelta > maxConfusionDelta) {
-                System.out.println("'" + candidate + "' too high confusionsDelta=" + confusionsDelta);
+                //System.out.println("'" + candidate + "' too high confusionsDelta=" + confusionsDelta);
 
             // TODO: Think about how to implement this restraint better
-            //} else if (confusionsDelta > savingsDelta) {
-            } else if (confusionsDelta > 0) {
+            } else if (confusionsDelta > savingsDelta) {
                 //System.out.println("'" + candidate + "' confusionsDelta=" + confusionsDelta
                 //        + " > savingsDelta=" + savingsDelta);
             } else {
