@@ -20,6 +20,8 @@ public class MccLists {
     // Removed: io, se, nt, ne, es, ti, ed, en, ma, li, il, us, ac, as, no
     // Removed: 8 MCCs (es, ti, ed, en, se, ma, il, ac, no) and added 3 MCCs (me, te, ve)
     // Removed: 11 MCCs (ac, ed, es, is, le, ma, no, ou, se, th, ti) and added "me"
+
+    // TODO: Evaluate effectiveness of different MCC lists
     public static List<String> shortMccList = Arrays.asList(
         "re", "in", "or", "an", "al", "at", "ar", "co", "ch", "de",
         "of", "ro", "it", "er", "on", "to", "st", "me", "il", "en");

@@ -19,6 +19,14 @@ public class CreateMccListTest {
 //        assertEquals(new HashMap<>(), mccCounter.calculateMCCs(""));
 //    }
 
+    private void outputResults() {
+        System.out.println("maxSavings=" + MccListCreator.maxSavings
+                + " size of mccLists=" + MccListCreator.mccLists.size()
+                + " duplicateBranchesCount=" + MccListCreator.duplicateBranchesCount);
+
+        System.out.println("mccLists=" + MccListCreator.mccLists);
+    }
+
     // TODO: Test number of confusions MccListCreator thinks there are
 
     @Test
@@ -29,9 +37,7 @@ public class CreateMccListTest {
         MccListCreator mccListCreator = new MccListCreator(in, 1, 10);
         mccListCreator.createMccList(new ArrayList<String>(), 0, 0, 0);
 
-        System.out.println("maxSavings=" + MccListCreator.maxSavings
-                + " branchesCount=" + MccListCreator.branchesCount
-                + " duplicateBranchesCount=" + MccListCreator.duplicateBranchesCount);
+        outputResults();
 
         //Collections.sort(createdList);
         //List<String> expectedList = Arrays.asList("the", "in", "ar", "to");
@@ -57,11 +63,7 @@ public class CreateMccListTest {
         MccListCreator mccListCreator = new MccListCreator(in, minMccValue, maxConfusionDelta);
         mccListCreator.createMccList(new ArrayList<String>(), 0, 0, 0);
 
-        System.out.println("maxSavings=" + MccListCreator.maxSavings
-                + " branchesCount=" + MccListCreator.branchesCount
-                + " duplicateBranchesCount=" + MccListCreator.duplicateBranchesCount);
-
-        System.out.println("mccLists=" + MccListCreator.mccLists);
+        outputResults();
     }
 
     @Test
@@ -75,8 +77,6 @@ public class CreateMccListTest {
         MccListCreator mccListCreator = new MccListCreator(in, minMccValue, maxConfusionDelta);
         mccListCreator.createMccList(new ArrayList<String>(), 0, 0, 0);
 
-        System.out.println("maxSavings=" + MccListCreator.maxSavings
-                + " branchesCount=" + MccListCreator.branchesCount
-                + " duplicateBranchesCount=" + MccListCreator.duplicateBranchesCount);
+        outputResults();
     }
 }
