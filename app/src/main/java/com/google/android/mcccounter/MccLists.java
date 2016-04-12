@@ -38,4 +38,7 @@ public class MccLists {
             "ic", "ot", "ge", "ac", "ri", "el", "la", "ct", "ca", "of");
 
     public static List<String> fullLongMccList = Arrays.asList("the", "ing", "and", "ion");
+
+    public static List<String> nonControversialMccList = Arrays.asList(
+            "in", "er", "th", "on", "an", "en", "al", "ar");
 }

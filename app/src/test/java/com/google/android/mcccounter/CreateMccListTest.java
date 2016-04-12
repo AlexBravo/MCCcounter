@@ -59,9 +59,10 @@ public class CreateMccListTest {
         final String in = Utility.toString(is);
 
         int minMccValue = in.length()/1000; // 0.1%
-        int maxConfusionDelta = in.length()/1000; // 0.1%
+        int maxConfusionDelta = in.length()/2000; // 0.05%
         MccListCreator mccListCreator = new MccListCreator(in, minMccValue, maxConfusionDelta);
-        mccListCreator.createMccList(new ArrayList<String>(), 0, 0, 0);
+        ArrayList<String> initialMccList = new ArrayList<>(MccLists.nonControversialMccList);
+        mccListCreator.createMccList(initialMccList, 0, 0, 0);
 
         outputResults();
     }
@@ -73,9 +74,11 @@ public class CreateMccListTest {
         final String in = Utility.toString(is);
 
         int minMccValue = in.length()/1000; // 0.1%
-        int maxConfusionDelta = in.length()/1000; // 0.1%
+        //int maxConfusionDelta = 0;
+        int maxConfusionDelta = in.length()/2000; // 0.05%
         MccListCreator mccListCreator = new MccListCreator(in, minMccValue, maxConfusionDelta);
-        mccListCreator.createMccList(new ArrayList<String>(), 0, 0, 0);
+        ArrayList<String> initialMccList = new ArrayList<>(MccLists.nonControversialMccList);
+        mccListCreator.createMccList(initialMccList, 0, 0, 0);
 
         outputResults();
     }

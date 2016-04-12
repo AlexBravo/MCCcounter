@@ -39,10 +39,10 @@ public class MccListCreator {
         this.maxConfusionDelta = maxConfusionDelta;
     }
 
-    public void createMccList(List<String> mccList, long savingsSoFar, long confusionsSoFar,
+    public void createMccList(ArrayList<String> mccList, long savingsSoFar, long confusionsSoFar,
                               int recursionLevel) {
 
-        List<String> mccsToConsider = new ArrayList<>(MccLists.fullLongMccList);
+        ArrayList<String> mccsToConsider = new ArrayList<>(MccLists.fullLongMccList);
         mccsToConsider.addAll(MccLists.fullShortMccList);
 
         // Init mccCalculator lists
@@ -105,8 +105,7 @@ public class MccListCreator {
             System.out.println("added '" + mccToAdd + "' savingsDelta=" + savingsDelta
                     + ", confusionsDelta=" + confusionsDelta + ", rank=" + ranks.get(mccToAdd)
                     + ", l=" + recursionLevel);
-            System.out.println("  savingsSoFar=" + savingsSoFar + "', maxSavings=" + maxSavings
-                    + "', confusionsSoFar=" + confusionsSoFar);
+            System.out.println("  newSavingsTotal=" + newSavingsTotal + ", newConfusionTotal=" + newConfusionTotal);
 
             // Go into this branch
             MccListCreator mccListCreator = new MccListCreator(in, minMccValue, maxConfusionDelta);
