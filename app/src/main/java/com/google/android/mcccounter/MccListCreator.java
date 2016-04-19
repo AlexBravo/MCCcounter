@@ -15,26 +15,21 @@ public class MccListCreator {
 
     public static int duplicateBranchesCount = 0;
     public static long maxSavings;
-
     public static HashMap<String, Long> mccLists = new HashMap<>();
 
-    private HashMap<String, Long> ranks = new HashMap<>();
-    private HashMap<String, Long> newConfusions = new HashMap<>();
-    private HashMap<String, Long> mccSavings = new HashMap<>();
+    private static int minMccValue;
+    private static int maxConfusionDelta;
 
-    private int minMccValue;
-    private int maxConfusionDelta;
-
-    private String in;
-    private long fileLength;
+    private static String in;
+    private static long fileLength;
 
 
     public MccListCreator(String in, int minMccValue, int maxConfusionDelta) {
-        this.in = in;
-        this.fileLength = in.length();
+        MccListCreator.in = in;
+        MccListCreator.fileLength = in.length();
 
-        this.minMccValue = minMccValue;
-        this.maxConfusionDelta = maxConfusionDelta;
+        MccListCreator.minMccValue = minMccValue;
+        MccListCreator.maxConfusionDelta = maxConfusionDelta;
     }
 
     public void createMccList(ArrayList<String> mccList) {
@@ -62,54 +57,47 @@ public class MccListCreator {
         ArrayList<String> mccsToConsider = new ArrayList<>(MccLists.fullLongMccList);
         mccsToConsider.addAll(MccLists.fullShortMccList);
 
-        // Init mccCalculator lists
+        // Add MCCs from mccList to mccCalculator and remove them from mccsToConsider
         MccCalculator mccCalculator = new MccCalculator();
         for (String mcc : mccList) {
             mccCalculator.add(mcc);
             mccsToConsider.remove(mcc);
         }
 
-        ranks.clear();
-        newConfusions.clear();
-        mccSavings.clear();
+        HashMap<String, Long> ranks = new HashMap<>();
+        HashMap<String, Long> newConfusions = new HashMap<>();
+        HashMap<String, Long> newMccSavings = new HashMap<>();
 
         // Evaluate all candidates
         for (String candidate : mccsToConsider) {
-            String mccListAsString = isDuplicateMccList(mccList, candidate);
-
+            String mccListAsString = getMccListAsString(mccList, candidate);
+            // Have this MCC list been evaluated before?
             if (mccLists.get(mccListAsString) != null) {
                 duplicateBranchesCount++;
                 System.out.print(".");
             } else {
                 mccCalculator.add(candidate);
 
-                evaluateCandidate(mccCalculator, candidate, savingsSoFar, confusionsSoFar);
+                evaluateCandidate(mccCalculator, candidate, savingsSoFar, confusionsSoFar,
+                        ranks, newConfusions, newMccSavings);
 
                 mccCalculator.remove(candidate);
             }
         }
 
-        List<String> branches = findMccsToAdd(ranks);
-        if (branches.isEmpty()) {
-            if (savingsSoFar > maxSavings) {
-                maxSavings = savingsSoFar;
-            }
-
-            System.out.println("mccList(" + mccList.size() + ") " + mccList);
-            System.out.println("   savingsSoFar=" + savingsSoFar + ", maxSavings=" + maxSavings
-                    + " mccLists size=" + mccLists.size() + " duplicateBranchesCount=" + duplicateBranchesCount);
+        if (ranks.isEmpty()) {
+            // We are done. No other candidates to add.
             return;
         }
 
-        // TODO: Use relative rank to decide which branch to use first
+        List<String> branches = findMccsToAdd(ranks);
+
         for (String mccToAdd : branches) {
             long newConfusionTotal = newConfusions.get(mccToAdd);
-            long confusionsDelta = newConfusionTotal - confusionsSoFar;
+            long newSavingsTotal = newMccSavings.get(mccToAdd);
 
-            long newSavingsTotal = mccSavings.get(mccToAdd);
-            long savingsDelta = newSavingsTotal - savingsSoFar;
-
-            String mccListAsString = isDuplicateMccList(mccList, mccToAdd);
+            String mccListAsString = getMccListAsString(mccList, mccToAdd);
+            // Have this MCC list been evaluated before?
             if (mccLists.get(mccListAsString) != null) {
                 // We should not get here
                 System.out.println("Error: MCC list already exists " + mccListAsString);
@@ -120,23 +108,41 @@ public class MccListCreator {
 
             mccList.add(mccToAdd);
 
-            System.out.println("added '" + mccToAdd + "' savingsDelta=" + savingsDelta
-                    + ", confusionsDelta=" + confusionsDelta + ", rank=" + ranks.get(mccToAdd)
-                    + ", l=" + recursionLevel);
-            System.out.println("  newSavingsTotal=" + newSavingsTotal + ", newConfusionTotal=" + newConfusionTotal);
+            System.out.print(mccToAdd + " ");
+            //long confusionsDelta = newConfusionTotal - confusionsSoFar;
+            //long savingsDelta = newSavingsTotal - savingsSoFar;
+            //
+            //System.out.println("added '" + mccToAdd + "' savingsDelta=" + savingsDelta
+            //        + ", confusionsDelta=" + confusionsDelta + ", rank=" + ranks.get(mccToAdd)
+            //        + ", l=" + recursionLevel);
 
-            // Go into this branch
-            MccListCreator mccListCreator = new MccListCreator(in, minMccValue, maxConfusionDelta);
-            mccListCreator.addToMccList(mccList, newSavingsTotal, newConfusionTotal, ++recursionLevel);
+            // Go into this branch by recursively calling yourself
+            addToMccList(mccList, newSavingsTotal, newConfusionTotal, ++recursionLevel);
+
+            System.out.println();
+            System.out.print("mccList(" + mccList.size() + ") " + mccList);
+            if (newSavingsTotal < maxSavings * 0.95) {
+                // Not worth printing info for this list that doesn't give enough savings
+                System.out.print(" " + newSavingsTotal + " ");
+            } else {
+                if (maxSavings < newSavingsTotal) {
+                    maxSavings = newSavingsTotal;
+                }
+                System.out.println();
+                System.out.println("  maxSavings=" + maxSavings + " newSavingsTotal=" + newSavingsTotal
+                        + ", newConfusionTotal=" + newConfusionTotal);
+                System.out.println("  mccLists size=" + mccLists.size()
+                        + " duplicateBranchesCount=" + duplicateBranchesCount);
+            }
 
             mccList.remove(mccToAdd);
         }
 
-        // Many lists were created, so can't just return one list
+        // Many lists were possibly created, so can't just return one list.
+        // Also all different mccToAdd were removed from the final list.
     }
 
-    private String isDuplicateMccList(List<String> mccList, String candidate) {
-        // Have this MCC list been evaluated before
+    private String getMccListAsString(List<String> mccList, String candidate) {
         ArrayList<String> sortedMccList = new ArrayList<>(mccList);
         sortedMccList.add(candidate);
         Collections.sort(sortedMccList);
@@ -144,7 +150,11 @@ public class MccListCreator {
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
-    private void evaluateCandidate(MccCalculator mccCalculator, String candidate, long savingSoFar, long confusionSoFar) {
+    private void evaluateCandidate(MccCalculator mccCalculator, String candidate,
+                                   long savingSoFar, long confusionSoFar,
+                                   HashMap<String, Long> ranks,
+                                   HashMap<String, Long> newConfusions,
+                                   HashMap<String, Long> newMccSavings) {
         // TODO: Number of occurrence of an MCCs should be calculated for each MCC
         // TODO: based on the current list of MCCs
         //int occurrences = 1; //mccCalculator.calculateChords(in, candidate);
@@ -183,7 +193,7 @@ public class MccListCreator {
                 long rank = (newConfusionTotal + 1) * typedChords;
                 ranks.put(candidate, rank);
                 newConfusions.put(candidate, newConfusionTotal);
-                mccSavings.put(candidate, newSavingsTotal);
+                newMccSavings.put(candidate, newSavingsTotal);
             }
         }
     }
@@ -193,10 +203,6 @@ public class MccListCreator {
         //System.out.println("sortedRanks " + sortedRanks);
 
         ArrayList<String> branches = new ArrayList<>();
-
-        if (sortedRanks.isEmpty()) {
-            return branches;
-        }
 
         // Look for MCCs with the smallest rank
         Iterator<Map.Entry<String, Long>> iterator = sortedRanks.entrySet().iterator();

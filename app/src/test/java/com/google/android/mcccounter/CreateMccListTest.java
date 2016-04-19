@@ -68,6 +68,22 @@ public class CreateMccListTest {
     }
 
     @Test
+    public void testSmallFileCloseToBest() throws Exception {
+        @SuppressWarnings("SpellCheckingInspection")
+        String fileName = "aliceinwonderland.txt";
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
+        final String in = Utility.toString(is);
+
+        int minMccValue = in.length()/1000; // 0.1%
+        int maxConfusionDelta = in.length()/2000; // 0.05%
+        MccListCreator mccListCreator = new MccListCreator(in, minMccValue, maxConfusionDelta);
+        ArrayList<String> initialMccList = new ArrayList<>(MccLists.closeToBest);
+        mccListCreator.createMccList(initialMccList);
+
+        outputResults();
+    }
+
+    @Test
     public void testBigFile() throws Exception {
         String fileName = "812_notes.txt";
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
