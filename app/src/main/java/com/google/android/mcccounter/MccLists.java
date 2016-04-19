@@ -40,5 +40,5 @@ public class MccLists {
     public static List<String> fullLongMccList = Arrays.asList("the", "ing", "and", "ion");
 
     public static List<String> nonControversialMccList = Arrays.asList(
-            "in", "er", "th", "on", "an", "en", "al", "ar");
+            "in", "th", "on", "an", "en", "al", "ar"); // 7 MCCs
 }

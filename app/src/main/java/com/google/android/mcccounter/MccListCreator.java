@@ -16,8 +16,6 @@ public class MccListCreator {
     public static int duplicateBranchesCount = 0;
     public static long maxSavings;
 
-    private MccCalculator mccCalculator = new MccCalculator();
-
     public static HashMap<String, Long> mccLists = new HashMap<>();
 
     private HashMap<String, Long> ranks = new HashMap<>();
@@ -39,13 +37,33 @@ public class MccListCreator {
         this.maxConfusionDelta = maxConfusionDelta;
     }
 
-    public void createMccList(ArrayList<String> mccList, long savingsSoFar, long confusionsSoFar,
+    public void createMccList(ArrayList<String> mccList) {
+        MccCalculator mccCalculator = new MccCalculator();
+        for (String mcc : mccList) {
+            mccCalculator.add(mcc);
+        }
+
+        // Calculate the new frequencies of all MCCs using the new lists
+        LinkedHashMap<String, Long> allFrequencies = mccCalculator.calculateSortedFrequencies(in);
+        long newSavingsTotal = Utility.calculateMccSavings(allFrequencies);
+
+        // Calculate the sum of all confusions
+        HashMap<String, Long> confusions = mccCalculator.calculateSortedConfusions(in);
+        long newConfusionTotal = Utility.calculateTotalOfValues(confusions);
+
+        // Call recursive method
+        addToMccList(mccList, newSavingsTotal, newConfusionTotal, 0);
+    }
+
+    // This is a recursive method
+    public void addToMccList(ArrayList<String> mccList, long savingsSoFar, long confusionsSoFar,
                               int recursionLevel) {
 
         ArrayList<String> mccsToConsider = new ArrayList<>(MccLists.fullLongMccList);
         mccsToConsider.addAll(MccLists.fullShortMccList);
 
         // Init mccCalculator lists
+        MccCalculator mccCalculator = new MccCalculator();
         for (String mcc : mccList) {
             mccCalculator.add(mcc);
             mccsToConsider.remove(mcc);
@@ -65,7 +83,7 @@ public class MccListCreator {
             } else {
                 mccCalculator.add(candidate);
 
-                evaluateCandidate(candidate, savingsSoFar, confusionsSoFar);
+                evaluateCandidate(mccCalculator, candidate, savingsSoFar, confusionsSoFar);
 
                 mccCalculator.remove(candidate);
             }
@@ -109,7 +127,7 @@ public class MccListCreator {
 
             // Go into this branch
             MccListCreator mccListCreator = new MccListCreator(in, minMccValue, maxConfusionDelta);
-            mccListCreator.createMccList(mccList, newSavingsTotal, newConfusionTotal, ++recursionLevel);
+            mccListCreator.addToMccList(mccList, newSavingsTotal, newConfusionTotal, ++recursionLevel);
 
             mccList.remove(mccToAdd);
         }
@@ -126,7 +144,7 @@ public class MccListCreator {
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
-    private void evaluateCandidate(String candidate, long savingSoFar, long confusionSoFar) {
+    private void evaluateCandidate(MccCalculator mccCalculator, String candidate, long savingSoFar, long confusionSoFar) {
         // TODO: Number of occurrence of an MCCs should be calculated for each MCC
         // TODO: based on the current list of MCCs
         //int occurrences = 1; //mccCalculator.calculateChords(in, candidate);
