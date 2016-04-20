@@ -28,7 +28,7 @@ public class CreateMccListTest {
 
         LinkedHashMap<String, Long> mccLists = Utility.sortMap(MccListCreator.evaluatedMccLists);
 
-        System.out.print("evaluatedMccLists=");
+        //System.out.print("evaluatedMccLists=");
         long maxSavings = 0;
         for (LinkedHashMap.Entry<String, Long> mccList : mccLists.entrySet()) {
             long listSavings = mccList.getValue();
@@ -57,7 +57,7 @@ public class CreateMccListTest {
 
         // Correct results
         // maxSavings=2 evaluatedMccLists.size=3 duplicateBranchesCount=0
-        // evaluatedMccLists=[the]=2 [th]=1 [he]=1
+        // [the]=2 [th]=1 [he]=1
     }
 
     @Test
@@ -72,7 +72,7 @@ public class CreateMccListTest {
         outputResults(0);
         // Correct results
         // maxSavings=3 evaluatedMccLists.size=9 duplicateBranchesCount=4
-        // evaluatedMccLists=[re, the]=3 [re, th]=2 [he, re]=2 [er, th]=2 [the]=2
+        // [re, the]=3 [re, th]=2 [he, re]=2 [er, th]=2 [the]=2
         // [re]=1 [th]=1 [er]=1 [he]=1
     }
 
@@ -89,7 +89,7 @@ public class CreateMccListTest {
 
         // Correct results
         // maxSavings=4 evaluatedMccLists.size=6 duplicateBranchesCount=0
-        // evaluatedMccLists=[the]=4 [et, he, th]=3 [th]=2 [et, th]=2 [he]=2 [et]=1
+        // [the]=4 [et, he, th]=3 [th]=2 [et, th]=2 [he]=2 [et]=1
     }
 
     @Test
@@ -106,7 +106,7 @@ public class CreateMccListTest {
 
         // Correct results
         // maxSavings=4 evaluatedMccLists.size=3 duplicateBranchesCount=0
-        // evaluatedMccLists=[the]=4 [th]=2 [he]=2
+        // [the]=4 [th]=2 [he]=2
     }
 
     @Test
@@ -122,7 +122,7 @@ public class CreateMccListTest {
 
         // Correct results
         // maxSavings=3 evaluatedMccLists.size=1 duplicateBranchesCount=0
-        // evaluatedMccLists=[he]=3
+        // [he]=3
     }
 
     @Test
@@ -139,7 +139,7 @@ public class CreateMccListTest {
 
         // Correct results
         // maxSavings=8 evaluatedMccLists.size=79 duplicateBranchesCount=117
-        // evaluatedMccLists=[ar, in, the, to]=8 [ar, et, in, the]=8 [in, re, the, to]=8
+        // [ar, in, the, to]=8 [ar, et, in, the]=8 [in, re, the, to]=8
         // [ar, in, the]=7 [in, re, the]=7 [ar, et, he, in, th]=7 [et, he, in, re, th, to]=7
         // [et, in, the]=7 [in, the, to]=7 [in, re, th, to]=6 [et, he, in, re, th]=6
         // [ar, in, th, to]=6 [he, in, re, to]=6 [et, he, in, th]=6 [ar, et, the]=6
@@ -178,9 +178,9 @@ public class CreateMccListTest {
         outputResults(0.9);
 
         // TODO: Why are there both "he" and "the" in [an, he, in, the]?
-        // Correct results (take 3 seconds)
+        // Correct results (take 5 seconds)
         // maxSavings=988 evaluatedMccLists.size=28 duplicateBranchesCount=19
-        // evaluatedMccLists=[an, he, in, the]=988 [an, er, in, the]=974
+        // [an, he, in, the]=988 [an, er, in, the]=974
         // [an, he, in, it]=956 [an, er, in, th]=950
     }
 
@@ -202,9 +202,11 @@ public class CreateMccListTest {
 
         outputResults(0.95);
 
-        // Results for aliceinwonderland_tenth (took 6 min 45 sec on home Mac)
+        // Results for aliceinwonderland_tenth
+        // (took 6 min 45 sec on home Mac, 4m 48 sec on work Mac,
+        // 4m 48 sec on work Mac with optimization)
         // maxSavings=2151 evaluatedMccLists.size=2344 duplicateBranchesCount=6536
-        // evaluatedMccLists=[al, and, as, he, in, ing, le, on, ou, re, th, the, to, ve]=2151
+        // [al, and, as, he, in, ing, le, on, ou, re, th, the, to, ve]=2151
         // [al, and, as, he, in, ing, le, on, or, ou, th, the, to, ve]=2143
         // [al, and, he, in, ing, le, on, ou, re, se, th, the, to, ve]=2124
         // [al, and, he, in, ing, le, on, or, ou, se, th, the, to, ve]=2116
@@ -236,7 +238,7 @@ public class CreateMccListTest {
 
         // Results for aliceinwonderland (took 25 min 15 sec on home Mac)
         // maxSavings=22236 evaluatedMccLists.size=975 duplicateBranchesCount=2339
-        // evaluatedMccLists=[al, and, ar, as, ed, en, er, in, ing, it, on, or, ou, the]=22236
+        // [al, and, ar, as, ed, en, er, in, ing, it, on, or, ou, the]=22236
         // [al,and,ar,as,ed,en,er,in,ing,on,or,ou,th,the]=22063
         // [al,and,ar,as,ed,en,er,in,ing,it,on,ou,the]=21313
         // [al,and,ar,ed,en,er,in,ing,it,on,or,ou,the]=21307

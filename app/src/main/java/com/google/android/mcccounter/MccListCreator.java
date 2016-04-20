@@ -39,13 +39,13 @@ public class MccListCreator {
         }
 
         // Calculate the new frequencies of all MCCs using the new lists
-        LinkedHashMap<String, Long> allFrequencies =
-                mccCalculator.calculateSortedFrequencies(in, minMccFrequency);
+        mccCalculator.calculateFrequenciesAndConfusions(in);
+        LinkedHashMap<String, Long> allFrequencies = mccCalculator.getSortedFrequencies(minMccFrequency);
         if (allFrequencies != null) {
             long newSavingsTotal = Utility.calculateMccSavings(allFrequencies);
 
             // Calculate the sum of all confusions
-            HashMap<String, Long> confusions = mccCalculator.calculateSortedConfusions(in);
+            HashMap<String, Long> confusions = mccCalculator.getSortedConfusions();
             long newConfusionTotal = Utility.calculateTotalOfValues(confusions);
 
             // Call recursive method
@@ -163,8 +163,9 @@ public class MccListCreator {
         //int occurrences = frequencies.get(candidate);
 
         // Calculate the new frequencies of all MCCs using the new lists
-        LinkedHashMap<String, Long> allFrequencies =
-                mccCalculator.calculateSortedFrequencies(in, minMccFrequency);
+        mccCalculator.calculateFrequenciesAndConfusions(in);
+
+        LinkedHashMap<String, Long> allFrequencies = mccCalculator.getSortedFrequencies(minMccFrequency);
 
         // Were all chords used?
         //Long frequency = allFrequencies.get(candidate);
@@ -173,7 +174,7 @@ public class MccListCreator {
             long savingsDelta = newSavingsTotal - savingSoFar;
 
             // Calculate the sum of all confusions
-            HashMap<String, Long> confusions = mccCalculator.calculateSortedConfusions(in);
+            HashMap<String, Long> confusions = mccCalculator.getSortedConfusions();
             long newConfusionTotal = Utility.calculateTotalOfValues(confusions);
             long confusionsDelta = newConfusionTotal - confusionSoFar;
 
