@@ -195,14 +195,26 @@ public class CreateMccListTest {
 
         int minMccFrequency = in.length()/200; // 0.5%
         int maxConfusionDelta = in.length()/10000; // 0.01%
-        double rankIncreasePercent = 1.01; // 1%
+        double rankIncreasePercent = 1.001; // 0.1%
         MccListCreator mccListCreator =
                 new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
         mccListCreator.createMccList(new ArrayList<String>());
 
         outputResults(0.9);
 
-        // Correct results
+        // Correct results (took 6 min 45 sec on home Mac)
+        // maxSavings=2151 evaluatedMccLists.size=2344 duplicateBranchesCount=6536
+        // evaluatedMccLists=[al, and, as, he, in, ing, le, on, ou, re, th, the, to, ve]=2151
+        // [al, and, as, he, in, ing, le, on, or, ou, th, the, to, ve]=2143
+        // [al, and, he, in, ing, le, on, ou, re, se, th, the, to, ve]=2124
+        // [al, and, he, in, ing, le, on, or, ou, se, th, the, to, ve]=2116
+        // [al, and, as, he, in, ing, le, on, ou, re, th, the, to]=2071
+        // [al, and, as, he, in, le, on, ou, re, th, the, to, ve]=2049
+        // [al, and, as, he, in, ing, le, on, ou, th, the, to, ve]=2049
+        // [al, and, he, in, ing, le, on, ou, re, se, th, the, to]=2044
+        // [al, and, as, he, in, ing, le, ou, re, th, the, to, ve]=2044
+        // [al, and, as, he, in, ing, on, or, ou, th, the, to, ve]=2044
+        // ...
     }
 
     @Test
