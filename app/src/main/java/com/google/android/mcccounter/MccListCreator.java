@@ -11,25 +11,25 @@ import java.util.Map;
 /** Created by alex on 4/6/16. */
 
 public class MccListCreator {
-    public static final double BRANCH_TOLERANCE = 1.01; // 1%
-
     public static int duplicateBranchesCount = 0;
     public static long maxSavings;
-    public static HashMap<String, Long> mccLists = new HashMap<>();
+    public static HashMap<String, Long> evaluatedMccLists = new HashMap<>();
 
     private static int minMccValue;
     private static int maxConfusionDelta;
+    public static double branchTolerance;
 
     private static String in;
     private static long fileLength;
 
 
-    public MccListCreator(String in, int minMccValue, int maxConfusionDelta) {
+    public MccListCreator(String in, int minMccValue, int maxConfusionDelta, double branchTolerance) {
         MccListCreator.in = in;
         MccListCreator.fileLength = in.length();
 
         MccListCreator.minMccValue = minMccValue;
         MccListCreator.maxConfusionDelta = maxConfusionDelta;
+        MccListCreator.branchTolerance = branchTolerance;
     }
 
     public void createMccList(ArrayList<String> mccList) {
@@ -40,14 +40,16 @@ public class MccListCreator {
 
         // Calculate the new frequencies of all MCCs using the new lists
         LinkedHashMap<String, Long> allFrequencies = mccCalculator.calculateSortedFrequencies(in);
-        long newSavingsTotal = Utility.calculateMccSavings(allFrequencies);
+        if (allFrequencies != null) {
+            long newSavingsTotal = Utility.calculateMccSavings(allFrequencies);
 
-        // Calculate the sum of all confusions
-        HashMap<String, Long> confusions = mccCalculator.calculateSortedConfusions(in);
-        long newConfusionTotal = Utility.calculateTotalOfValues(confusions);
+            // Calculate the sum of all confusions
+            HashMap<String, Long> confusions = mccCalculator.calculateSortedConfusions(in);
+            long newConfusionTotal = Utility.calculateTotalOfValues(confusions);
 
-        // Call recursive method
-        addToMccList(mccList, newSavingsTotal, newConfusionTotal, 0);
+            // Call recursive method
+            addToMccList(mccList, newSavingsTotal, newConfusionTotal, 0);
+        }
     }
 
     // This is a recursive method
@@ -64,74 +66,70 @@ public class MccListCreator {
             mccsToConsider.remove(mcc);
         }
 
-        HashMap<String, Long> ranks = new HashMap<>();
-        HashMap<String, Long> newConfusions = new HashMap<>();
-        HashMap<String, Long> newMccSavings = new HashMap<>();
+        HashMap<String, Long> candidatesRanks = new HashMap<>();
+        HashMap<String, Long> candidatesConfusions = new HashMap<>();
+        HashMap<String, Long> candidatesSavings = new HashMap<>();
 
         // Evaluate all candidates
         for (String candidate : mccsToConsider) {
             String mccListAsString = getMccListAsString(mccList, candidate);
             // Have this MCC list been evaluated before?
-            if (mccLists.get(mccListAsString) != null) {
+            if (evaluatedMccLists.get(mccListAsString) != null) {
                 duplicateBranchesCount++;
                 System.out.print(".");
             } else {
-                mccCalculator.add(candidate);
-
                 evaluateCandidate(mccCalculator, candidate, savingsSoFar, confusionsSoFar,
-                        ranks, newConfusions, newMccSavings);
-
-                mccCalculator.remove(candidate);
+                        candidatesRanks, candidatesConfusions, candidatesSavings);
             }
         }
 
-        if (ranks.isEmpty()) {
+        if (candidatesRanks.isEmpty()) {
             // We are done. No other candidates to add.
             return;
         }
 
-        List<String> branches = findMccsToAdd(ranks);
+        List<String> branches = findMccsToAdd(candidatesRanks);
 
         for (String mccToAdd : branches) {
-            long newConfusionTotal = newConfusions.get(mccToAdd);
-            long newSavingsTotal = newMccSavings.get(mccToAdd);
-
             String mccListAsString = getMccListAsString(mccList, mccToAdd);
             // Have this MCC list been evaluated before?
-            if (mccLists.get(mccListAsString) != null) {
-                // We should not get here
-                System.out.println("Error: MCC list already exists " + mccListAsString);
+            if (evaluatedMccLists.get(mccListAsString) != null) {
+                //System.out.println("Error: MCC list already exists " + mccListAsString);
                 continue;
             }
 
-            mccLists.put(mccListAsString, newSavingsTotal);
-
             mccList.add(mccToAdd);
 
+            long mccToAddConfusions = candidatesConfusions.get(mccToAdd);
+            long mccToAddSavings = candidatesSavings.get(mccToAdd);
+
             System.out.print(mccToAdd + " ");
-            //long confusionsDelta = newConfusionTotal - confusionsSoFar;
-            //long savingsDelta = newSavingsTotal - savingsSoFar;
+            //long confusionsDelta = mccToAddConfusions - confusionsSoFar;
+            //long savingsDelta = mccToAddSavings - savingsSoFar;
             //
             //System.out.println("added '" + mccToAdd + "' savingsDelta=" + savingsDelta
             //        + ", confusionsDelta=" + confusionsDelta + ", rank=" + ranks.get(mccToAdd)
             //        + ", l=" + recursionLevel);
 
             // Go into this branch by recursively calling yourself
-            addToMccList(mccList, newSavingsTotal, newConfusionTotal, ++recursionLevel);
+            addToMccList(mccList, mccToAddSavings, mccToAddConfusions, ++recursionLevel);
+
+            // Add this list at the end, so we don't see the same evaluatedMccLists.size
+            evaluatedMccLists.put(mccListAsString, mccToAddSavings);
 
             System.out.println();
             System.out.print("mccList(" + mccList.size() + ") " + mccList);
-            if (newSavingsTotal < maxSavings * 0.95) {
+            if (mccToAddSavings < maxSavings * 0.95) {
                 // Not worth printing info for this list that doesn't give enough savings
-                System.out.print(" " + newSavingsTotal + " ");
+                System.out.print(" " + mccToAddSavings + " ");
             } else {
-                if (maxSavings < newSavingsTotal) {
-                    maxSavings = newSavingsTotal;
+                if (maxSavings < mccToAddSavings) {
+                    maxSavings = mccToAddSavings;
                 }
                 System.out.println();
-                System.out.println("  maxSavings=" + maxSavings + " newSavingsTotal=" + newSavingsTotal
-                        + ", newConfusionTotal=" + newConfusionTotal);
-                System.out.println("  mccLists size=" + mccLists.size()
+                System.out.println("  maxSavings=" + maxSavings + " mccToAddSavings=" + mccToAddSavings
+                        + ", mccToAddConfusions=" + mccToAddConfusions);
+                System.out.println("  evaluatedMccLists.size=" + evaluatedMccLists.size()
                         + " duplicateBranchesCount=" + duplicateBranchesCount);
             }
 
@@ -155,24 +153,27 @@ public class MccListCreator {
                                    HashMap<String, Long> ranks,
                                    HashMap<String, Long> newConfusions,
                                    HashMap<String, Long> newMccSavings) {
+
+        mccCalculator.add(candidate);
+
         // TODO: Number of occurrence of an MCCs should be calculated for each MCC
         // TODO: based on the current list of MCCs
         //int occurrences = 1; //mccCalculator.calculateChords(in, candidate);
         //int occurrences = frequencies.get(candidate);
 
-        // Calculate the sum of all confusions
-        HashMap<String, Long> confusions = mccCalculator.calculateSortedConfusions(in);
-        long newConfusionTotal = Utility.calculateTotalOfValues(confusions);
-        long confusionsDelta = newConfusionTotal - confusionSoFar;
-
         // Calculate the new frequencies of all MCCs using the new lists
         LinkedHashMap<String, Long> allFrequencies = mccCalculator.calculateSortedFrequencies(in);
 
-        // Was this chord encountered?
-        Long frequency = allFrequencies.get(candidate);
-        if (frequency != null) {
+        // Were all chords used?
+        //Long frequency = allFrequencies.get(candidate);
+        if (allFrequencies != null) {
             long newSavingsTotal = Utility.calculateMccSavings(allFrequencies);
             long savingsDelta = newSavingsTotal - savingSoFar;
+
+            // Calculate the sum of all confusions
+            HashMap<String, Long> confusions = mccCalculator.calculateSortedConfusions(in);
+            long newConfusionTotal = Utility.calculateTotalOfValues(confusions);
+            long confusionsDelta = newConfusionTotal - confusionSoFar;
 
             // Add chord only if it gains us something
             if (savingsDelta < minMccValue) {
@@ -196,6 +197,8 @@ public class MccListCreator {
                 newMccSavings.put(candidate, newSavingsTotal);
             }
         }
+
+        mccCalculator.remove(candidate);
     }
 
     public List<String> findMccsToAdd(HashMap<String, Long> ranks) {
@@ -214,16 +217,20 @@ public class MccListCreator {
         branches.add(firstEntryKey);
 
         // See if we have more choices than one
-        // TODO: Add processing for all choices.
-        // TODO: The ranks don't have to be equal, they can be close enough to create a "choice"
         while (iterator.hasNext()) {
             Map.Entry<String, Long> nextEntry = iterator.next();
-            if (nextEntry.getValue() < firstEntryRank * BRANCH_TOLERANCE) {
+            // Reject choices that have too large rank
+            if (nextEntry.getValue() < firstEntryRank * branchTolerance) {
                 //System.out.println("Alternative choice found for '" + firstEntryKey
                 //        + "' : '" + nextEntry.getKey() + "'");
 
                 branches.add(nextEntry.getKey());
             }
+            //else {
+            //      System.out.println("Rejected choice for '" + firstEntryKey
+            //              + "' : '" + nextEntry.getKey()
+            //              + "' nextEntry rank=" + nextEntry.getValue());
+            //  }
         }
 
         return branches;

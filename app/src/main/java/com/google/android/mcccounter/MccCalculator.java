@@ -104,6 +104,14 @@ public class MccCalculator {
             }
         }
 
+        // Were all chords used?
+
+        // We need to avoid these situation:
+        //    If in="the", adding "the" after "he" increases savings from 1 to 2,
+        //    yet "he" is not encountered anymore, making the list invalid
+        if (frequencies.size() != longList.size() + shortList.size()) {
+            return null;
+        }
         return Utility.sortMap(frequencies);
     }
 
