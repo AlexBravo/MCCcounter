@@ -15,7 +15,7 @@ public class MccListCreator {
     public static long maxSavings;
     public static HashMap<String, Long> evaluatedMccLists = new HashMap<>();
 
-    private static int minMccValue;
+    private static int minMccFrequency;
     private static int maxConfusionDelta;
     public static double branchTolerance;
 
@@ -23,11 +23,11 @@ public class MccListCreator {
     private static long fileLength;
 
 
-    public MccListCreator(String in, int minMccValue, int maxConfusionDelta, double branchTolerance) {
+    public MccListCreator(String in, int minMccFrequency, int maxConfusionDelta, double branchTolerance) {
         MccListCreator.in = in;
         MccListCreator.fileLength = in.length();
 
-        MccListCreator.minMccValue = minMccValue;
+        MccListCreator.minMccFrequency = minMccFrequency;
         MccListCreator.maxConfusionDelta = maxConfusionDelta;
         MccListCreator.branchTolerance = branchTolerance;
     }
@@ -39,7 +39,8 @@ public class MccListCreator {
         }
 
         // Calculate the new frequencies of all MCCs using the new lists
-        LinkedHashMap<String, Long> allFrequencies = mccCalculator.calculateSortedFrequencies(in);
+        LinkedHashMap<String, Long> allFrequencies =
+                mccCalculator.calculateSortedFrequencies(in, minMccFrequency);
         if (allFrequencies != null) {
             long newSavingsTotal = Utility.calculateMccSavings(allFrequencies);
 
@@ -162,7 +163,8 @@ public class MccListCreator {
         //int occurrences = frequencies.get(candidate);
 
         // Calculate the new frequencies of all MCCs using the new lists
-        LinkedHashMap<String, Long> allFrequencies = mccCalculator.calculateSortedFrequencies(in);
+        LinkedHashMap<String, Long> allFrequencies =
+                mccCalculator.calculateSortedFrequencies(in, minMccFrequency);
 
         // Were all chords used?
         //Long frequency = allFrequencies.get(candidate);
@@ -176,7 +178,8 @@ public class MccListCreator {
             long confusionsDelta = newConfusionTotal - confusionSoFar;
 
             // Add chord only if it gains us something
-            if (savingsDelta < minMccValue) {
+            // 3-letter MCC has double of the value of 2-letter MCC
+            if (savingsDelta < minMccFrequency * (candidate.length() - 1)) {
                 //System.out.println("'" + candidate + "' too low savingsDelta=" + savingsDelta);
             } else if (confusionsDelta > maxConfusionDelta) {
                 //System.out.println("'" + candidate + "' too high confusionsDelta=" + confusionsDelta);

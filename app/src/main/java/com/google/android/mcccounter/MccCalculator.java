@@ -18,6 +18,8 @@ public class MccCalculator {
 //        this.longList = longList;
 //    }
 
+    //TODO: Combine calculateSortedConfusions() and calculateSortedFrequencies() for performance
+
     public LinkedHashMap<String, Long> calculateSortedConfusions(String in) {
         //String in = inp.toLowerCase();
         HashMap<String, Long> confusions = new HashMap<>();
@@ -70,7 +72,7 @@ public class MccCalculator {
         return Utility.sortMap(confusions);
     }
 
-    public LinkedHashMap<String, Long> calculateSortedFrequencies(String in) {
+    public LinkedHashMap<String, Long> calculateSortedFrequencies(String in, int minMccFrequency) {
         // Go through the input text and find MCCs in them
         frequencies.clear();
 
@@ -104,13 +106,19 @@ public class MccCalculator {
             }
         }
 
-        // Were all chords used?
+        // Is each MCC still used enough?
 
         // We need to avoid these situation:
         //    If in="the", adding "the" after "he" increases savings from 1 to 2,
         //    yet "he" is not encountered anymore, making the list invalid
         if (frequencies.size() != longList.size() + shortList.size()) {
             return null;
+        }
+        // Now actually check min frequencies
+        for (Long frequency : frequencies.values()) {
+            if (frequency < minMccFrequency) {
+                return null;
+            }
         }
         return Utility.sortMap(frequencies);
     }
@@ -123,7 +131,7 @@ public class MccCalculator {
         int originalConfusionsTotal = Utility.calculateTotalOfValues(originalConfusions);
 
 
-        LinkedHashMap<String, Long> sortedFrequencies = calculateSortedFrequencies(in);
+        LinkedHashMap<String, Long> sortedFrequencies = calculateSortedFrequencies(in, 1);
         int frequenciesTotal = Utility.calculateMccSavings(sortedFrequencies);
 
         for(int i = 0; i < shortList.size(); i++) {
