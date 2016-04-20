@@ -5,11 +5,13 @@ import java.util.List;
 
 /** Created by alex on 4/4/16. */
 
+// TODO: Evaluate effectiveness of different MCC lists
+
 public class MccLists {
 //    public static List<String> shortList = Arrays.asList(
-//            "re", "in", "or", "an", "th", "al", "at", "ma", "ar", "es",
-//            "co", "il", "ac", "ch", "no", "de", "se", "ed", "of", "le",
-//            "ro", "ou", "ti", "is", "it", "en", "er", "on", "to", "st"); // Full list
+//        "re", "in", "or", "an", "th", "al", "at", "ma", "ar", "es",
+//        "co", "il", "ac", "ch", "no", "de", "se", "ed", "of", "le",
+//        "ro", "ou", "ti", "is", "it", "en", "er", "on", "to", "st"); // Full list
 
     // Removed: re, ti, le, co, se, ma, st
     // Removed: es, ti, re, co, le, se, ma*/
@@ -21,29 +23,22 @@ public class MccLists {
     // Removed: 8 MCCs (es, ti, ed, en, se, ma, il, ac, no) and added 3 MCCs (me, te, ve)
     // Removed: 11 MCCs (ac, ed, es, is, le, ma, no, ou, se, th, ti) and added "me"
 
-    // TODO: Evaluate effectiveness of different MCC lists
-    public static List<String> shortMccList = Arrays.asList(
-        "re", "in", "or", "an", "al", "at", "ar", "co", "ch", "de",
-        "of", "ro", "it", "er", "on", "to", "st", "me", "il", "en");
-
-    public static List<String> longMccList = Arrays.asList("ing", "and", "the");
-
     // list of 59 bigrams that have frequencies higher than 8,000 + "of":
     public static List<String> fullShortMccList = Arrays.asList(
-            "in", "er", "re", "th", "on", "or", "an", "le", "te", "es",
-            "he", "at", "to", "en", "co", "ro", "ed", "ti", "st", "de",
-        /*"ng",*/ "al", "it", "se", "ar", /*"nt", "nd",*/ "ou", "om", "ma",
-            "me", "li", "ne", "is", "il", "ve", "as", "io", "ra", "ta",
-            "ll", "no", "ch", "ea", "et", "us", "ce", "ha", "ec", "fo",
-            "ic", "ot", "ge", "ac", "ri", "el", "la", "ct", "ca", "of");
+        "in", "er", "re", "th", "on", "or", "an", "le", "te", "es",
+        "he", "at", "to", "en", "co", "ro", "ed", "ti", "st", "de",
+    /*"ng",*/ "al", "it", "se", "ar", /*"nt", "nd",*/ "ou", "om", "ma",
+        "me", "li", "ne", "is", "il", "ve", "as", "io", "ra", "ta",
+        "ll", "no", "ch", "ea", "et", "us", "ce", "ha", "ec", "fo",
+        "ic", "ot", "ge", "ac", "ri", "el", "la", "ct", "ca", "of");
 
     public static List<String> fullLongMccList = Arrays.asList("the", "ing", "and", "ion");
 
     public static List<String> nonControversialMccList = Arrays.asList(
-            //"in", "er", "th", "on", "an", "en", "al", "ar"); // 8 MCCs
-            //"in", "th", "on", "an", "en", "al", "ar"); // 7 MCCs, removed "er"
-            "in", "th", "on", "an", "en", "al", "ar", "st", "the"); // 9 MCCs, added "st", "the"
+        //"in", "er", "th", "on", "an", "en", "al", "ar"); // 8 MCCs
+        //"in", "th", "on", "an", "en", "al", "ar"); // 7 MCCs, removed "er"
+        "in", "th", "on", "an", "en", "al", "ar", "st", "the"); // 9 MCCs, added "st", "the"
 
     public static List<String> closeToBest = Arrays.asList(
-    "in", "er", "th", "on", "an", "en", "al", "ar", "the", "ing", "ed", "and", "as", "or", "is");
+        "in", "er", "th", "on", "an", "en", "al", "ar", "the", "ing", "ed", "and", "as", "or", "is");
 }

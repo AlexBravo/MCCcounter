@@ -15,32 +15,6 @@ import java.util.Map;
 
 public class Utility {
     @SuppressWarnings("unused")
-    public static boolean lookThroughShorts(String in) {
-        if(in.length() != 2) {
-            return false;
-        }
-        for(String s : MccLists.shortMccList){
-            if(s.equals(in)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @SuppressWarnings("unused")
-    public static boolean lookThroughLongs(String in) {
-        if(in.length() != 3) {
-            return false;
-        }
-        for(String s : MccLists.longMccList){
-            if(s.equals(in)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @SuppressWarnings("unused")
     public static boolean isMccInList(String in, List<String> mccs) {
         return mccs.contains(in);
 //        if(in.length() != shortMccLength) {
