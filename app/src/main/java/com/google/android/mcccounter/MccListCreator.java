@@ -17,19 +17,19 @@ public class MccListCreator {
 
     private static int minMccFrequency;
     private static int maxConfusionDelta;
-    public static double branchTolerance;
+    public static double rankIncreasePercent;
 
     private static String in;
     private static long fileLength;
 
 
-    public MccListCreator(String in, int minMccFrequency, int maxConfusionDelta, double branchTolerance) {
+    public MccListCreator(String in, int minMccFrequency, int maxConfusionDelta, double rankIncreasePercent) {
         MccListCreator.in = in;
         MccListCreator.fileLength = in.length();
 
         MccListCreator.minMccFrequency = minMccFrequency;
         MccListCreator.maxConfusionDelta = maxConfusionDelta;
-        MccListCreator.branchTolerance = branchTolerance;
+        MccListCreator.rankIncreasePercent = rankIncreasePercent;
     }
 
     public void createMccList(ArrayList<String> mccList) {
@@ -223,7 +223,7 @@ public class MccListCreator {
         while (iterator.hasNext()) {
             Map.Entry<String, Long> nextEntry = iterator.next();
             // Reject choices that have too large rank
-            if (nextEntry.getValue() < firstEntryRank * branchTolerance) {
+            if (nextEntry.getValue() <= firstEntryRank * rankIncreasePercent) {
                 //System.out.println("Alternative choice found for '" + firstEntryKey
                 //        + "' : '" + nextEntry.getKey() + "'");
 

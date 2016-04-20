@@ -158,7 +158,7 @@ public class CreateMccListTest {
     }
 
     @Test
-    public void test_alice_noConfusion() throws Exception {
+    public void test_alice_1() throws Exception {
         @SuppressWarnings("SpellCheckingInspection")
         //String fileName = "aliceinwonderland.txt";
         //String fileName = "aliceinwonderland_half.txt";
@@ -167,12 +167,42 @@ public class CreateMccListTest {
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
         final String in = Utility.toString(is);
 
-        int minMccFrequency = in.length()/1000; // 0.1%
-        //MccListCreator mccListCreator = new MccListCreator(in, minMccFrequency, 1, 100);
-        MccListCreator mccListCreator = new MccListCreator(in, minMccFrequency, 1, 1.001);
+        int minMccFrequency = in.length()/100; // 1%
+        int maxConfusionDelta = 1;
+        double rankIncreasePercent = 1.01; // 1%
+        MccListCreator mccListCreator =
+                new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
         mccListCreator.createMccList(new ArrayList<String>());
 
-        outputResults(0.95);
+        outputResults(0.9);
+
+        // TODO: Why are there both "he" and "the" in [an, he, in, the]?
+        // Correct results (take 3 seconds)
+        // maxSavings=988 evaluatedMccLists.size=28 duplicateBranchesCount=19
+        // evaluatedMccLists=[an, he, in, the]=988 [an, er, in, the]=974
+        // [an, he, in, it]=956 [an, er, in, th]=950
+    }
+
+    @Test
+    public void test_alice_smallConfusion() throws Exception {
+        @SuppressWarnings("SpellCheckingInspection")
+        //String fileName = "aliceinwonderland.txt";
+                //String fileName = "aliceinwonderland_half.txt";
+                //String fileName = "aliceinwonderland_quarter.txt";
+                String fileName = "aliceinwonderland_tenth.txt";
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
+        final String in = Utility.toString(is);
+
+        int minMccFrequency = in.length()/200; // 0.5%
+        int maxConfusionDelta = in.length()/10000; // 0.01%
+        double rankIncreasePercent = 1.01; // 1%
+        MccListCreator mccListCreator =
+                new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
+        mccListCreator.createMccList(new ArrayList<String>());
+
+        outputResults(0.9);
+
+        // Correct results
     }
 
     @Test
@@ -184,7 +214,9 @@ public class CreateMccListTest {
 
         int minMccFrequency = in.length()/1000; // 0.1%
         int maxConfusionDelta = in.length()/2000; // 0.05%
-        MccListCreator mccListCreator = new MccListCreator(in, minMccFrequency, maxConfusionDelta, 1.001);
+        double rankIncreasePercent = 1.00001; // 0.001%
+        MccListCreator mccListCreator =
+                new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
         ArrayList<String> initialMccList = new ArrayList<>(MccLists.nonControversialMccList);
         mccListCreator.createMccList(initialMccList);
 
@@ -200,7 +232,9 @@ public class CreateMccListTest {
 
         int minMccFrequency = in.length()/1000; // 0.1%
         int maxConfusionDelta = in.length()/2000; // 0.05%
-        MccListCreator mccListCreator = new MccListCreator(in, minMccFrequency, maxConfusionDelta, 1.001);
+        double rankIncreasePercent = 1.00001; // 0.001%
+        MccListCreator mccListCreator =
+                new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
         ArrayList<String> initialMccList = new ArrayList<>(MccLists.closeToBest);
         mccListCreator.createMccList(initialMccList);
 
@@ -216,7 +250,9 @@ public class CreateMccListTest {
         int minMccFrequency = in.length()/1000; // 0.1%
         //int maxConfusionDelta = 0;
         int maxConfusionDelta = in.length()/2000; // 0.05%
-        MccListCreator mccListCreator = new MccListCreator(in, minMccFrequency, maxConfusionDelta, 1.001);
+        double rankIncreasePercent = 1.00001; // 0.001%
+        MccListCreator mccListCreator =
+                new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
         ArrayList<String> initialMccList = new ArrayList<>(MccLists.nonControversialMccList);
         mccListCreator.createMccList(initialMccList);
 
