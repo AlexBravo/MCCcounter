@@ -15,11 +15,6 @@ public class CreateMccListTest {
 //        mccListCreator = new MccListCreator();
 //    }
 
-//    @Test
-//    public void testEmptyString() throws Exception {
-//        assertEquals(new HashMap<>(), mccCounter.calculateMCCs(""));
-//    }
-
     private void outputResults(double percentToDiscard) {
         System.out.println();
         System.out.println("maxSavings=" + MccListCreator.maxSavings
@@ -36,8 +31,12 @@ public class CreateMccListTest {
                 maxSavings = listSavings;
             }
             if (listSavings >= (long) (maxSavings * percentToDiscard)) {
-                System.out.print(mccList.getKey() + "=" + listSavings + " ");
-                if (mccList.getKey().length() > 30) {
+                String mccListKey = mccList.getKey();
+                int numberOfMccs = mccListKey.length() - mccListKey.replace(",", "").length() + 1;
+
+                System.out.print(mccListKey + "(" + numberOfMccs + ")=" + listSavings + " ");
+
+                if (mccListKey.length() > 30) {
                     System.out.println();
                 }
             }
@@ -78,7 +77,6 @@ public class CreateMccListTest {
 
     @Test
     public void test_thethe_1() throws Exception {
-
         @SuppressWarnings("SpellCheckingInspection")
         final String in = "thethe";
 
@@ -94,7 +92,6 @@ public class CreateMccListTest {
 
     @Test
     public void test_thethe_2() throws Exception {
-
         @SuppressWarnings("SpellCheckingInspection")
         final String in = "thethe";
 
@@ -111,7 +108,6 @@ public class CreateMccListTest {
 
     @Test
     public void test_thethehe_3() throws Exception {
-
         @SuppressWarnings("SpellCheckingInspection")
         final String in = "thethehe";
 
@@ -127,7 +123,6 @@ public class CreateMccListTest {
 
     @Test
     public void test_thetheininareto() throws Exception {
-
         @SuppressWarnings("SpellCheckingInspection")
         final String in = "thetheininareto";
 
@@ -178,23 +173,21 @@ public class CreateMccListTest {
         outputResults(0.9);
 
         // TODO: Why are there both "he" and "the" in [an, he, in, the]?
-        // Correct results (take 5 seconds)
-        // maxSavings=988 evaluatedMccLists.size=28 duplicateBranchesCount=19
+        // Correct results (took 4 seconds)
+        // maxSavings=988 evaluatedMccLists.size=28 duplicateBranchesCount=23
         // [an, he, in, the]=988 [an, er, in, the]=974
         // [an, he, in, it]=956 [an, er, in, th]=950
     }
 
     @Test
-    public void test_alice_partial_smallConfusion() throws Exception {
+    public void test_alice_tenth_smallConfusion() throws Exception {
         @SuppressWarnings("SpellCheckingInspection")
-        //String fileName = "aliceinwonderland_half.txt";
-        //String fileName = "aliceinwonderland_quarter.txt";
         String fileName = "aliceinwonderland_tenth.txt";
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
         final String in = Utility.toString(is);
 
-        int minMccFrequency = in.length() / 200; // 0.5%
-        int maxConfusionDelta = in.length() / 10000; // 0.01%
+        int minMccFrequency = (int)(in.length() / 100 * 0.5); // 0.5%
+        int maxConfusionDelta = (int)(in.length() / 100 * 0.01); // 0.01%
         double rankIncreasePercent = 1.001; // 0.1%
         MccListCreator mccListCreator =
                 new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
@@ -203,20 +196,87 @@ public class CreateMccListTest {
         outputResults(0.95);
 
         // Results for aliceinwonderland_tenth
-        // (took 6 min 45 sec on home Mac, 4m 48 sec on work Mac,
-        // 4m 48 sec on work Mac with optimization)
-        // maxSavings=2151 evaluatedMccLists.size=2344 duplicateBranchesCount=6536
+        // (took on home Mac: 6 min 45 sec,
+        // on work Mac: 6m 15 sec, 4m 48 sec with optimization,
+        // 6m 25 sec with fix in using minMccFrequency)
+        // maxSavings=2151 evaluatedMccLists.size=3140 duplicateBranchesCount=10044
         // [al, and, as, he, in, ing, le, on, ou, re, th, the, to, ve]=2151
         // [al, and, as, he, in, ing, le, on, or, ou, th, the, to, ve]=2143
         // [al, and, he, in, ing, le, on, ou, re, se, th, the, to, ve]=2124
         // [al, and, he, in, ing, le, on, or, ou, se, th, the, to, ve]=2116
+        // [al, an, as, he, in, ing, le, on, ou, re, th, the, to, ve]=2102
+        // [al, an, as, he, in, ing, le, on, or, ou, th, the, to, ve]=2094
+        // [al, an, he, in, ing, le, on, ou, re, se, th, the, to, ve]=2075
         // [al, and, as, he, in, ing, le, on, ou, re, th, the, to]=2071
-        // [al, and, as, he, in, le, on, ou, re, th, the, to, ve]=2049
+        // [al, an, he, in, ing, le, on, or, ou, se, th, the, to, ve]=2067
         // [al, and, as, he, in, ing, le, on, ou, th, the, to, ve]=2049
-        // [al, and, he, in, ing, le, on, ou, re, se, th, the, to]=2044
-        // [al, and, as, he, in, ing, le, ou, re, th, the, to, ve]=2044
-        // [al, and, as, he, in, ing, on, or, ou, th, the, to, ve]=2044
-        // ...
+
+    }
+
+    @Test
+    public void test_alice_half_smallConfusion() throws Exception {
+        @SuppressWarnings("SpellCheckingInspection")
+        String fileName = "aliceinwonderland_half.txt";
+
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
+        final String in = Utility.toString(is);
+
+        int minMccFrequency = (int)(in.length() / 100 * 0.5); // 0.5%
+        int maxConfusionDelta = (int)(in.length() / 100 * 0.01); // 0.01%
+        double rankIncreasePercent = 1.001; // 0.1%
+        MccListCreator mccListCreator =
+                new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
+        mccListCreator.createMccList(new ArrayList<String>());
+
+        outputResults(0.95);
+
+        // Results for aliceinwonderland_half
+        // (took 5 min 51 sec on work Mac)
+        // maxSavings=10055 evaluatedMccLists.size=567 duplicateBranchesCount=1314
+        // [al, and, as, he, in, ing, le, ou, re, th, the, to](12)=10055
+        // [al, and, as, he, in, ing, le, on, ou, re, th, the](12)=10003
+        // [al, and, as, ed, en, er, in, ing, ou, th, the, to](12)=9984
+        // [al, and, he, in, ing, le, ou, re, se, th, the, to](12)=9974
+        // [al, and, as, ed, en, er, in, ing, on, ou, th, the](12)=9932
+        // [al, and, he, in, ing, le, on, ou, re, se, th, the](12)=9922
+        // [al, and, as, he, in, ing, ou, re, th, the, to](11)=9645
+        // [al, and, as, he, in, ing, on, ou, re, th, the](11)=9593
+        // [al, and, he, in, ing, ou, re, se, th, the, to](11)=9564
+    }
+
+    @Test
+    public void test_alice_smallConfusion_old() throws Exception {
+        @SuppressWarnings("SpellCheckingInspection")
+        String fileName = "aliceinwonderland.txt";
+
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
+        final String in = Utility.toString(is);
+
+        int minMccFrequency = (int)(in.length() / 100 * 0.5);
+        int maxConfusionDelta = (int)(in.length() / 100 * 0.01);
+        double rankIncreasePercent = 1.001;
+        MccListCreator mccListCreator =
+                new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
+        mccListCreator.createMccList(new ArrayList<String>());
+
+        outputResults(0.95);
+
+        // Results for aliceinwonderland
+        // (took 23 min 43 sec on home Mac)
+        // maxSavings=22223 evaluatedMccLists.size=1161 duplicateBranchesCount=3211
+        // [al, and, ar, as, ed, en, er, in, ing, it, on, or, ou, the](14)=22223
+        // [al, and, ar, as, ed, en, er, in, ing, on, or, ou, th, the](14)=22063
+        // [al, and, ar, as, ed, en, er, in, ing, it, on, ou, the](13)=21300
+        // [al, and, ar, ed, en, er, in, ing, it, on, or, ou, the](13)=21294
+        // [al, and, as, ed, en, er, in, ing, on, or, ou, th, the](13)=21242
+        // [and, ar, as, ed, en, er, in, ing, it, on, or, ou, the](13)=21220
+        // [al, and, ar, as, ed, er, in, ing, it, on, or, ou, the](13)=21200
+        // [al, and, ar, as, en, er, in, ing, it, on, or, ou, the](13)=21167
+        // [al, and, ar, as, ed, en, er, in, ing, on, ou, th, the](13)=21140
+        // [al, and, ar, ed, en, er, in, ing, on, or, ou, th, the](13)=21134
+
+        // Why does this list (calculated a day before) have a different savings number?
+        // [al, and, ar, as, ed, en, er, in, ing, it, on, or, ou, the]=22236
     }
 
     @Test
@@ -227,29 +287,17 @@ public class CreateMccListTest {
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
         final String in = Utility.toString(is);
 
-        int minMccFrequency = in.length() / 200; // 0.5%
-        int maxConfusionDelta = in.length() / 10000; // 0.01%
-        double rankIncreasePercent = 1.001; // 0.1%
+        int minMccFrequency = (int)(in.length() / 100 * 0.5); // 0.5%
+        int maxConfusionDelta = (int)(in.length() / 100 * 0.1); // 0.1%
+        double rankIncreasePercent = 1.01; // 1%
         MccListCreator mccListCreator =
                 new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
         mccListCreator.createMccList(new ArrayList<String>());
 
         outputResults(0.95);
 
-        // Results for aliceinwonderland (took 25 min 15 sec on home Mac)
-        // maxSavings=22236 evaluatedMccLists.size=975 duplicateBranchesCount=2339
-        // [al, and, ar, as, ed, en, er, in, ing, it, on, or, ou, the]=22236
-        // [al,and,ar,as,ed,en,er,in,ing,on,or,ou,th,the]=22063
-        // [al,and,ar,as,ed,en,er,in,ing,it,on,ou,the]=21313
-        // [al,and,ar,ed,en,er,in,ing,it,on,or,ou,the]=21307
-        // [al,and,as,ed,en,er,in,ing,on,or,ou,th,the]=21242
-        // [and,ar,as,ed,en,er,in,ing,it,on,or,ou,the]=21233
-        // [al,and,ar,as,ed,er,in,ing,it,on,or,ou,the]=21213
-        // [al,and,ar,as,en,er,in,ing,it,on,or,ou,the]=21180
-        // [al,and,ar,as,ed,en,er,in,ing,on,ou,th,the]=21140
-        // [al,and,ar,ed,en,er,in,ing,on,or,ou,th,the]=21134
-        // [al,and,ar,as,ed,en,er,in,ing,it,ou,the,to]=21104
-}
+        // Results for aliceinwonderland
+    }
 
     @Test
     public void testBigFileCloseToBest() throws Exception {
@@ -258,8 +306,8 @@ public class CreateMccListTest {
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
         final String in = Utility.toString(is);
 
-        int minMccFrequency = in.length() / 500; // 0.2%
-        int maxConfusionDelta = in.length() / 10000; // 0.01%
+        int minMccFrequency = (int)(in.length() / 100 * 0.2); // 0.2%
+        int maxConfusionDelta = (int)(in.length() / 100 * 0.01); // 0.01%
         double rankIncreasePercent = 1.001; // 0.1%
         MccListCreator mccListCreator =
                 new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
@@ -275,9 +323,9 @@ public class CreateMccListTest {
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
         final String in = Utility.toString(is);
 
-        int minMccFrequency = in.length() / 1000; // 0.1%
+        int minMccFrequency = (int)(in.length() / 100 * 0.1); // 0.1%
         //int maxConfusionDelta = 0;
-        int maxConfusionDelta = in.length() / 2000; // 0.05%
+        int maxConfusionDelta = (int)(in.length() / 100 * 0.05); // 0.05%
         double rankIncreasePercent = 1.00001; // 0.001%
         MccListCreator mccListCreator =
                 new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);

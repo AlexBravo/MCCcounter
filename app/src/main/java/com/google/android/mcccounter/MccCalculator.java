@@ -113,7 +113,7 @@ public class MccCalculator {
                         if (longList.contains(secondLong)) {
                             String toAdd = shortMcc + secondLong.substring(1, 3);
                             addToMap(toAdd, confusions);
-                            i += 2;
+                            //i += 2;
                         }
                     }
                 }

@@ -179,8 +179,13 @@ public class MccListCreator {
             long confusionsDelta = newConfusionTotal - confusionSoFar;
 
             // Add chord only if it gains us something
-            // 3-letter MCC has double of the value of 2-letter MCC
-            if (savingsDelta < minMccFrequency * (candidate.length() - 1)) {
+
+            // 3-letter MCC has double of the value of 2-letter MCC,
+            // but the cost of pressing a both long and short chord is the same,
+            // so no need to look at the length of MCC
+            //if (savingsDelta < minMccFrequency * (candidate.length() - 1)) {
+
+            if (savingsDelta < minMccFrequency) {
                 //System.out.println("'" + candidate + "' too low savingsDelta=" + savingsDelta);
             } else if (confusionsDelta > maxConfusionDelta) {
                 //System.out.println("'" + candidate + "' too high confusionsDelta=" + confusionsDelta);
