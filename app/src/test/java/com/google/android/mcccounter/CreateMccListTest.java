@@ -163,9 +163,9 @@ public class CreateMccListTest {
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
         final String in = Utility.toString(is);
 
-        int minMccFrequency = in.length() / 100; // 1%
+        int minMccFrequency = in.length() / 100;
         int maxConfusionDelta = 1;
-        double rankIncreasePercent = 1.01; // 1%
+        double rankIncreasePercent = 1.01;
         MccListCreator mccListCreator =
                 new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
         mccListCreator.createMccList(new ArrayList<String>());
@@ -186,9 +186,9 @@ public class CreateMccListTest {
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
         final String in = Utility.toString(is);
 
-        int minMccFrequency = (int)(in.length() / 100 * 0.5); // 0.5%
-        int maxConfusionDelta = (int)(in.length() / 100 * 0.01); // 0.01%
-        double rankIncreasePercent = 1.001; // 0.1%
+        int minMccFrequency = (int)(in.length() / 100 * 0.5);
+        int maxConfusionDelta = (int)(in.length() / 100 * 0.01);
+        double rankIncreasePercent = 1.001;
         MccListCreator mccListCreator =
                 new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
         mccListCreator.createMccList(new ArrayList<String>());
@@ -221,9 +221,9 @@ public class CreateMccListTest {
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
         final String in = Utility.toString(is);
 
-        int minMccFrequency = (int)(in.length() / 100 * 0.5); // 0.5%
-        int maxConfusionDelta = (int)(in.length() / 100 * 0.01); // 0.01%
-        double rankIncreasePercent = 1.001; // 0.1%
+        int minMccFrequency = (int)(in.length() / 100 * 0.5);
+        int maxConfusionDelta = (int)(in.length() / 100 * 0.01);
+        double rankIncreasePercent = 1.001;
         MccListCreator mccListCreator =
                 new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
         mccListCreator.createMccList(new ArrayList<String>());
@@ -245,41 +245,6 @@ public class CreateMccListTest {
     }
 
     @Test
-    public void test_alice_smallConfusion_old() throws Exception {
-        @SuppressWarnings("SpellCheckingInspection")
-        String fileName = "aliceinwonderland.txt";
-
-        InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
-        final String in = Utility.toString(is);
-
-        int minMccFrequency = (int)(in.length() / 100 * 0.5);
-        int maxConfusionDelta = (int)(in.length() / 100 * 0.01);
-        double rankIncreasePercent = 1.001;
-        MccListCreator mccListCreator =
-                new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
-        mccListCreator.createMccList(new ArrayList<String>());
-
-        outputResults(0.95);
-
-        // Results for aliceinwonderland
-        // (took 23 min 43 sec on home Mac)
-        // maxSavings=22223 evaluatedMccLists.size=1161 duplicateBranchesCount=3211
-        // [al, and, ar, as, ed, en, er, in, ing, it, on, or, ou, the](14)=22223
-        // [al, and, ar, as, ed, en, er, in, ing, on, or, ou, th, the](14)=22063
-        // [al, and, ar, as, ed, en, er, in, ing, it, on, ou, the](13)=21300
-        // [al, and, ar, ed, en, er, in, ing, it, on, or, ou, the](13)=21294
-        // [al, and, as, ed, en, er, in, ing, on, or, ou, th, the](13)=21242
-        // [and, ar, as, ed, en, er, in, ing, it, on, or, ou, the](13)=21220
-        // [al, and, ar, as, ed, er, in, ing, it, on, or, ou, the](13)=21200
-        // [al, and, ar, as, en, er, in, ing, it, on, or, ou, the](13)=21167
-        // [al, and, ar, as, ed, en, er, in, ing, on, ou, th, the](13)=21140
-        // [al, and, ar, ed, en, er, in, ing, on, or, ou, th, the](13)=21134
-
-        // Why does this list (calculated a day before) have a different savings number?
-        // [al, and, ar, as, ed, en, er, in, ing, it, on, or, ou, the]=22236
-    }
-
-    @Test
     public void test_alice_smallConfusion() throws Exception {
         @SuppressWarnings("SpellCheckingInspection")
         String fileName = "aliceinwonderland.txt";
@@ -287,9 +252,9 @@ public class CreateMccListTest {
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
         final String in = Utility.toString(is);
 
-        int minMccFrequency = (int)(in.length() / 100 * 0.5); // 0.5%
-        int maxConfusionDelta = (int)(in.length() / 100 * 0.1); // 0.1%
-        double rankIncreasePercent = 1.01; // 1%
+        int minMccFrequency = (int)(in.length() / 100 * 0.5);
+        int maxConfusionDelta = (int)(in.length() / 100 * 0.1);
+        double rankIncreasePercent = 1.005;
         MccListCreator mccListCreator =
                 new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
         mccListCreator.createMccList(new ArrayList<String>());
@@ -306,9 +271,9 @@ public class CreateMccListTest {
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
         final String in = Utility.toString(is);
 
-        int minMccFrequency = (int)(in.length() / 100 * 0.2); // 0.2%
-        int maxConfusionDelta = (int)(in.length() / 100 * 0.01); // 0.01%
-        double rankIncreasePercent = 1.001; // 0.1%
+        int minMccFrequency = (int)(in.length() / 100 * 0.2);
+        int maxConfusionDelta = (int)(in.length() / 100 * 0.01);
+        double rankIncreasePercent = 1.001;
         MccListCreator mccListCreator =
                 new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
         ArrayList<String> initialMccList = new ArrayList<>(MccLists.closeToBest);
@@ -323,10 +288,10 @@ public class CreateMccListTest {
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
         final String in = Utility.toString(is);
 
-        int minMccFrequency = (int)(in.length() / 100 * 0.1); // 0.1%
+        int minMccFrequency = (int)(in.length() / 100 * 0.1);
         //int maxConfusionDelta = 0;
-        int maxConfusionDelta = (int)(in.length() / 100 * 0.05); // 0.05%
-        double rankIncreasePercent = 1.00001; // 0.001%
+        int maxConfusionDelta = (int)(in.length() / 100 * 0.05);
+        double rankIncreasePercent = 1.00001;
         MccListCreator mccListCreator =
                 new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
         ArrayList<String> initialMccList = new ArrayList<>(MccLists.nonControversialMccList);

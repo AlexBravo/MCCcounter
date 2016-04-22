@@ -128,8 +128,8 @@ public class MccListCreator {
                     maxSavings = mccToAddSavings;
                 }
                 System.out.println();
-                System.out.println("  maxSavings=" + maxSavings + " mccToAddSavings=" + mccToAddSavings
-                        + ", mccToAddConfusions=" + mccToAddConfusions);
+                System.out.println("  maxSavings=" + maxSavings + " savings=" + mccToAddSavings
+                        + ", confusions=" + mccToAddConfusions);
                 System.out.println("  evaluatedMccLists.size=" + evaluatedMccLists.size()
                         + " duplicateBranchesCount=" + duplicateBranchesCount);
             }
