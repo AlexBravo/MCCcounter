@@ -37,7 +37,8 @@ public class MccLists {
     public static List<String> nonControversialMccList = Arrays.asList(
         //"in", "er", "th", "on", "an", "en", "al", "ar"); // 8 MCCs
         //"in", "th", "on", "an", "en", "al", "ar"); // 7 MCCs, removed "er"
-        "in", "th", "on", "an", "en", "al", "ar", "st", "the"); // 9 MCCs, added "st", "the"
+        //"in", "th", "on", "an", "en", "al", "ar", "st", "the"); // 9 MCCs, added "st", "the"
+        "in", "th", "on", "an", "en", "al", "ar", "the", "ing", "and"); // 10 MCCs, removed "st", added "ing" and "and"
 
     public static List<String> closeToBest = Arrays.asList(
         "in", "er", "th", "on", "an", "en", "al", "ar", "the", "ing", "ed", "and", "as", "or", "is");
