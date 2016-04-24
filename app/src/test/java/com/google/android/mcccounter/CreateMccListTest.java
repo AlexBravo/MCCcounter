@@ -18,28 +18,38 @@ public class CreateMccListTest {
     private void outputResults(double percentToDiscard) {
         System.out.println();
         System.out.println("maxSavings=" + MccListCreator.maxSavings
-                + " evaluatedMccLists.size=" + MccListCreator.evaluatedMccLists.size()
+                + " mccLists.size=" + MccListCreator.mccListsSavings.size()
                 + " duplicateBranchesCount=" + MccListCreator.duplicateBranchesCount);
 
-        LinkedHashMap<String, Long> mccLists = Utility.sortMap(MccListCreator.evaluatedMccLists);
+        LinkedHashMap<String, Long> mccLists = Utility.sortMap(MccListCreator.mccListsSavings);
 
-        //System.out.print("evaluatedMccLists=");
+        //System.out.print("mccListsSavings=");
         long maxSavings = 0;
+        long previousSavings = 0;
+        long previousConfusions = 0;
         for (LinkedHashMap.Entry<String, Long> mccList : mccLists.entrySet()) {
             long listSavings = mccList.getValue();
+
+            String mccListKey = mccList.getKey();
+
+            long listConfusions = MccListCreator.mccListsConfusions.get(mccListKey);
+            int numberOfMccs = mccListKey.length() - mccListKey.replace(",", "").length() + 1;
+
             if (maxSavings < listSavings) {
                 maxSavings = listSavings;
             }
             if (listSavings >= (long) (maxSavings * percentToDiscard)) {
-                String mccListKey = mccList.getKey();
-                int numberOfMccs = mccListKey.length() - mccListKey.replace(",", "").length() + 1;
-
-                System.out.print(mccListKey + "(" + numberOfMccs + ")=" + listSavings + " ");
+                System.out.print(mccListKey + "(" + numberOfMccs + ")=" + listSavings
+                        + ","  + listConfusions + "," + (listSavings - previousSavings) + ","
+                        + (listConfusions - previousConfusions) + " ");
 
                 if (mccListKey.length() > 30) {
                     System.out.println();
                 }
             }
+
+            previousSavings = listSavings;
+            previousConfusions = listConfusions;
         }
     }
 
@@ -55,7 +65,7 @@ public class CreateMccListTest {
         outputResults(0);
 
         // Correct results
-        // maxSavings=2 evaluatedMccLists.size=3 duplicateBranchesCount=0
+        // maxSavings=2 mccListsSavings.size=3 duplicateBranchesCount=0
         // [the]=2 [th]=1 [he]=1
     }
 
@@ -70,7 +80,7 @@ public class CreateMccListTest {
 
         outputResults(0);
         // Correct results
-        // maxSavings=3 evaluatedMccLists.size=9 duplicateBranchesCount=4
+        // maxSavings=3 mccListsSavings.size=9 duplicateBranchesCount=4
         // [re, the]=3 [re, th]=2 [he, re]=2 [er, th]=2 [the]=2
         // [re]=1 [th]=1 [er]=1 [he]=1
     }
@@ -86,7 +96,7 @@ public class CreateMccListTest {
         outputResults(0);
 
         // Correct results
-        // maxSavings=4 evaluatedMccLists.size=6 duplicateBranchesCount=0
+        // maxSavings=4 mccListsSavings.size=6 duplicateBranchesCount=0
         // [the]=4 [et, he, th]=3 [th]=2 [et, th]=2 [he]=2 [et]=1
     }
 
@@ -102,7 +112,7 @@ public class CreateMccListTest {
         outputResults(0);
 
         // Correct results
-        // maxSavings=4 evaluatedMccLists.size=3 duplicateBranchesCount=0
+        // maxSavings=4 mccListsSavings.size=3 duplicateBranchesCount=0
         // [the]=4 [th]=2 [he]=2
     }
 
@@ -117,7 +127,7 @@ public class CreateMccListTest {
         outputResults(0);
 
         // Correct results
-        // maxSavings=3 evaluatedMccLists.size=1 duplicateBranchesCount=0
+        // maxSavings=3 mccListsSavings.size=1 duplicateBranchesCount=0
         // [he]=3
     }
 
@@ -133,7 +143,7 @@ public class CreateMccListTest {
         outputResults(0);
 
         // Correct results
-        // maxSavings=8 evaluatedMccLists.size=79 duplicateBranchesCount=117
+        // maxSavings=8 mccListsSavings.size=79 duplicateBranchesCount=117
         // [ar, in, the, to]=8 [ar, et, in, the]=8 [in, re, the, to]=8
         // [ar, in, the]=7 [in, re, the]=7 [ar, et, he, in, th]=7 [et, he, in, re, th, to]=7
         // [et, in, the]=7 [in, the, to]=7 [in, re, th, to]=6 [et, he, in, re, th]=6
@@ -172,7 +182,7 @@ public class CreateMccListTest {
 
         // TODO: Why are there both "he" and "the" in [an, he, in, the]?
         // Correct results (took 4 seconds)
-        // maxSavings=988 evaluatedMccLists.size=28 duplicateBranchesCount=23
+        // maxSavings=988 mccListsSavings.size=28 duplicateBranchesCount=23
         // [an, he, in, the]=988 [an, er, in, the]=974
         // [an, he, in, it]=956 [an, er, in, th]=950
     }
@@ -197,7 +207,7 @@ public class CreateMccListTest {
         // (took on home Mac: 6 min 45 sec,
         // on work Mac: 6m 15 sec, 4m 48 sec with optimization,
         // 6m 25 sec with fix in using minMccFrequency)
-        // maxSavings=2151 evaluatedMccLists.size=3140 duplicateBranchesCount=10044
+        // maxSavings=2151 mccListsSavings.size=3140 duplicateBranchesCount=10044
         // [al, and, as, he, in, ing, le, on, ou, re, th, the, to, ve]=2151
         // [al, and, as, he, in, ing, le, on, or, ou, th, the, to, ve]=2143
         // [al, and, he, in, ing, le, on, ou, re, se, th, the, to, ve]=2124
@@ -230,7 +240,7 @@ public class CreateMccListTest {
 
         // Results for aliceinwonderland_half
         // (took 5 min 51 sec on work Mac)
-        // maxSavings=10055 evaluatedMccLists.size=567 duplicateBranchesCount=1314
+        // maxSavings=10055 mccListsSavings.size=567 duplicateBranchesCount=1314
         // [al, and, as, he, in, ing, le, ou, re, th, the, to](12)=10055
         // [al, and, as, he, in, ing, le, on, ou, re, th, the](12)=10003
         // [al, and, as, ed, en, er, in, ing, ou, th, the, to](12)=9984
@@ -287,7 +297,7 @@ public class CreateMccListTest {
 
         int minMccFrequency = (int)(in.length() / 100 * 0.1);
         int maxConfusionDelta = (int)(in.length() / 100 * 0.2);
-        double rankIncreasePercent = 1.00005; // 0.005
+        double rankIncreasePercent = 1.00001; // 0.001
         MccListCreator mccListCreator =
                 new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
         mccListCreator.createMccList(new ArrayList<String>());

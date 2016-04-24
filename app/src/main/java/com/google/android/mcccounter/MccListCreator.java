@@ -13,7 +13,8 @@ import java.util.Map;
 public class MccListCreator {
     public static int duplicateBranchesCount = 0;
     public static long maxSavings;
-    public static HashMap<String, Long> evaluatedMccLists = new HashMap<>();
+    public static HashMap<String, Long> mccListsSavings = new HashMap<>();
+    public static HashMap<String, Long> mccListsConfusions = new HashMap<>();
 
     private static int minMccFrequency;
     private static int maxConfusionDelta;
@@ -75,7 +76,7 @@ public class MccListCreator {
         for (String candidate : mccsToConsider) {
             String mccListAsString = getMccListAsString(mccList, candidate);
             // Have this MCC list been evaluated before?
-            if (evaluatedMccLists.get(mccListAsString) != null) {
+            if (mccListsSavings.get(mccListAsString) != null) {
                 duplicateBranchesCount++;
                 System.out.print(".");
             } else {
@@ -94,7 +95,7 @@ public class MccListCreator {
         for (String mccToAdd : branches) {
             String mccListAsString = getMccListAsString(mccList, mccToAdd);
             // Have this MCC list been evaluated before?
-            if (evaluatedMccLists.get(mccListAsString) != null) {
+            if (mccListsSavings.get(mccListAsString) != null) {
                 //System.out.println("Error: MCC list already exists " + mccListAsString);
                 continue;
             }
@@ -115,8 +116,9 @@ public class MccListCreator {
             // Go into this branch by recursively calling yourself
             addToMccList(mccList, mccToAddSavings, mccToAddConfusions, ++recursionLevel);
 
-            // Add this list at the end, so we don't see the same evaluatedMccLists.size
-            evaluatedMccLists.put(mccListAsString, mccToAddSavings);
+            // Add this list at the end, so we don't see the same mccListsSavings.size
+            mccListsSavings.put(mccListAsString, mccToAddSavings);
+            mccListsConfusions.put(mccListAsString, mccToAddConfusions);
 
             System.out.println();
             System.out.print("mccList(" + mccList.size() + ") " + mccList);
@@ -130,7 +132,7 @@ public class MccListCreator {
                 System.out.println();
                 System.out.println("  maxSavings=" + maxSavings + " savings=" + mccToAddSavings
                         + ", confusions=" + mccToAddConfusions);
-                System.out.println("  evaluatedMccLists.size=" + evaluatedMccLists.size()
+                System.out.println("  mccListsSavings.size=" + mccListsSavings.size()
                         + " duplicateBranchesCount=" + duplicateBranchesCount);
             }
 
