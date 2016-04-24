@@ -44,4 +44,8 @@ public class MccLists {
 
     public static List<String> closeToBest = Arrays.asList(
         "in", "er", "th", "on", "an", "en", "al", "ar", "the", "ing", "ed", "and", "as", "or", "is");
+
+    public static List<String> finalList = Arrays.asList(
+        "ac", "al", "an", "and", "ar", "as", "at", "ch", "ed", "en", "er", "es", "et", "il", "in",
+        "ing", "ion", "is", "it", "of", "om", "on", "or", "ot", "ou", "st", "th", "the", "ge"); // 28 MCCs
 }

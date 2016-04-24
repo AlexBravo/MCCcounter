@@ -284,7 +284,7 @@ public class CreateMccListTest {
 
         int minMccFrequency = (int)(in.length() / 100 * 0.1);
         int maxConfusionDelta = (int)(in.length() / 100 * 0.2);
-        double rankIncreasePercent = 1.0001; // 0.001
+        double rankIncreasePercent = 1.00001; // 0.001
         MccListCreator mccListCreator =
                 new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
         mccListCreator.createMccList(new ArrayList<String>());
@@ -300,11 +300,28 @@ public class CreateMccListTest {
 
         int minMccFrequency = (int)(in.length() / 100 * 0.1);
         int maxConfusionDelta = (int)(in.length() / 100 * 0.1);
-        double rankIncreasePercent = 1.0001; // 0.001%
+        double rankIncreasePercent = 1.00001; // 0.001%
         MccListCreator mccListCreator =
                 new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
 
         mccListCreator.createMccList(new ArrayList<>(MccLists.nonControversialMccList));
+
+        outputResults(0.85);
+    }
+
+    @Test
+    public void testBigFilFinalList() throws Exception {
+        String fileName = "812_notes.txt";
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
+        final String in = Utility.toString(is);
+
+        int minMccFrequency = (int)(in.length() / 100 * 0.1);
+        int maxConfusionDelta = (int)(in.length() / 100 * 0.1);
+        double rankIncreasePercent = 1.00001; // 0.001%
+        MccListCreator mccListCreator =
+                new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
+
+        mccListCreator.createMccList(new ArrayList<>(MccLists.finalList));
 
         outputResults(0.85);
     }
