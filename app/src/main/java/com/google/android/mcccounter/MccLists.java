@@ -23,14 +23,15 @@ public class MccLists {
     // Removed: 8 MCCs (es, ti, ed, en, se, ma, il, ac, no) and added 3 MCCs (me, te, ve)
     // Removed: 11 MCCs (ac, ed, es, is, le, ma, no, ou, se, th, ti) and added "me"
 
-    // list of 59 bigrams that have frequencies higher than 8,000 + "of":
+    // list of 59 bigrams that have frequencies higher than 8,000 + "of"
+    // removed us, ce, ha, ec, fo, ic, el, la, ct
     public static List<String> fullShortMccList = Arrays.asList(
         "in", "er", "re", "th", "on", "or", "an", "le", "te", "es",
         "he", "at", "to", "en", "co", "ro", "ed", "ti", "st", "de",
-    /*"ng",*/ "al", "it", "se", "ar", /*"nt", "nd",*/ "ou", "om", "ma",
+    /*"ng",*/ "al", "it", "se", "ar", /*"nt", "nd",*/   "ou", "om", "ma",
         "me", "li", "ne", "is", "il", "ve", "as", "io", "ra", "ta",
-        "ll", "no", "ch", "ea", "et", "us", "ce", "ha", "ec", "fo",
-        "ic", "ot", "ge", "ac", "ri", "el", "la", "ct", "ca", "of");
+        "ll", "no", "ch", "ea", "et", /*"us", "ce", "ha","ec", "fo",*/
+    /*"ic",*/ "ot", "ge", "ac", "ri", /*"el", "la", "ct",*/   "ca", "of");
 
     public static List<String> fullLongMccList = Arrays.asList("the", "ing", "and", "ion");
 
@@ -38,7 +39,8 @@ public class MccLists {
         //"in", "er", "th", "on", "an", "en", "al", "ar"); // 8 MCCs
         //"in", "th", "on", "an", "en", "al", "ar"); // 7 MCCs, removed "er"
         //"in", "th", "on", "an", "en", "al", "ar", "st", "the"); // 9 MCCs, added "st", "the"
-        "in", "th", "on", "an", "en", "al", "ar", "the", "ing", "and"); // 10 MCCs, removed "st", added "ing" and "and"
+        //"in", "th", "on", "an", "en", "al", "ar", "the", "ing", "and"); // 10 MCCs, removed "st", added "ing" and "and"
+        "in", "th", "on", "an", "en", "al", "ar", "the", "ing", "and", "st"); // 11 MCCs, added "st" back
 
     public static List<String> closeToBest = Arrays.asList(
         "in", "er", "th", "on", "an", "en", "al", "ar", "the", "ing", "ed", "and", "as", "or", "is");
