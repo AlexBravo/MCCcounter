@@ -8,10 +8,11 @@ import java.util.List;
 // TODO: Evaluate effectiveness of different MCC lists
 
 public class MccLists {
-//    public static List<String> shortList = Arrays.asList(
-//        "re", "in", "or", "an", "th", "al", "at", "ma", "ar", "es",
-//        "co", "il", "ac", "ch", "no", "de", "se", "ed", "of", "le",
-//        "ro", "ou", "ti", "is", "it", "en", "er", "on", "to", "st"); // Full list
+    public static List<String> oldList = Arrays.asList(
+        "re", "in", "or", "an", "th", "al", "at", "ma", "ar", "es",
+        "co", "il", "ac", "ch", "no", "de", "se", "ed", "of", "le",
+        "ro", "ou", "ti", "is", "it", "en", "er", "on", "to", "st",
+        "the", "ing", "and"); // Full list
 
     // Removed: re, ti, le, co, se, ma, st
     // Removed: es, ti, re, co, le, se, ma*/
