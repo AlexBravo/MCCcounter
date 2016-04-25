@@ -13,114 +13,94 @@ public class MccCalculator {
 
     private HashMap<String, Long> frequencies = new HashMap<>();
     private HashMap<String, Long> confusions = new HashMap<>();
+    private HashMap<String, Long> typedChars = new HashMap<>();
 
 //    public MccCalculator(List<String> shortList, List<String> longList) {
 //        this.shortList = shortList;
 //        this.longList = longList;
 //    }
 
-//    public LinkedHashMap<String, Long> calculateSortedConfusions(String in) {
-//        confusions.clear();
-//
-//        // Go through the input text and find MCCs in them
-//        int i = 0;
-//        // Go all the way to 2 letters before the last one. That is the place of last possible confusion
-//        while(i < in.length() - 2) {
-//            // It's OK for the second parameter of substring() to go all the way to be equal lenght()
-//            if (i + 3 <= in.length()) {
-//                //String longMcc = in.substring(i, i + 3);
-//                // Account for the fact that all MCCs have capitalized first letter
-//                String longMcc = in.substring(i, i + 1).toLowerCase() + in.substring(i + 1, i + 3);
-//                if (longList.contains(longMcc)) {
-//                    // Don't look for 4th letter.
-//                    // "thet" is not confusing if there are only "the" and "et",
-//                    // as there needs to be "th", "the" and "et" to be confusing
-//
-//                    i += 3;
-//                    continue;
-//                }
-//            }
-//
-//            // Account for the fact that all MCCs have capitalized first letter
-//            String shortMcc = in.substring(i, i + 1).toLowerCase() + in.substring(i + 1, i + 2);
-//            if (shortList.contains(shortMcc)) {
-//                // Don't count capitalized second MCC
-//                String secondShort = in.substring(i + 1, (i + 1) + 2);
-//                if (shortList.contains(secondShort)) {
-//                    String toAdd = shortMcc + secondShort.charAt(1);
-//                    addToMap(toAdd, confusions);
-//                } else if (i + 4 <= in.length()) {
-//                    // Look for confusions like "at"-"the" in "rather"
-//
-//                    // Don't count capitalized second MCC
-//                    String secondLong = in.substring(i + 1, (i + 1) + 3);
-//                    if (longList.contains(secondLong)) {
-//                        String toAdd = shortMcc + secondLong.substring(1, 3);
-//                        addToMap(toAdd, confusions);
-//                        i += 2;
-//                    }
-//                }
-//
-//                i += 2;
-//            } else {
-//                i++;
-//            }
-//        }
-//
-//        return Utility.sortMap(confusions);
-//    }
-
     public void calculateFrequenciesAndConfusions(String in) {
         // Go through the input text and find MCCs in them
         frequencies.clear();
         confusions.clear();
+        typedChars.clear();
 
         // Go through the input text and find MCCs in them
         int i = 0;
         int length = in.length();
+        String longMcc;
+        String shortMcc;
+        String secondShort;
+        String secondLong;
+
+        String typedMcc;
+        String confusion;
+
+        String typedChar;
         // Go all the way to one letter before the last one
         while (i < length - 1) {
+            typedMcc = null;
+            confusion = null;
             // It's OK for the second parameter of substring() to go all the way to be equal lenght()
             if (i + 3 <= length) {
-                //String longMcc = in.substring(i, i + 3);
                 // Account for the fact that all MCCs have capitalized first letter
-                String longMcc = in.substring(i, i + 1).toLowerCase() + in.substring(i + 1, i + 3);
+                longMcc = in.substring(i, i + 1).toLowerCase() + in.substring(i + 1, i + 3);
                 if (longList.contains(longMcc)) {
                     // Don't look for 4th letter.
                     // "thet" is not confusing if there are only "the" and "et",
                     // as there needs to be "th", "the" and "et" to be confusing
-
-                    i += 3;
-                    addToMap(longMcc, frequencies);
-                    continue;
+                    typedMcc = longMcc;
                 }
             }
 
-            // Account for the fact that all MCCs have capitalized first letter
-            String shortMcc = in.substring(i, i + 1).toLowerCase() + in.substring(i + 1, i + 2);
-            if (shortList.contains(shortMcc)) {
-                if (i + 3 <= length) {
-                    // Don't count capitalized the second MCC
-                    String secondShort = in.substring(i + 1, (i + 1) + 2);
-                    if (shortList.contains(secondShort)) {
-                        String toAdd = shortMcc + secondShort.charAt(1);
-                        addToMap(toAdd, confusions);
-                    } else if (i + 4 <= in.length()) {
-                        // Look for confusions like "at"-"the" in "rather"
+            if (typedMcc == null) {
+                // Account for the fact that all MCCs have capitalized first letter
+                shortMcc = in.substring(i, i + 1).toLowerCase() + in.substring(i + 1, i + 2);
+                if (shortList.contains(shortMcc)) {
+                    // This is what is going to be typed, unless there are exceptions
+                    typedMcc = shortMcc;
 
-                        // Don't count capitalized second MCC
-                        String secondLong = in.substring(i + 1, (i + 1) + 3);
-                        if (longList.contains(secondLong)) {
-                            String toAdd = shortMcc + secondLong.substring(1, 3);
-                            addToMap(toAdd, confusions);
-                            //i += 2;
+                    if (i + 3 <= length) {
+                        // Don't count the capitalized second MCC
+                        secondShort = in.substring(i + 1, (i + 1) + 2);
+                        if (shortList.contains(secondShort)) {
+                            if (secondShort.equals("th")
+                                    || secondShort.equals("st")
+                                    || secondShort.equals("ch")) {
+                                // secondShort will be typed in the next loop iteration
+                                // in this iteration just type one char
+                                typedMcc = null;
+                            } else {
+                                confusion = shortMcc + secondShort.charAt(1);
+                            }
+                        } else if (i + 4 <= in.length()) {
+                            // Look for confusions like "at"-"the" in "rather"
+
+                            // Don't count capitalized second MCC
+                            secondLong = in.substring(i + 1, (i + 1) + 3);
+                            if (longList.contains(secondLong)) {
+                                confusion = shortMcc + secondLong.substring(1, 3);
+                                // secondShort will be typed in the next loop iteration
+                                // in this iteration just type one char
+                                typedMcc = null;
+                            }
                         }
                     }
                 }
-                i += 2;
-                addToMap(shortMcc, frequencies);
+            }
+
+            if (typedMcc != null) {
+                addToMap(typedMcc, frequencies);
+                i += typedMcc.length();
             } else {
+                typedChar = in.substring(i, i + 1).toLowerCase();
+                addToMap(typedChar, typedChars);
                 i++;
+            }
+
+            if (confusion != null) {
+                addToMap(confusion, confusions);
             }
         }
     }
@@ -147,40 +127,9 @@ public class MccCalculator {
         return Utility.sortMap(confusions);
     }
 
-//    public LinkedHashMap<String, Long> calculateSortedConfusionRanks(String in){
-//
-//        HashMap<String, Long> confusionRanks = new HashMap<>();
-//        HashMap<String, Long> originalConfusions = calculateSortedConfusions(in);
-//        int originalConfusionsTotal = Utility.calculateTotalOfValues(originalConfusions);
-//
-//
-//        LinkedHashMap<String, Long> sortedFrequencies = calculateFrequenciesAndConfusions(in, 1);
-//        int frequenciesTotal = Utility.calculateMccSavings(sortedFrequencies);
-//
-//        for(int i = 0; i < shortList.size(); i++) {
-//            String mccToRemove = shortList.get(i);
-//            shortList.set(i, "");
-//            HashMap<String, Long> confusions = calculateSortedConfusions(in);
-//            double confusionPercentage = calculateConfusionPercentage(confusions, originalConfusionsTotal);
-//            Long frequency = sortedFrequencies.get(mccToRemove);
-//            if (frequency != 0) {
-//                Long confusionRank = Utility.calculateConfusionRank(confusionPercentage, frequency);
-//                if (confusionRank != null) {
-//                    confusionRanks.put(mccToRemove, confusionRank);
-//                }
-//            }
-//            shortList.set(i, mccToRemove);
-//        }
-//
-//        return Utility.sortMap(confusionRanks);
-//    }
-
-//    public double calculateConfusionPercentage(HashMap<String, Long> confusions, int originalTotal) {
-//        int confusionsTotal = Utility.calculateTotalOfValues(confusions);
-//        @SuppressWarnings("UnnecessaryLocalVariable")
-//        double d = ((originalTotal - confusionsTotal) / (double) originalTotal) * 100;
-//        return d;
-//    }
+    public LinkedHashMap<String, Long> getSortedTypedChars() {
+        return Utility.sortMap(typedChars);
+    }
 
     public void add(String candidate) {
         if (candidate.length() == 2) {

@@ -8,6 +8,7 @@ import java.util.List;
 // TODO: Evaluate effectiveness of different MCC lists
 
 public class MccLists {
+    @SuppressWarnings("unused")
     public static List<String> oldList = Arrays.asList(
         "re", "in", "or", "an", "th", "al", "at", "ma", "ar", "es",
         "co", "il", "ac", "ch", "no", "de", "se", "ed", "of", "le",
@@ -48,5 +49,5 @@ public class MccLists {
 
     public static List<String> finalList = Arrays.asList(
         "ac", "al", "an", "and", "ar", "as", "at", "ch", "ed", "en", "er", "es", "et", "il", "in",
-        "ing", "ion", "is", "it", "of", "om", "on", "or", "ot", "ou", "st", "th", "the", "ge"); // 28 MCCs
+        "ing", "ion", "is", "it", "of", "om", "on", "or", "ot", "ou", "st", "th", "the"); // 28 MCCs
 }

@@ -18,7 +18,7 @@ public class MccListCreator {
 
     private static int minMccFrequency;
     private static int maxConfusionDelta;
-    public static double rankIncreasePercent;
+    private static double rankIncreasePercent;
 
     private static String in;
     private static long fileLength;
@@ -39,19 +39,40 @@ public class MccListCreator {
             mccCalculator.add(mcc);
         }
 
-        // Calculate the new frequencies of all MCCs using the new lists
-        mccCalculator.calculateFrequenciesAndConfusions(in);
-        LinkedHashMap<String, Long> allFrequencies = mccCalculator.getSortedFrequencies(minMccFrequency);
-        if (allFrequencies != null) {
-            long newSavingsTotal = Utility.calculateMccSavings(allFrequencies);
+        long newSavingsTotal = 0;
+        long newConfusionTotal = 0;
+        if (!mccList.isEmpty()) {
+            // Calculate the new frequencies of all MCCs using the new lists
+            mccCalculator.calculateFrequenciesAndConfusions(in);
+            LinkedHashMap<String, Long> frequencies = mccCalculator.getSortedFrequencies(minMccFrequency);
+            if (frequencies != null) {
 
-            // Calculate the sum of all confusions
-            HashMap<String, Long> confusions = mccCalculator.getSortedConfusions();
-            long newConfusionTotal = Utility.calculateTotalOfValues(confusions);
+                newSavingsTotal = Utility.calculateMccSavings(frequencies);
 
-            // Call recursive method
-            addToMccList(mccList, newSavingsTotal, newConfusionTotal, 0);
+                // Calculate the sum of all confusions
+                HashMap<String, Long> confusions = mccCalculator.getSortedConfusions();
+                newConfusionTotal = Utility.calculateTotalOfValues(confusions);
+
+                System.out.println("frequencies(" + frequencies.size() + ")=" + frequencies.toString());
+                System.out.println("confusions(" + confusions.size() + ")="+ confusions.toString());
+
+                System.out.println("newSavingsTotal=" + newSavingsTotal
+                        + ", newConfusionTotal=" + newConfusionTotal);
+
+                HashMap<String, Long> typedChars = mccCalculator.getSortedTypedChars();
+                System.out.print("typedChars(" + typedChars.size() + ")=");
+                // Don't output too rare chars
+                for (LinkedHashMap.Entry<String, Long> typedChar : typedChars.entrySet()) {
+                    if (typedChar.getValue() > 10) {
+                        System.out.print(typedChar.getKey() + "=" + typedChar.getValue() + " ");
+                    }
+                }
+                System.out.println();
+            }
         }
+
+        // Call recursive method
+        addToMccList(mccList, newSavingsTotal, newConfusionTotal, 0);
     }
 
     // This is a recursive method
@@ -132,7 +153,7 @@ public class MccListCreator {
                 System.out.println();
                 System.out.println("  maxSavings=" + maxSavings + " savings=" + mccToAddSavings
                         + ", confusions=" + mccToAddConfusions);
-                System.out.println("  mccListsSavings.size=" + mccListsSavings.size()
+                System.out.println("  mccLists.size=" + mccListsSavings.size()
                         + " duplicateBranchesCount=" + duplicateBranchesCount);
             }
 
@@ -167,12 +188,12 @@ public class MccListCreator {
         // Calculate the new frequencies of all MCCs using the new lists
         mccCalculator.calculateFrequenciesAndConfusions(in);
 
-        LinkedHashMap<String, Long> allFrequencies = mccCalculator.getSortedFrequencies(minMccFrequency);
+        LinkedHashMap<String, Long> frequencies = mccCalculator.getSortedFrequencies(minMccFrequency);
 
         // Were all chords used?
         //Long frequency = allFrequencies.get(candidate);
-        if (allFrequencies != null) {
-            long newSavingsTotal = Utility.calculateMccSavings(allFrequencies);
+        if (frequencies != null) {
+            long newSavingsTotal = Utility.calculateMccSavings(frequencies);
             long savingsDelta = newSavingsTotal - savingSoFar;
 
             // Calculate the sum of all confusions
