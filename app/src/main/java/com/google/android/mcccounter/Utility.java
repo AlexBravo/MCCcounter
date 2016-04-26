@@ -100,4 +100,13 @@ public class Utility {
 
         return (long)(confusion/dFrequency);
     }
+
+    static void addToMap(String toAdd, HashMap<String, Long> map) {
+        if(!map.containsKey(toAdd)) {
+            map.put(toAdd, 1L);
+        } else {
+            long prev = map.get(toAdd);
+            map.put(toAdd, prev + 1L);
+        }
+    }
 }

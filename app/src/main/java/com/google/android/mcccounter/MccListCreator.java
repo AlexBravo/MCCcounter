@@ -137,7 +137,7 @@ public class MccListCreator {
             // Go into this branch by recursively calling yourself
             addToMccList(mccList, mccToAddSavings, mccToAddConfusions, ++recursionLevel);
 
-            // Add this list at the end, so we don't see the same mccListsSavings.size
+            // Add this list at the end, so we don't see the same mccListsSavings.size in the output
             mccListsSavings.put(mccListAsString, mccToAddSavings);
             mccListsConfusions.put(mccListAsString, mccToAddConfusions);
 
@@ -175,8 +175,8 @@ public class MccListCreator {
     private void evaluateCandidate(MccCalculator mccCalculator, String candidate,
                                    long savingSoFar, long confusionSoFar,
                                    HashMap<String, Long> ranks,
-                                   HashMap<String, Long> newConfusions,
-                                   HashMap<String, Long> newMccSavings) {
+                                   HashMap<String, Long> confusions,
+                                   HashMap<String, Long> savings) {
 
         mccCalculator.add(candidate);
 
@@ -197,8 +197,8 @@ public class MccListCreator {
             long savingsDelta = newSavingsTotal - savingSoFar;
 
             // Calculate the sum of all confusions
-            HashMap<String, Long> confusions = mccCalculator.getSortedConfusions();
-            long newConfusionTotal = Utility.calculateTotalOfValues(confusions);
+            HashMap<String, Long> sortedConfusions = mccCalculator.getSortedConfusions();
+            long newConfusionTotal = Utility.calculateTotalOfValues(sortedConfusions);
             long confusionsDelta = newConfusionTotal - confusionSoFar;
 
             // Add chord only if it gains us something
@@ -225,8 +225,8 @@ public class MccListCreator {
                 // Add 1 to confusionsDelta to make sure typedChords is taken into account
                 long rank = (newConfusionTotal + 1) * typedChords;
                 ranks.put(candidate, rank);
-                newConfusions.put(candidate, newConfusionTotal);
-                newMccSavings.put(candidate, newSavingsTotal);
+                confusions.put(candidate, newConfusionTotal);
+                savings.put(candidate, newSavingsTotal);
             }
         }
 

@@ -91,16 +91,16 @@ public class MccCalculator {
             }
 
             if (typedMcc != null) {
-                addToMap(typedMcc, frequencies);
+                Utility.addToMap(typedMcc, frequencies);
                 i += typedMcc.length();
             } else {
                 typedChar = in.substring(i, i + 1).toLowerCase();
-                addToMap(typedChar, typedChars);
+                Utility.addToMap(typedChar, typedChars);
                 i++;
             }
 
             if (confusion != null) {
-                addToMap(confusion, confusions);
+                Utility.addToMap(confusion, confusions);
             }
         }
     }
@@ -144,15 +144,6 @@ public class MccCalculator {
             shortList.remove(candidate);
         } else {
             longList.remove(candidate);
-        }
-    }
-
-    private static void addToMap(String toAdd, HashMap<String, Long> map) {
-        if(!map.containsKey(toAdd)) {
-            map.put(toAdd, 1L);
-        } else {
-            long prev = map.get(toAdd);
-            map.put(toAdd, prev + 1L);
         }
     }
 }
