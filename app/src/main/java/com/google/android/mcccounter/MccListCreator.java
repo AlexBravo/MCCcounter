@@ -79,8 +79,7 @@ public class MccListCreator {
     public void addToMccList(ArrayList<String> mccList, long savingsSoFar, long confusionsSoFar,
                               int recursionLevel) {
 
-        ArrayList<String> mccsToConsider = new ArrayList<>(MccLists.fullLongMccList);
-        mccsToConsider.addAll(MccLists.fullShortMccList);
+        ArrayList<String> mccsToConsider = new ArrayList<>(MccLists.fullMccList);
 
         // Add MCCs from mccList to mccCalculator and remove them from mccsToConsider
         MccCalculator mccCalculator = new MccCalculator();

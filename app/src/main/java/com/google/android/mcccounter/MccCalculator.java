@@ -108,9 +108,11 @@ public class MccCalculator {
     public LinkedHashMap<String, Long> getSortedFrequencies(int minMccFrequency) {
         // Is each MCC still used enough?
 
-        // We need to avoid these situation:
-        //    If in="the", adding "the" after "he" increases savings from 1 to 2,
-        //    yet "he" is not encountered anymore, making the list invalid
+        // Avoid this situation:
+        //    Assume input string is "the".
+        //    "he" will be added first to the list of MCCs.
+        //    then when "the" is added to the list "he", savings are increased from 1 to 2,
+        //    but "he" is not encountered anymore, making the list "he, "the" not a valid list
         if (frequencies.size() != longList.size() + shortList.size()) {
             return null;
         }
