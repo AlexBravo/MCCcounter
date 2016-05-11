@@ -37,9 +37,9 @@ public class MccLists {
         "ing", "ion", "is", "it", "of", "om", "on", "or", "ot", "ou", "st", "th", "the", "to ");
 
     @SuppressWarnings("unused")
-    public static List<String> oldList = Arrays.asList(
+    public static List<String> oldList = Arrays.asList( // Full list
             "re", "in", "or", "an", "th", "al", "at", "ma", "ar", "es",
             "co", "il", "ac", "ch", "no", "de", "se", "ed", "of", "le",
             "ro", "ou", "ti", "is", "it", "en", "er", "on", "to", "st",
-            "the", "ing", "and"); // Full list
+            "the", "ing", "and");
 }
