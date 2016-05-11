@@ -21,14 +21,16 @@ public class MccLists {
     // list of 59 bigrams that have frequencies higher than 8,000 + "of"
     // removed us, ce, ha, ec, fo, ic, el, la, ct
     // added "to "
+    // added "ed ", "ing ", "the ", "on ", "or ", "is ", "er "
+    // added back "he", "to", "el"
     public static List<String> fullMccList = Arrays.asList(
-        "in", "er", "re",  "th", "on", "or", "an", "le", "te", "es",
-     /*"he",*/"at",/*"to",*/"en","co", "ro", "ed", "ti", "st", "de",
-     /*"ng",*/"al", "it",  "se", "ar", /*"nt", "nd",*/   "ou", "om", "ma",
-        "me", "li", "ne",  "is", "il", "ve", "as", "io", "ra", "ta",
-        "ll", "no", "ch",  "ea", "et", /*"us", "ce", "ha","ec", "fo",*/
-     /*"ic",*/"ot", "ge",  "ac", "ri", /*"el", "la", "ct",*/   "ca", "of",
-        "the", "ing", "and", "ion", "to ");
+        "in",  "er",  "re",  "th", "on", "or", "an", "le", "te", "es",
+        "he",  "at",  "to", "en","co", "ro", "ed", "ti", "st", "de",
+     /*"ng",*/ "al",  "it",  "se", "ar", /*"nt", "nd",*/   "ou", "om", "ma",
+        "me",  "li",  "ne",  "is", "il", "ve", "as", "io", "ra", "ta",
+        "ll",  "no",  "ch",  "ea", "et", /*"us", "ce", "ha","ec", "fo",*/
+     /*"ic",*/ "ot",  "ge",  "ac", "ri", "el", /*"la", "ct",*/   "ca", "of",
+       "the", "ing",  "and", "ion", "ed ", "to ", "ing ", "the ", "on ", "or ", "is ", "er ");
 
     public static List<String> finalList = Arrays.asList( // 29 MCCs
         "ac", "al", "an", "and", "ar", "as", "at", "ch", "ed", "en", "er", "es", "et", "il", "in",
