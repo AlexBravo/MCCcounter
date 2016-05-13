@@ -30,11 +30,16 @@ public class MccLists {
         "me",  "li",  "ne",  "is", "il", "ve", "as", "io", "ra", "ta",
         "ll",  "no",  "ch",  "ea", "et", /*"us", "ce", "ha","ec", "fo",*/
      /*"ic",*/ "ot",  "ge",  "ac", "ri", "el", /*"la", "ct",*/   "ca", "of",
-       "the", "ing",  "and", "ion", "ed ", "to ", "ing ", "the ", "on ", "or ", "is ", "er ");
+       "the", "ing",  "and", "ion", "ed ", "to ", "ing ", "the ", "or ", "is ", "er ");
 
     public static List<String> finalList = Arrays.asList( // 29 MCCs
         "ac", "al", "an", "and", "ar", "as", "at", "ch", "ed", "en", "er", "es", "et", "il", "in",
         "ing", "ion", "is", "it", "of", "om", "on", "or", "ot", "ou", "st", "th", "the", "to ");
+
+    @SuppressWarnings("unused")
+    public static List<String> finalListWithSpaces = Arrays.asList( // 32 MCCs
+            "ac", "al", "an", "and", "ar", "as", "at", "ch", "ed ", "el", "en", "er", "er ", "es", "et", "il", "in",
+            "ing ", "ion", "is ", "it", "of", "om", "on", "or", "or ", "ot", "ou", "st", "th", "the ", "to ");
 
     @SuppressWarnings("unused")
     public static List<String> oldList = Arrays.asList( // Full list

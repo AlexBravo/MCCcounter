@@ -68,6 +68,18 @@ public class MccListCreator {
                     }
                 }
                 System.out.println();
+
+                HashMap<String, Long> typedMccs = mccCalculator.getSortedTypedMccs();
+                System.out.print("typedMccs(" + typedMccs.size() + ")=");
+
+                int i = 0;
+                for (LinkedHashMap.Entry<String, Long> typedMcc : typedMccs.entrySet()) {
+                    System.out.print(typedMcc.getKey() + "=" + typedMcc.getValue() + " ");
+                    if (++i % 10 == 0) {
+                        System.out.println();
+                    }
+                }
+                System.out.println();
             }
         }
 
@@ -142,9 +154,11 @@ public class MccListCreator {
 
             System.out.println();
             System.out.print("mccList(" + mccList.size() + ") " + mccList);
-            if (mccToAddSavings < maxSavings * 0.95) {
+
+            //noinspection StatementWithEmptyBody
+            if (mccToAddSavings < maxSavings * 0.90) {
                 // Not worth printing info for this list that doesn't give enough savings
-                System.out.print(" " + mccToAddSavings + " ");
+                //System.out.print(" " + mccToAddSavings + " ");
             } else {
                 if (maxSavings < mccToAddSavings) {
                     maxSavings = mccToAddSavings;
@@ -202,8 +216,8 @@ public class MccListCreator {
 
             // Add chord only if it gains us something
 
-            // 3-letter MCC has double of the value of 2-letter MCC,
-            // but the cost of pressing a both long and short chord is the same,
+            // A 3-letter MCC has double of the savings of a 2-letter MCC,
+            // but the cost of pressing both long and short chord is the same,
             // so no need to look at the length of MCC
             //if (savingsDelta < minMccFrequency * (candidate.length() - 1)) {
 

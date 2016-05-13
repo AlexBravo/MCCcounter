@@ -17,12 +17,14 @@ public class MccCalculator {
     private HashMap<String, Long> frequencies = new HashMap<>();
     private HashMap<String, Long> confusions = new HashMap<>();
     private HashMap<String, Long> typedChars = new HashMap<>();
+    private HashMap<String, Long> typedMccs = new HashMap<>();
 
     public void calculateFrequenciesAndConfusions(String in) {
         // Go through the input text and find MCCs in them
         frequencies.clear();
         confusions.clear();
         typedChars.clear();
+        typedMccs.clear();
 
         // Go through the input text and find MCCs in them
         int i = 0;
@@ -41,7 +43,11 @@ public class MccCalculator {
             }
 
             if (typedMcc != null) {
-                Utility.addToMap(typedMcc, frequencies);
+                // Account for the fact that all MCCs come in pairs,
+                // with the second MCC having capitalized first letter
+                Utility.addToMap(typedMcc.toLowerCase(), frequencies);
+
+                Utility.addToMap(typedMcc, typedMccs);
                 i += typedMcc.length();
             } else {
                 String typedChar = in.substring(i, i + 1).toLowerCase();
@@ -52,10 +58,17 @@ public class MccCalculator {
     }
 
     // Returns null if no MCC was found
+    @Nullable
     private String lookForMccsAndConfusions(String in, int i, int length) {
 
-        // Account for the fact that all MCCs have capitalized first letter
-        String firstMcc = in.substring(i, i + 1).toLowerCase() + in.substring(i + 1, i + 2);
+        // Account for the fact that all MCCs come in pairs,
+        // with the second MCC having capitalized first letter
+        String firstChar = in.substring(i, i + 1);
+        String firstOriginalMcc = firstChar + in.substring(i + 1, i + 2);
+
+        String firstLowerChar = firstChar.toLowerCase();
+        String firstMcc = firstLowerChar + in.substring(i + 1, i + 2);
+
         if (!length2.contains(firstMcc)) {
             return null;
         }
@@ -65,12 +78,12 @@ public class MccCalculator {
             // Look for confusions like "at"-"the " in "rather "
 
             // Don't count capitalized second MCC
-            String secondMCC = in.substring(i + 1, (i + 5));
+            String secondMCC = in.substring(i + 1, i + 5);
             if (length4.contains(secondMCC)) {
                 String confusion = firstMcc + secondMCC.substring(1, 4);
                 Utility.addToMap(confusion, confusions);
 
-                return firstMcc;
+                return firstOriginalMcc;
             }
         }
 
@@ -79,12 +92,12 @@ public class MccCalculator {
             // Look for confusions like "at"-"the" in "rather"
 
             // Don't count capitalized second MCC
-            String secondMCC = in.substring(i + 1, (i + 4));
+            String secondMCC = in.substring(i + 1, i + 4);
             if (length3.contains(secondMCC)) {
                 String confusion = firstMcc + secondMCC.substring(1, 3);
                 Utility.addToMap(confusion, confusions);
 
-                return firstMcc;
+                return firstOriginalMcc;
             }
         }
 
@@ -93,7 +106,7 @@ public class MccCalculator {
             // Don't count the capitalized second MCC
             String secondMCC = in.substring(i + 1, (i + 3));
             if (!length2.contains(secondMCC)) {
-                return firstMcc;
+                return firstOriginalMcc;
             }
 
             // Look for MCCs that don't cause confusions
@@ -107,37 +120,40 @@ public class MccCalculator {
                 String confusion = firstMcc + secondMCC.charAt(1);
                 Utility.addToMap(confusion, confusions);
 
-                return firstMcc;
+                return firstOriginalMcc;
             }
         }
 
         //if (i + 2 <= length) {
-        return firstMcc;
+        return firstOriginalMcc;
         //}
     }
 
-    // Returns null if no long MCC was found
+    // Returns null if no 4-letter or 3-letter MCC was found
     @Nullable
     private String lookForLongMcc(String in, int i, int length) {
 
+        // Account for the fact that all MCCs come in pairs,
+        // with the second MCC having capitalized first letter
+        String firstChar = in.substring(i, i + 1);
+        String firstLowerChar = firstChar.toLowerCase();
+
         // It's OK for the second parameter of substring() to go all the way to be equal length()
         if (i + 4 <= length) {
-            // Account for the fact that all MCCs have capitalized first letter
-            String firstMcc = in.substring(i, i + 1).toLowerCase() + in.substring(i + 1, i + 4);
-            if (length4.contains(firstMcc)) {
+            String mccSuffix = in.substring(i + 1, i + 4);
+            if (length4.contains(firstLowerChar + mccSuffix)) {
                 // Don't look for 5th letter
-                return firstMcc;
+                return firstChar + mccSuffix;
             }
         }
 
         if (i + 3 <= length) {
-            // Account for the fact that all MCCs have capitalized first letter
-            String firstMcc = in.substring(i, i + 1).toLowerCase() + in.substring(i + 1, i + 3);
-            if (length3.contains(firstMcc)) {
+            String mccSuffix = in.substring(i + 1, i + 3);
+            if (length3.contains(firstLowerChar + mccSuffix)) {
                 // Don't look for 4th letter, because
                 // "thet" is not confusing if there are only "the" and "et",
                 // as there needs to be "th", "the" and "et" to be confusing
-                return firstMcc;
+                return firstChar + mccSuffix;
             }
         }
 
@@ -170,6 +186,10 @@ public class MccCalculator {
 
     public LinkedHashMap<String, Long> getSortedTypedChars() {
         return Utility.sortMap(typedChars);
+    }
+
+    public LinkedHashMap<String, Long> getSortedTypedMccs() {
+        return Utility.sortMap(typedMccs);
     }
 
     public void add(String candidate) {

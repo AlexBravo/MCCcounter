@@ -14,8 +14,9 @@ public class BigFileMccListCreatorTest extends MccListCreatorTest {
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
         final String in = Utility.toString(is);
 
-        int minMccFrequency = (int)(in.length() / 100 * 0.1);
-        int maxConfusionDelta = (int)(in.length() / 100 * 0.1);
+        // Length of 812_notes is 2896k, so 0.1% = 2896
+        int minMccFrequency = 6000; // (int)(in.length() / 100 * 0.1);
+        int maxConfusionDelta = (int)(minMccFrequency * 0.5); // (int)(in.length() / 100 * 0.1);
         double rankIncreasePercent = 1.00001; // 0.001
         MccListCreator mccListCreator =
                 new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
@@ -35,7 +36,33 @@ public class BigFileMccListCreatorTest extends MccListCreatorTest {
         // took 1 hour 22 min on Alex Mac
 
         // For minMccFrequency=0.1, maxConfusionDelta=0.1, rankIncreasePercent=0.001%
-        // took min on Alex Mac
+        // took 33 min on Alex Mac
+        // maxSavings=503929 mccLists.size=44 duplicateBranchesCount=8
+        // [ac, al, an, and, ar, as, at, ch, ed, ed , el, en, er, er , es, et, il, in, ing, ing ,
+        // ion, is, is , it, of, om, on, on , or, or , ot, ou, st, th, the , to ](36)503929,65;2918797511043
+        // [ac, al, an, and, ar, as, at, ch, ed, ed , el, en, er, er , es, et, il, in, ing, ing ,
+        // ion, is , it, of, om, on, on , or, or , ot, ou, st, th, the , to ](35)500333,65;-3596,0;2897971361112
+        // [ac, al, an, and, ar, as, at, ch, ed, ed , el, en, er, er , es, et, il, in, ing, ing ,
+        // ion, is, is , it, of, om, on, on , or, or , ou, st, th, the , to ](35)497091,41;2879216642420
+        // [ac, al, an, and, ar, as, at, ch, ed, ed , el, en, er, er , es, et, il, in, ing, ing ,
+        // ion, is , it, of, om, on, on , or, or , ou, st, th, the , to ](34)493495,41;-6838,-24;2858390319905
+        // [ac, al, an, and, ar, as, ch, ed, ed , el, en, er, er , es, et, il, in, ing, ing ,
+        // ion, is, is , it, of, om, on, on , or, or , ou, st, th, the , to ](34)479310,20;2776246249182
+        // [ac, al, an, and, ar, as, ch, ed, ed , el, en, er, er , es, et, il, in, ing, ing ,
+        // ion, is , it, of, om, on, on , or, or , ou, st, th, the , to ](33)475714,20;-17781,-21;2755419775656
+        // [ac, al, an, and, ar, as, ch, ed, ed , el, en, er, er , es, et, il, in, ing, ing ,
+
+        // For minMccFrequency=6k, maxConfusionDelta=3k, rankIncreasePercent=0.001%
+        // took 28 min on Alex Mac
+        // maxSavings=487147 mccLists.size=32 duplicateBranchesCount=0
+        // [ac, al, an, and, ar, as, at, ch, ed , el, en, er, er , es, et, il, in, ing , ion, is ,
+        // it, of, om, on, or, or , ot, ou, st, th, the , to ](32)487147,65;2821603019083
+        // [ac, al, an, and, ar, as, at, ch, ed , el, en, er, er , es, et, il, in, ing , ion, is ,
+        // it, of, om, on, or, or , ou, st, th, the , to ](31)480309,41;-6838,-24;2782021345020
+        // [ac, al, an, and, ar, as, ch, ed , el, en, er, er , es, et, il, in, ing , ion, is ,
+        // it, of, om, on, or, or , ou, st, th, the , to ](30)462528,20;-17781,-21;2679050247022
+        // [ac, al, an, and, ar, as, ch, ed , el, en, er, er , es, et, il, in, ing , ion, is ,
+        // it, of, om, on, or, or , ou, th, the , to ](29)450649,10;-11879,-10;2610254568920
     }
 
     @Test
@@ -44,8 +71,9 @@ public class BigFileMccListCreatorTest extends MccListCreatorTest {
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
         final String in = Utility.toString(is);
 
-        int minMccFrequency = (int)(in.length() / 100 * 0.1);
-        int maxConfusionDelta = (int)(in.length() / 100 * 0.1);
+        // Length of 812_notes is 2896k, so 0.1% = 2896
+        int minMccFrequency = 6000; // (int)(in.length() / 100 * 0.1);
+        int maxConfusionDelta = (int)(minMccFrequency * 0.5); // (int)(in.length() / 100 * 0.1);
         double rankIncreasePercent = 1.0001; // 0.01%
         MccListCreator mccListCreator =
                 new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
