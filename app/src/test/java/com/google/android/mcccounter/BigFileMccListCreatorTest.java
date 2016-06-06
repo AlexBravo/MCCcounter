@@ -22,7 +22,7 @@ public class BigFileMccListCreatorTest extends MccListCreatorTest {
                 new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
         mccListCreator.createMccList(new ArrayList<String>());
 
-        outputResults(0.9, in.length());
+        getResults(0.9, in.length());
 
         // For minMccFrequency=0.1, maxConfusionDelta=0.1, rankIncreasePercent=0.001%
         // took 16 min 41 sec on work Mac
@@ -80,7 +80,7 @@ public class BigFileMccListCreatorTest extends MccListCreatorTest {
 
         mccListCreator.createMccList(new ArrayList<>(MccLists.finalList));
 
-        outputResults(0.85, in.length());
+        getResults(0.85, in.length());
 
         // frequencies(28)={er=26629, in=23698, or=22353, at=17823, en=17442, ed=16582, st=16204,
         // on=16020, es=15620, al=15152, ar=14993, ou=13853, the=13635, om=13128, ing=12973,

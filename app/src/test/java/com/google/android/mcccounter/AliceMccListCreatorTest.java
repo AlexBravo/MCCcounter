@@ -22,7 +22,7 @@ public class AliceMccListCreatorTest extends MccListCreatorTest {
                 new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
         mccListCreator.createMccList(new ArrayList<String>());
 
-        outputResults(0.95, in.length());
+        getResults(0.95, in.length());
 
         // For minMccFrequency=0.5, maxConfusionDelta=0.01, rankIncreasePercent=0.1%
         // took 18 min 11 sec on work Mac
@@ -63,7 +63,7 @@ public class AliceMccListCreatorTest extends MccListCreatorTest {
                 new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
         mccListCreator.createMccList(new ArrayList<String>());
 
-        outputResults(0.95, in.length());
+        getResults(0.95, in.length());
 
         // For minMccFrequency=0.2, maxConfusionDelta=0.01, rankIncreasePercent=0.1%
         // took > 55 min on work Mac
@@ -134,7 +134,7 @@ public class AliceMccListCreatorTest extends MccListCreatorTest {
                 new MccListCreator(in, minMccFrequency, maxConfusionDelta, rankIncreasePercent);
         mccListCreator.createMccList(new ArrayList<String>());
 
-        outputResults(0.9, in.length());
+        getResults(0.9, in.length());
 
         // For minMccFrequency=0.1, maxConfusionDelta=0.2, rankIncreasePercent=0.005%
         // took 5 min 1 sec on work Mac

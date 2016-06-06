@@ -3,15 +3,21 @@ package com.google.android.mcccounter;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import static junit.framework.Assert.assertEquals;
+
 // Created by alex on 5/11/2016
 
 public class MccListCreatorTest {
-    protected void outputResults(double percentToDiscard, long length) {
+
+    protected Results getResults(double percentToDiscard, long length) {
+        Results results = new Results();
         System.out.println();
         System.out.println("maxSavings=" + MccListCreator.maxSavings
                 + " mccLists.size=" + MccListCreator.mccListsSavings.size()
                 + " duplicateBranchesCount=" + MccListCreator.duplicateBranchesCount);
-
+        results.setMaxSavings(MccListCreator.maxSavings);
+        results.setMccListsSize(MccListCreator.mccListsSavings.size());
+        results.setDuplicateBranchesCount(MccListCreator.duplicateBranchesCount);
         HashMap<String, Long> mccLists = new HashMap<>();
         long maxSavings = 0;
         for (LinkedHashMap.Entry<String, Long> mccList : MccListCreator.mccListsSavings.entrySet()) {
@@ -71,5 +77,18 @@ public class MccListCreatorTest {
                 }
             }
         }
+        return results;
+    }
+    public Results createExpectedResults(long maxSavings, int mccListsSize, int duplicateBranchesCount){
+        Results ret = new Results();
+        ret.setMaxSavings(maxSavings);
+        ret.setMccListsSize(mccListsSize);
+        ret.setDuplicateBranchesCount(duplicateBranchesCount);
+        return ret;
+    }
+    public void compareResults(Results expected, Results actual){
+        assertEquals("maxSavings", expected.getMaxSavings(), actual.getMaxSavings());
+        assertEquals("mccListsSize", expected.getMccListsSize(), actual.getMccListsSize());
+        assertEquals("duplicateBranchesCount", expected.getDuplicateBranchesCount(), actual.getDuplicateBranchesCount());
     }
 }
