@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+import static junit.framework.Assert.assertEquals;
+
 // Created by alex on 5/11/2016
 
 public class BasicMccListCreatorTest extends MccListCreatorTest {
@@ -15,8 +17,11 @@ public class BasicMccListCreatorTest extends MccListCreatorTest {
         MccListCreator mccListCreator = new MccListCreator(in, 1, 1, 100);
         mccListCreator.createMccList(new ArrayList<String>());
 
-        outputResults(0, in.length());
+        Results actual = getResults(0, in.length());
+        Results expected = new Results(
+                /*maxSavings*/ 2, /*mccListsSize*/ 3, /*duplicateBranchesCount*/ 0);
 
+        compareResults(expected, actual);
         // Expected results
         // maxSavings=2 mccLists.size=3 duplicateBranchesCount=0
         // [the](1)2,0;16 [th](1)1,0;8 [he](1)1,0;8
@@ -30,7 +35,7 @@ public class BasicMccListCreatorTest extends MccListCreatorTest {
         MccListCreator mccListCreator = new MccListCreator(in, 1, 1, 100);
         mccListCreator.createMccList(new ArrayList<String>());
 
-        outputResults(0, in.length());
+        getResults(0, in.length());
 
         // Expected results
 
@@ -47,7 +52,7 @@ public class BasicMccListCreatorTest extends MccListCreatorTest {
         mccListCreator.createMccList(new ArrayList<String>());
         //mccListCreator.createMccList(new ArrayList<>(MccLists.finalList));
 
-        outputResults(0, in.length());
+        getResults(0, in.length());
         // Expected results
         // maxSavings=3 mccLists.size=9 duplicateBranchesCount=4
         // [re, the](2)3,0;30 [the](1)2,0;24 [re, th](2)2,0;18 [he, re](2)2,0;18
@@ -62,7 +67,7 @@ public class BasicMccListCreatorTest extends MccListCreatorTest {
         MccListCreator mccListCreator = new MccListCreator(in, 1, 1, 100);
         mccListCreator.createMccList(new ArrayList<String>());
 
-        outputResults(0, in.length());
+        getResults(0, in.length());
 
         // Expected results
         // maxSavings=4 mccLists.size=4 duplicateBranchesCount=0
@@ -81,7 +86,7 @@ public class BasicMccListCreatorTest extends MccListCreatorTest {
         MccListCreator mccListCreator = new MccListCreator(in, 2, 1, 100);
         mccListCreator.createMccList(new ArrayList<String>());
 
-        outputResults(0, in.length());
+        getResults(0, in.length());
 
         // Expected results
         // maxSavings=4 mccLists.size=3 duplicateBranchesCount=0
@@ -97,7 +102,7 @@ public class BasicMccListCreatorTest extends MccListCreatorTest {
         MccListCreator mccListCreator = new MccListCreator(in, 2, 1, 100);
         mccListCreator.createMccList(new ArrayList<String>());
 
-        outputResults(0, in.length());
+        getResults(0, in.length());
 
         // Expected results
         // maxSavings=6 mccLists.size=4 duplicateBranchesCount=0
@@ -112,7 +117,7 @@ public class BasicMccListCreatorTest extends MccListCreatorTest {
         MccListCreator mccListCreator = new MccListCreator(in, 3, 1, 100);
         mccListCreator.createMccList(new ArrayList<String>());
 
-        outputResults(0, in.length());
+        getResults(0, in.length());
 
         // Expected results
         // maxSavings=3 mccLists.size=1 duplicateBranchesCount=0
@@ -127,7 +132,7 @@ public class BasicMccListCreatorTest extends MccListCreatorTest {
         MccListCreator mccListCreator = new MccListCreator(in, 1, 1, 100);
         mccListCreator.createMccList(new ArrayList<String>());
 
-        outputResults(0, in.length());
+        getResults(0, in.length());
 
         // Expected results
         // maxSavings=7 mccLists.size=23 duplicateBranchesCount=23
@@ -146,8 +151,8 @@ public class BasicMccListCreatorTest extends MccListCreatorTest {
         MccListCreator mccListCreator = new MccListCreator(in, 1, 1, 100);
         mccListCreator.createMccList(new ArrayList<String>());
 
-        //outputResults(0.95);
-        outputResults(0, in.length());
+        //getResults(0.95);
+        getResults(0, in.length());
 
         // Expected results (nothing was removed)
         // maxSavings=8 mccLists.size=67 duplicateBranchesCount=101
