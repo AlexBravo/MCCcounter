@@ -8,20 +8,17 @@ public class Results {
     private int mccListsSize;
     private int duplicateBranchesCount;
 
-    public void setMaxSavings(long val){
-        maxSavings = val;
+    public Results(long maxSavings, int mccListsSize, int duplicateBranchesCount) {
+        this.maxSavings = maxSavings;
+        this.mccListsSize = mccListsSize;
+        this.duplicateBranchesCount = duplicateBranchesCount;
     }
+
     public long getMaxSavings(){
         return maxSavings;
     }
-    public void setMccListsSize(int val){
-        mccListsSize = val;
-    }
     public int getMccListsSize(){
         return mccListsSize;
-    }
-    public void setDuplicateBranchesCount(int val){
-        duplicateBranchesCount = val;
     }
     public int getDuplicateBranchesCount(){
         return duplicateBranchesCount;

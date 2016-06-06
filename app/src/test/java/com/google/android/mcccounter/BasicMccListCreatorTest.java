@@ -18,7 +18,7 @@ public class BasicMccListCreatorTest extends MccListCreatorTest {
         mccListCreator.createMccList(new ArrayList<String>());
 
         Results actual = getResults(0, in.length());
-        Results expected = createExpectedResults(
+        Results expected = new Results(
                 /*maxSavings*/ 2, /*mccListsSize*/ 3, /*duplicateBranchesCount*/ 0);
 
         compareResults(expected, actual);

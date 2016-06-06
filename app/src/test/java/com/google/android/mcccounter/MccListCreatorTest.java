@@ -10,14 +10,14 @@ import static junit.framework.Assert.assertEquals;
 public class MccListCreatorTest {
 
     protected Results getResults(double percentToDiscard, long length) {
-        Results results = new Results();
+
         System.out.println();
         System.out.println("maxSavings=" + MccListCreator.maxSavings
                 + " mccLists.size=" + MccListCreator.mccListsSavings.size()
                 + " duplicateBranchesCount=" + MccListCreator.duplicateBranchesCount);
-        results.setMaxSavings(MccListCreator.maxSavings);
-        results.setMccListsSize(MccListCreator.mccListsSavings.size());
-        results.setDuplicateBranchesCount(MccListCreator.duplicateBranchesCount);
+        Results results = new Results(MccListCreator.maxSavings,
+                                      MccListCreator.mccListsSavings.size(),
+                                      MccListCreator.duplicateBranchesCount);
         HashMap<String, Long> mccLists = new HashMap<>();
         long maxSavings = 0;
         for (LinkedHashMap.Entry<String, Long> mccList : MccListCreator.mccListsSavings.entrySet()) {
@@ -79,13 +79,7 @@ public class MccListCreatorTest {
         }
         return results;
     }
-    public Results createExpectedResults(long maxSavings, int mccListsSize, int duplicateBranchesCount){
-        Results ret = new Results();
-        ret.setMaxSavings(maxSavings);
-        ret.setMccListsSize(mccListsSize);
-        ret.setDuplicateBranchesCount(duplicateBranchesCount);
-        return ret;
-    }
+
     public void compareResults(Results expected, Results actual){
         assertEquals("maxSavings", expected.getMaxSavings(), actual.getMaxSavings());
         assertEquals("mccListsSize", expected.getMccListsSize(), actual.getMccListsSize());
