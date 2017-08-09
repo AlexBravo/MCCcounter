@@ -4,8 +4,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static junit.framework.Assert.assertEquals;
-
 // Created by alex on 5/11/2016
 
 public class BasicMccListCreatorTest extends MccListCreatorTest {

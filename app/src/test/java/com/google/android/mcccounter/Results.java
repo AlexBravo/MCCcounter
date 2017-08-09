@@ -1,7 +1,7 @@
 package com.google.android.mcccounter;
 
 /**
- * Created by wendy on 6/5/2016.
+ * @author Alex  on 6/5/2016.
  */
 public class Results {
     private long maxSavings;

@@ -11,9 +11,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-/** Created by wendy on 3/20/2016. */
+/** @author Alex on 3/20/2016. */
 
-public class Utility {
+class Utility {
     @SuppressWarnings("unused")
     public static boolean isMccInList(String in, List<String> mccs) {
         return mccs.contains(in);
@@ -34,7 +34,7 @@ public class Utility {
     }
 
     @NonNull
-    public static LinkedHashMap<String, Long> sortMap(HashMap<String, Long> map) {
+    static LinkedHashMap<String, Long> sortMap(HashMap<String, Long> map) {
         List<Map.Entry<String, Long>> list = new LinkedList<>(map.entrySet());
         Collections.sort(list, new Comparator<Map.Entry<String, Long>>() {
             @Override
@@ -50,7 +50,7 @@ public class Utility {
     }
 
     @NonNull
-    public static LinkedHashMap<String, Long> sortMapReverse(HashMap<String, Long> map) {
+    static LinkedHashMap<String, Long> sortMapReverse(HashMap<String, Long> map) {
         List<Map.Entry<String, Long>> list = new LinkedList<>(map.entrySet());
         Collections.sort(list, new Comparator<Map.Entry<String, Long>>() {
             @Override
@@ -65,7 +65,7 @@ public class Utility {
         return returnVal;
     }
 
-    public static int calculateTotalOfValues(HashMap<String, Long> map) {
+    static int calculateTotalOfValues(HashMap<String, Long> map) {
         int mapTotal = 0;
         for(Long i : map.values()){
             mapTotal += i;
@@ -73,7 +73,7 @@ public class Utility {
         return mapTotal;
     }
 
-    public static int calculateMccSavings(HashMap<String, Long> map) {
+    static int calculateMccSavings(HashMap<String, Long> map) {
         int mapTotal = 0;
         for(Map.Entry<String, Long> entry : map.entrySet()) {
             // We have 1 press saved for each 2-letter MCC
@@ -84,9 +84,10 @@ public class Utility {
         return mapTotal;
     }
 
-    // Less confusing and more frequent MCCs has the lowest confusion rank
+    // Less confusing and more frequent MCC has the lowest confusion rank
     // TODO: Find a way to tell between MCC with low confusion and low frequency
     // TODO: and high confusion and high frequency
+    @SuppressWarnings("unused")
     @Nullable public static Long calculateConfusionRank(double confusion, long frequency) {
         if(frequency == 0) {
             return null;

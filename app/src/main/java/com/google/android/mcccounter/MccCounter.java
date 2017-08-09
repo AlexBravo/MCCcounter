@@ -7,14 +7,14 @@ import java.util.Map;
 
 //Created by Maxim on 12/12/2015.
 
-public class MccCounter {
-    public static List<String> shortMccList = Arrays.asList(
+class MccCounter {
+    private static List<String> shortMccList = Arrays.asList(
         "re", "in", "or", "an", "al", "at", "ar", "co", "ch", "de",
         "of", "ro", "it", "er", "on", "to", "st", "me", "il", "en");
 
-    public static List<String> longMccList = Arrays.asList("ing", "and", "the");
+    private static List<String> longMccList = Arrays.asList("ing", "and", "the");
 
-    public static Map<String, Long> calculateMCCs(String in) {
+    static Map<String, Long> calculateMCCs(String in) {
         Map<String, Long> mccs = new HashMap<>();
         if(in.length() > 1) {
             if (in.length() < 3) {
@@ -28,7 +28,7 @@ public class MccCounter {
         return mccs;
     }
 
-    public static Map<String, Long> ridOfShortRepetition(Map<String, Long> list){
+    private static Map<String, Long> ridOfShortRepetition(Map<String, Long> list){
         if(list.containsKey("in") && list.containsKey("ing")){
             if(list.get("in") <= list.get("ing")){
                 list.remove("in");
@@ -81,7 +81,7 @@ public class MccCounter {
         return results;
     }
 
-    public static Map<String, Long> searchThroughShortR(String toSearch){
+    private static Map<String, Long> searchThroughShortR(String toSearch){
         Map<String, Long> results = new HashMap<>();
         for(int i = toSearch.length() - 1; i > 2; i--){
             String searchable = toSearch.substring(i - 2, i);
@@ -101,7 +101,7 @@ public class MccCounter {
         return results;
     }
 
-    public static Map<String, Long> searchThroughLong(String toSearch){
+    private static Map<String, Long> searchThroughLong(String toSearch){
         Map<String, Long> results = new HashMap<>();
 
         for(int i = 0; i < toSearch.length() - 2; i++){

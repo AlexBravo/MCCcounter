@@ -7,7 +7,7 @@ import java.util.List;
 
 // TODO: Evaluate effectiveness of different MCC lists
 
-public class MccLists {
+class MccLists {
     // Removed: re, ti, le, co, se, ma, st
     // Removed: es, ti, re, co, le, se, ma*/
     // Removed: es, ti, le, se, ma
@@ -23,7 +23,7 @@ public class MccLists {
     // added "to "
     // added "ed ", "ing ", "the ", "on ", "or ", "is ", "er "
     // added back "he", "to", "el"
-    public static List<String> fullMccList = Arrays.asList(
+    static List<String> fullMccList = Arrays.asList(
         "in",  "er",  "re",  "th", "on", "or", "an", "le", "te", "es",
         "he",  "at",  "to", "en","co", "ro", "ed", "ti", "st", "de",
      /*"ng",*/ "al",  "it",  "se", "ar", /*"nt", "nd",*/   "ou", "om", "ma",
@@ -32,9 +32,9 @@ public class MccLists {
      /*"ic",*/ "ot",  "ge",  "ac", "ri", "el", /*"la", "ct",*/   "ca", "of",
        "the", "ing",  "and", "ion", "ed ", "to ", "ing ", "the ", "or ", "is ", "er ");
 
-    public static List<String> finalList = Arrays.asList( // 29 MCCs
+    static List<String> finalList = Arrays.asList( // 29 MCCs
         "ac", "al", "an", "and", "ar", "as", "at", "ch", "ed", "en", "er", "es", "et", "il", "in",
-        "ing", "ion", "is", "it", "of", "om", "on", "or", "ot", "ou", "st", "th", "the", "to ");
+        "ing", "ion", "is", "it", "of", "om", "on", "or", "ot", "ou", "st", "th", "the", "to");
 
     @SuppressWarnings("unused")
     public static List<String> finalListWithSpaces = Arrays.asList( // 32 MCCs

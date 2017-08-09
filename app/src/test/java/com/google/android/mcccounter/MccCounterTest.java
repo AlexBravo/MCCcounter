@@ -7,7 +7,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
-//Created by Kids on 12/12/2015.
+//@author Alex on 12/12/2015.
 public class MccCounterTest {
 //    @Before
 //    public void setUp() throws Exception {

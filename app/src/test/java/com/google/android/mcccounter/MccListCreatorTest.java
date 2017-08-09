@@ -7,9 +7,9 @@ import static junit.framework.Assert.assertEquals;
 
 // Created by alex on 5/11/2016
 
-public class MccListCreatorTest {
+class MccListCreatorTest {
 
-    protected Results getResults(double percentToDiscard, long length) {
+    Results getResults(double percentToDiscard, long length) {
 
         System.out.println();
         System.out.println("maxSavings=" + MccListCreator.maxSavings
@@ -80,7 +80,7 @@ public class MccListCreatorTest {
         return results;
     }
 
-    public void compareResults(Results expected, Results actual){
+    void compareResults(Results expected, Results actual){
         assertEquals("maxSavings", expected.getMaxSavings(), actual.getMaxSavings());
         assertEquals("mccListsSize", expected.getMccListsSize(), actual.getMccListsSize());
         assertEquals("duplicateBranchesCount", expected.getDuplicateBranchesCount(), actual.getDuplicateBranchesCount());

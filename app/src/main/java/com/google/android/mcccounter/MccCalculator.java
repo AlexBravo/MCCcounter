@@ -9,7 +9,7 @@ import java.util.List;
 
 /** Created by alex on 3/20/2016. */
 
-public class MccCalculator {
+class MccCalculator {
     private List<String> length2 = new ArrayList<>();
     private List<String> length3 = new ArrayList<>();
     private List<String> length4 = new ArrayList<>();
@@ -19,7 +19,7 @@ public class MccCalculator {
     private HashMap<String, Long> typedChars = new HashMap<>();
     private HashMap<String, Long> typedMccs = new HashMap<>();
 
-    public void calculateFrequenciesAndConfusions(String in) {
+    void calculateFrequenciesAndConfusions(String in) {
         // Go through the input text and find MCCs in them
         frequencies.clear();
         confusions.clear();
@@ -160,7 +160,7 @@ public class MccCalculator {
         return null;
     }
 
-    public LinkedHashMap<String, Long> getSortedFrequencies(int minMccFrequency) {
+    LinkedHashMap<String, Long> getSortedFrequencies(int minMccFrequency) {
         // Is each MCC still used enough?
 
         // Avoid this situation:
@@ -180,19 +180,19 @@ public class MccCalculator {
         return Utility.sortMap(frequencies);
     }
 
-    public LinkedHashMap<String, Long> getSortedConfusions() {
+    LinkedHashMap<String, Long> getSortedConfusions() {
         return Utility.sortMap(confusions);
     }
 
-    public LinkedHashMap<String, Long> getSortedTypedChars() {
+    LinkedHashMap<String, Long> getSortedTypedChars() {
         return Utility.sortMap(typedChars);
     }
 
-    public LinkedHashMap<String, Long> getSortedTypedMccs() {
+    LinkedHashMap<String, Long> getSortedTypedMccs() {
         return Utility.sortMap(typedMccs);
     }
 
-    public void add(String candidate) {
+    void add(String candidate) {
         switch (candidate.length()) {
             case 2:
                 length2.add(candidate);
@@ -208,7 +208,7 @@ public class MccCalculator {
         }
     }
 
-    public void remove(String candidate) {
+    void remove(String candidate) {
         switch (candidate.length()) {
             case 2:
                 length2.remove(candidate);

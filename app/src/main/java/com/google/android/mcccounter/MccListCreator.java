@@ -10,11 +10,11 @@ import java.util.Map;
 
 /** Created by alex on 4/6/16. */
 
-public class MccListCreator {
-    public static int duplicateBranchesCount = 0;
-    public static long maxSavings;
-    public static HashMap<String, Long> mccListsSavings = new HashMap<>();
-    public static HashMap<String, Long> mccListsConfusions = new HashMap<>();
+class MccListCreator {
+    static int duplicateBranchesCount = 0;
+    static long maxSavings;
+    static HashMap<String, Long> mccListsSavings = new HashMap<>();
+    static HashMap<String, Long> mccListsConfusions = new HashMap<>();
 
     private static int minMccFrequency;
     private static int maxConfusionDelta;
@@ -24,7 +24,7 @@ public class MccListCreator {
     private static long fileLength;
 
 
-    public MccListCreator(String in, int minMccFrequency, int maxConfusionDelta, double rankIncreasePercent) {
+    MccListCreator(String in, int minMccFrequency, int maxConfusionDelta, double rankIncreasePercent) {
         MccListCreator.in = in;
         MccListCreator.fileLength = in.length();
 
@@ -33,7 +33,7 @@ public class MccListCreator {
         MccListCreator.rankIncreasePercent = rankIncreasePercent;
     }
 
-    public void createMccList(ArrayList<String> mccList) {
+    void createMccList(ArrayList<String> mccList) {
         MccCalculator mccCalculator = new MccCalculator();
         for (String mcc : mccList) {
             mccCalculator.add(mcc);
@@ -88,7 +88,7 @@ public class MccListCreator {
     }
 
     // This is a recursive method
-    public void addToMccList(ArrayList<String> mccList, long savingsSoFar, long confusionsSoFar,
+    private void addToMccList(ArrayList<String> mccList, long savingsSoFar, long confusionsSoFar,
                               int recursionLevel) {
 
         ArrayList<String> mccsToConsider = new ArrayList<>(MccLists.fullMccList);
@@ -246,7 +246,7 @@ public class MccListCreator {
         mccCalculator.remove(candidate);
     }
 
-    public List<String> findMccsToAdd(HashMap<String, Long> ranks) {
+    private List<String> findMccsToAdd(HashMap<String, Long> ranks) {
         LinkedHashMap<String, Long> sortedRanks = Utility.sortMapReverse(ranks);
         //System.out.println("sortedRanks " + sortedRanks);
 
