@@ -9,31 +9,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private EditText word;
-    private String input;
-    private String output;
-    private TextView result;
+    //private EditText word;
+    //private String input;
+    //private TextView result;
     private ListView listview;
     private View button;
-    private ArrayList<String> list = new ArrayList<String>();
-    private String[] values = new String[32];
+    private ArrayList<String> list = new ArrayList<>();
+    //private String[] values = new String[32];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        word = (EditText) findViewById(R.id.word);
-        word.addTextChangedListener(tWatcher);
+        //word = (EditText) findViewById(R.id.word);
+        //word.addTextChangedListener(tWatcher);
         //result = (TextView) findViewById(R.id.result);
-        input = word.getText().toString();
+        //input = word.getText().toString();
 
         listview = (ListView) findViewById(R.id.listview);
         button = findViewById(R.id.button);
@@ -63,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressWarnings("unused")
     private final TextWatcher tWatcher = new TextWatcher() {
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -75,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         public void onTextChanged(CharSequence s, int st, int before, int count) {
             list.clear();
             String rs = s.toString();
-            output = MccCounter.calculateMCCs(rs).toString();
+            String output = MccCounter.calculateMCCs(rs).toString();
 //            result.setText(output.substring(1, output.length() - 1));
 
             if(output.length() > 2) {
@@ -107,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     public void onClick(View view){
-        final ArrayAdapter adapter = new ArrayAdapter(this,
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, list);
         listview.setAdapter(adapter);
 
